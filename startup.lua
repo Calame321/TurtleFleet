@@ -68,6 +68,8 @@ for i = 1, #all_files do
     if not fs.exists( all_files[ i ] ) then
         print( "Updating..." )
         update()
+        print( "Updated! press a key to reboot" )
+        read()
         os.reboot()
     end
 end
