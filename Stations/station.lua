@@ -1,5 +1,5 @@
 -- A station object.
-Station = {
+station = {
     -- type = mine, farm, smeltery, warehouse, etc.
     type = "",
     -- sub_type = "minecraft:oak_wood", "minecraft:sugar_cane", etc.
@@ -20,17 +20,17 @@ Station = {
     res_to_build = {},
 }
 
-function Station:new( o )
+function station:new( o )
     o = o or {}
     setmetatable( o, self )
     self.__index = self
     return o
 end
 
-function Station:build()
+function station:build()
 end
 
-function Station:start_work()
+function station:start_work()
     if workers >= max_worker then
         print( "can't work there. It's full.")
         return false
@@ -40,4 +40,4 @@ function Station:start_work()
     return true
 end
 
-return Station
+return station
