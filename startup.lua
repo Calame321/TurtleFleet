@@ -44,10 +44,14 @@ end
 
 function get_file_from_github( url, file_path )
     local f = fs.open( file_path, "w" )
-    local w = http.get( url )
-    f.write( w.readAll() )
-    f.flush()
-    f.close()
+    local w, m = http.get( url )
+    if w then
+        f.write( w.readAll() )
+        f.flush()
+        f.close()
+    else
+        print( "Cant load '" .. url .. "' : " .. m )
+    end
 end
 
 local all_files = {
