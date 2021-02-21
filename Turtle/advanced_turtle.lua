@@ -472,7 +472,7 @@ function turtle.drop_in_enderchest( stuff_to_keep )
                 to_keep[ item.name ] = to_keep[ item.name ] - 1
             else
                 turtle.select( i )
-                turtle.dropUp()
+                if not turtle.dropUp() then os.sleep( 1 ) end
             end
         end
     end
