@@ -32,9 +32,9 @@ function update()
     get_file_from_github( git_path .. "Turtle/advanced_turtle.lua"  ,"TurtleFleet/Turtle/advanced_turtle.lua" )
     get_file_from_github( git_path .. "Stations/station.lua"        ,"TurtleFleet/Stations/station.lua" )
     get_file_from_github( git_path .. "Stations/tree_farm.lua"      ,"TurtleFleet/Stations/treefarm.lua" )
-    get_file_from_github( git_path .. "Job/job.lua"                 ,"TurtleFleet/Job/job.lua" )
-    get_file_from_github( git_path .. "Job/builder.lua"             ,"TurtleFleet/Job/builder.lua" )
-    get_file_from_github( git_path .. "Job/coocker.lua"             ,"TurtleFleet/Job/coocker.lua" )
+    get_file_from_github( git_path .. "Jobs/job.lua"                 ,"TurtleFleet/Jobs/job.lua" )
+    get_file_from_github( git_path .. "Jobs/builder.lua"             ,"TurtleFleet/Jobs/builder.lua" )
+    get_file_from_github( git_path .. "Jobs/coocker.lua"             ,"TurtleFleet/Jobs/coocker.lua" )
     get_file_from_github( git_path .. "startup.lua"                 , "startup" )
 
     rs.setAnalogueOutput( "back", 1 )
@@ -55,9 +55,9 @@ local all_files = {
     "TurtleFleet/Turtle/pathfind.lua",
     "TurtleFleet/Stations/station.lua",
     "TurtleFleet/Stations/treefarm.lua",
-    "TurtleFleet/Job/job.lua",
-    "TurtleFleet/Job/builder.lua",
-    "TurtleFleet/Job/coocker.lua",
+    "TurtleFleet/Jobs/job.lua",
+    "TurtleFleet/Jobs/builder.lua",
+    "TurtleFleet/Jobs/coocker.lua",
 }
 
 for i = 1, #all_files do
