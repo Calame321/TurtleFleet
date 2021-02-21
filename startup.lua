@@ -81,7 +81,7 @@ station = dofile( "TurtleFleet/Stations/station.lua" )
 treeFarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
 job = dofile( "TurtleFleet/Jobs/job.lua" )
 builder = dofile( "TurtleFleet/Jobs/builder.lua" )
-builder = dofile( "TurtleFleet/Jobs/coocker.lua" )
+coocker = dofile( "TurtleFleet/Jobs/coocker.lua" )
 
 -----------
 -- Const --
@@ -149,12 +149,6 @@ function save_map()
     file.flush()
     file.close()
 end
-
---function log( text )
-    --local file = fs.open( "logs", "a" )
-    --file.writeLine( text )
-    --file.close()
---end
 
 ---------
 -- Map --
