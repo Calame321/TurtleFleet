@@ -5,7 +5,7 @@
 miner = job:new()
 
 miner.chunk_per_region = 5 --from center
-miner.branch_mine_length = 16 * chunk_per_region
+miner.branch_mine_length = 16 * miner.chunk_per_region
 
 function miner:vein_mine( from, block )
     -- up
