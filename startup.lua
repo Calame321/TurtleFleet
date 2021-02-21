@@ -81,7 +81,7 @@ station = dofile( "TurtleFleet/Stations/station.lua" )
 treeFarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
 job = dofile( "TurtleFleet/Jobs/job.lua" )
 builder = dofile( "TurtleFleet/Jobs/builder.lua" )
-coocker = dofile( "TurtleFleet/Jobs/cooker.lua" )
+cooker = dofile( "TurtleFleet/Jobs/cooker.lua" )
 
 -----------
 -- Const --
@@ -677,7 +677,7 @@ function show_menu()
             flaten_chunks( number_of_chunk )
         end
     elseif args[ 1 ] == "8" then
-        coocker:start_cooking()
+        cooker:start_cooking()
     elseif args[ 1 ] == "9" then
         miner:branch_mining( args[ 2 ] )
     elseif args[ 1 ] == "10" then

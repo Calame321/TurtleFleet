@@ -1,14 +1,14 @@
 --------------
 -- Coocker --
 --------------
-coocker = job:new()
+cooker = job:new()
 
 local coocking_time = 10
 local coal_burn_time = 80
 
 local furnace_fuel_ammount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }
 
-function coocker:fill_inv()
+function cooker:fill_inv()
     if not turtle.suck() then
         print( "The inventory is empty..." )
 
@@ -29,7 +29,7 @@ function coocker:fill_inv()
     return math.floor( item_in_inv / 16 )
 end
 
-function coocker:drop_remaining_items()
+function cooker:drop_remaining_items()
     if turtle.has_items() then
         for i = 1, 16 do
             if turtle.getItemCount( i ) > 0 then
@@ -42,7 +42,7 @@ function coocker:drop_remaining_items()
     end
 end
 
-function coocker:refuel_furnace()
+function cooker:refuel_furnace()
     turtle.turnLeft()
     turtle.select( 1 )
     turtle.suck()
@@ -88,14 +88,14 @@ function coocker:refuel_furnace()
         turtle.back()
 
         turtle.turnRight()
-        coocker:drop_remaining_items()
+        cooker:drop_remaining_items()
         turtle.turnLeft()
     else
         turtle.turnRight()
     end
 end
 
-function coocker:insert_ingerdient()
+function cooker:insert_ingerdient()
     turtle.up()
     turtle.select( 1 )
     local item_to_insert = fill_inv()
@@ -117,11 +117,11 @@ function coocker:insert_ingerdient()
     end
 
     turtle.turnRight()
-    coocker:drop_remaining_items()
+    cooker:drop_remaining_items()
     turtle.down()
 end
 
-function coocker:empty_furnace()
+function cooker:empty_furnace()
     turtle.down()
     turtle.turnLeft()
     
@@ -136,11 +136,11 @@ function coocker:empty_furnace()
     end
 
     turtle.turnRight()
-    coocker:drop_remaining_items()
+    cooker:drop_remaining_items()
     turtle.up()
 end
 
-function coocker:check_own_fuel()
+function cooker:check_own_fuel()
     if turtle.getFuelLevel() < 500 then
         turtle.turnRight()
         turtle.suck()
@@ -149,14 +149,14 @@ function coocker:check_own_fuel()
     end
 end
 
-function coocker:start_cooking()
+function cooker:start_cooking()
     while true do
-        coocker:check_own_fuel()
-        coocker:refuel_furnace()
-        coocker:empty_furnace()
-        coocker:insert_ingerdient()
+        cooker:check_own_fuel()
+        cooker:refuel_furnace()
+        cooker:empty_furnace()
+        cooker:insert_ingerdient()
         os.sleep( 80 )
     end
 end
 
-return coocker
+return cooker
