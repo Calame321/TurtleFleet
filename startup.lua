@@ -29,10 +29,13 @@ end
 function update()
     fs.delete( "startup" )
     fs.delete( "TurtleFleet" )
-    get_file_from_github( git_path .. "Turtle/advanced_turtle.lua","TurtleFleet/Turtle/advanced_turtle.lua" )
-    get_file_from_github( git_path .. "Stations/station.lua","TurtleFleet/Stations/station.lua" )
-    get_file_from_github( git_path .. "Stations/tree_farm.lua","TurtleFleet/Stations/treefarm.lua" )
-    get_file_from_github( git_path .. "startup.lua", "startup" )
+    get_file_from_github( git_path .. "Turtle/advanced_turtle.lua"  ,"TurtleFleet/Turtle/advanced_turtle.lua" )
+    get_file_from_github( git_path .. "Stations/station.lua"        ,"TurtleFleet/Stations/station.lua" )
+    get_file_from_github( git_path .. "Stations/tree_farm.lua"      ,"TurtleFleet/Stations/treefarm.lua" )
+    get_file_from_github( git_path .. "Job/job.lua"                 ,"TurtleFleet/Job/job.lua" )
+    get_file_from_github( git_path .. "Job/builder.lua"             ,"TurtleFleet/Job/builder.lua" )
+    get_file_from_github( git_path .. "Job/coocker.lua"             ,"TurtleFleet/Job/coocker.lua" )
+    get_file_from_github( git_path .. "startup.lua"                 , "startup" )
 
     rs.setAnalogueOutput( "back", 1 )
     os.sleep( 0.05 )
@@ -47,10 +50,15 @@ function get_file_from_github( url, file_path )
     f.close()
 end
 
-local all_files = {}
-all_files[ 1 ] = "TurtleFleet/Turtle/advanced_turtle.lua"
-all_files[ 2 ] = "TurtleFleet/Stations/station.lua"
-all_files[ 3 ] = "TurtleFleet/Stations/treefarm.lua"
+local all_files = {
+    "TurtleFleet/Turtle/advanced_turtle.lua",
+    "TurtleFleet/Turtle/pathfind.lua",
+    "TurtleFleet/Stations/station.lua",
+    "TurtleFleet/Stations/treefarm.lua",
+    "TurtleFleet/Job/job.lua",
+    "TurtleFleet/Job/builder.lua",
+    "TurtleFleet/Job/coocker.lua",
+}
 
 for i = 1, #all_files do
     if not fs.exists( all_files[ i ] ) then
@@ -64,14 +72,12 @@ end
 -- config --
 ------------
 shell.run( "TurtleFleet/Turtle/advanced_turtle.lua" )
-Station = dofile( "TurtleFleet/Stations/station.lua" )
-TreeFarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
-
--- region
-local chunk_per_region = 5 --from center
-
--- Mining
-local branch_mine_length = 16 * chunk_per_region
+shell.run( "TurtleFleet/Turtle/pathfind.lua" )
+station = dofile( "TurtleFleet/Stations/station.lua" )
+treeFarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
+job = dofile( "TurtleFleet/Job/job.lua" )
+builder = dofile( "TurtleFleet/Job/builder.lua" )
+builder = dofile( "TurtleFleet/Job/coocker.lua" )
 
 -----------
 -- Const --
@@ -184,225 +190,11 @@ function map_get( pos )
     return map[ pos.x ][ pos.y ][ pos.z ]
 end
 
---------------------
--- A* Pathfinding --
---------------------
-local openSet = { start }
-local closedSet = {}
-local came_from = {}
-local gScore = {}
-local fScore = {}
-local sleep_counter = 0
-
-local neibourgh_pos = {
-    vector.new(  1,  0,  0 ),
-    vector.new( -1,  0,  0 ),
-    vector.new(  0,  1,  0 ),
-    vector.new(  0, -1,  0 ),
-    vector.new(  0,  0,  1 ),
-    vector.new(  0,  0, -1 ),
-}
-
-function reconstruct_path( cameFrom, current )
-    total_path = { current }
-    while came_from[ current ] do
-        current = came_from[ current ]
-        table.insert( total_path, 1, current )
-    end
-    return total_path
-end
-
-function neibourgh( coord )
-    local valid_n = {}
-
-    for c = 1, #neibourgh_pos do
-        local n_coord = neibourgh_pos[ c ] + coord
-        local m = map_get( n_coord )
-
-        if m == nil then
-            table.insert( valid_n, n_coord )
-        end
-    end
-
-    return valid_n
-end
-
-function distance_to( v1, v2 )
-    local v3 = v1 - v2
-    return math.abs( v3.x ) + math.abs( v3.y ) + math.abs( v3.z )
-end
-
-function get_lowest_f()
-    local lowest_f = 9999999999;
-    local lowest_node = nil
-
-    for o = 1, #openSet do
-        local node = openSet[ o ]
-        local f = fScore[ node ]
-
-        if f < lowest_f then
-            lowest_f = f
-            lowest_node = node
-        end
-    end
-
-    return lowest_node
-end
-
--- A* finds a path from start to goal.
-function A_Star( start, goal )
-    -- G = Distance from starting node.
-    -- H = Distance from end node. ( distance_to( v1, v2 ) )
-    -- F = G + H
-    openSet = { start } -- array
-    closedSet = {} -- array
-    came_from = {} -- dictionnary
-    gScore = {} -- dictionnary
-    fScore = {} -- dictionnary
-
-    gScore[ start ] = 0
-    fScore[ start ] = distance_to( start, goal )
-
-    while table.getn( openSet ) ~= 0 do
-        -- avoid 'too long without yeilding'
-        if sleep_counter == 20 then
-            os.sleep( 0.05 )
-            sleep_counter = 0
-        end
-        sleep_counter = sleep_counter + 1
-
-        current = get_lowest_f()
-
-        if tostring( current ) == tostring( goal ) then
-            return reconstruct_path( came_from, current )
-        end
-
-        -- Adding current to closed set
-        for o = 1, #openSet do
-            if tostring( openSet[ o ] ) == tostring( current ) then
-                table.insert( closedSet, current )
-                table.remove( openSet, o )
-                break
-            end
-        end
-
-        local n = neibourgh( current )
-
-        -- Log the neibourgh
-        local str_n = "Neibourgh: "
-        for c = 1, #n do
-            str_n = str_n .. tostring( n[ c ] ) .. " | "
-        end
-
-        for c = 1, #n do
-            if not has_value( closedSet, n[ c ] ) then
-                came_from[ n[ c ] ] = current
-                gScore[ n[ c ] ] = gScore[ current ] + 1
-                fScore[ n[ c ] ] = gScore[ n[ c ] ] + distance_to( n[ c ], goal )
-
-                if not has_value( openSet, n[ c ] ) then
-                    table.insert( openSet, n[ c ] )
-                end
-            end
-        end
-    end
-
-    -- Open set is empty but goal was never reached
-    print( "No path found!" )
-    return {}
-end
-
 
 
 ----------------
 -- Decoration --
 ----------------
-function place_floor( direction )
-    direction = direction or "down"
-    print( "Place floor block in firt slot." )
-    print( "Press a key when ready." )
-    read()
-
-    local floor_block = turtle.getItemDetail( 1 ).name
-    local can_continue = true
-    local rightTurn = true
-
-    while can_continue do
-        turtle.digDir( direction )
-        
-        local block_index = turtle.get_item_index( floor_block )
-
-        if block_index == -1 then
-            print( "Give me more block please!" )
-
-            while block_index == -1 do
-                os.sleep( 1 )
-                block_index = turtle.get_item_index( floor_block )
-            end
-        end
-
-        turtle.select( block_index )
-        turtle.placeDir( direction )
-
-        if not move( "forward", "minecraft:torch" ) or turtle.is_block_name( "down", floor_block ) then
-            if rightTurn then
-                turtle.turnRight()
-            else
-                turtle.turnLeft()
-            end
-            
-            if not move( "forward", "minecraft:torch" ) then
-                can_continue = false
-            end
-
-            if rightTurn then
-                turtle.turnRight()
-                rightTurn = false
-            else
-                turtle.turnLeft()
-                rightTurn = true
-            end
-        end
-    end
-end
-
-
-function place_wall()
-    print( "Place floor block in firt slot." )
-    print( "Press a key when ready." )
-    read()
-
-    local wall_block = turtle.getItemDetail( 1 ).name
-    local direction = "up"
-
-    while true do
-        repeat
-            turtle.try_refuel()
-            turtle.dig_all( "forward" )
-            turtle.select( get_item_index( wall_block ) )
-            turtle.place()
-            moveDir[ direction ]()
-        until detectDir[ direction ]()
-
-        turtle.dig_all( "forward" )
-        turtle.select( get_item_index( wall_block ) )
-        turtle.place()
-        turtle.turnRight()
-
-        if turtle.detect() then
-            return
-        end
-
-        turtle.forward()
-        turtle.turnLeft()
-
-        if direction == "up" then
-            direction = "down"
-        else
-            direction = "up"
-        end
-    end
-end
 
 local initial_aditionnal_up = 5
 local last_average_height = 10
@@ -550,325 +342,7 @@ function flaten_chunks( number_of_chunk )
     end
 end
 
-------------
--- Mining --
-------------
-function vein_mine( from, block )
-    -- up
-    if turtle.is_block_name( "up", block ) then
-        turtle.force_move( "up" )
-        vein_mine( "up", block )
-    end
 
-    -- forward
-    if turtle.is_block_name( "forward", block ) then
-        turtle.force_forward()
-        vein_mine( "forward", block )
-    end
-
-    -- down
-    if turtle.is_block_name( "down", block ) then
-        turtle.force_down()
-        vein_mine( "down", block )
-    end
-    
-    -- left
-    turtle.turnLeft()
-
-    if turtle.is_block_name( "forward", block ) then
-        turtle.force_forward()
-        vein_mine( "forward", block )
-    end
-
-    -- right
-    turtle.turn180()
-    
-    if turtle.is_block_name( "forward", block ) then
-        turtle.force_forward()
-        vein_mine( "forward", block )
-    end
-
-    turtle.turnLeft()
-    turtle.move_reverse( from )
-end
-
-
-function dig_out( depth, width )
-    turtle.force_forward()
-    turtle.turnRight()
-
-    for x = 1, depth do
-        for y = 1, width - 1 do
-            turtle.dig_all( "up" )
-            turtle.dig_all( "down" )
-            turtle.force_forward()
-        end
-
-        turtle.dig_all( "up" )
-        turtle.dig_all( "down" )
-        
-        -- dont need to change row if at the end
-        if x < depth then
-            if x % 2 == 0 then
-                turtle.turnRight()
-                turtle.force_forward()
-                turtle.turnRight()
-            else
-                turtle.turnLeft()
-                turtle.force_forward()
-                turtle.turnLeft()
-            end
-            
-            turtle.dig_all( "up" )
-            turtle.dig_all( "down" )
-        end
-    end
-end
-
-function check_ore( direction )
-    local ore_tag = "forge:ores"
-    
-    if turtle.is_block_tag( direction, ore_tag ) then
-        local success, data = turtle.inspectDir( direction )
-        local ore_name = data.name
-
-        for b = 1, #DO_NOT_MINE do
-            if ore_name == DO_NOT_MINE[ b ] then
-                return false
-            end
-        end
-
-        turtle.force_move( direction )
-        vein_mine( direction, ore_name )
-    end
-
-    return true
-end
-
-function mine_branch()
-    local found_forbidden_ore = false
-    local depth = 0
-
-    for i = 1, branch_mine_length do
-        depth = depth + 1
-        turtle.force_forward()
-
-        if not check_ore( "up" ) then found_forbidden_ore = true end
-        if not check_ore( "down" ) then found_forbidden_ore = true end
-        turtle.turnLeft()
-        if not check_ore( "forward" ) then found_forbidden_ore = true end
-        turtle.turn180()
-        if not check_ore( "forward" ) then found_forbidden_ore = true end
-        turtle.turnLeft()
-
-        if found_forbidden_ore then print( "FOUND DO_NOT_MINE ORE !!!!" ) break end
-    end
-
-    for i = 0, depth - 1 do
-        turtle.force_move( "back" )
-
-        if found_forbidden_ore then
-            turtle.digDown()
-        end
-    end
-
-    return found_forbidden_ore
-end
-
-function empty_inventory()
-    for i = 1, 16 do
-        local slot = turtle.getItemDetail( i )
-
-        if slot and not turtle.is_valid_fuel( slot.name ) then
-            turtle.select( i )
-            
-            if not turtle.drop() then
-                print( "Please, make some place in the chest !!" )
-
-                while not turtle.drop() do
-                    os.sleep( 10 )
-                end
-            end
-        end
-    end
-end
-
-function branch_mining( side )
-    local branch_index = 0
-
-    for b = 1, branch_mine_length / 4 do
-        turtle.turn180()
-
-        for i = 1, ( branch_index * 4 ) do
-            turtle.force_forward()
-        end
-
-        if side == "left" then turtle.turnLeft() else turtle.turnRight() end
-
-        mine_branch()
-
-        if side == "left" then turtle.turnLeft() else  turtle.turnRight() end
-        
-        for i = 1, ( branch_index * 4 ) do
-            turtle.force_forward()
-        end
-
-        empty_inventory()
-        branch_index = branch_index + 1
-    end
-end
-
-local mining_state = "going_down"
-local mine_start_position
-local mine_level = 6
-local mine_setup = false
-local mine_layer = 1
-local mine_direction = 0
-
-
-function setup_mine( mine_position )
-    mine_start_position = mine_position
-    save_mine()
-end
-
-function get_mine_y()
-    return ( mine_layer * 2 ) + 4
-end
-
-function get_branch_entrance_pos( branch_index )
-    local x = mine_start_position.x + ( ( ( ( mine_layer % 2 ) * 2 ) + 2 ) * ( mine_direction % 2 ) )
-    local y = get_mine_y()
-    local z = mine_start_position.z + ( ( ( ( mine_layer % 2 ) * 2 ) + 2 ) * ( ( 1 + mine_direction ) % 2 ) )
-end
-
-function mine()
-    load_mine()
-
-    if not mine_setup then
-        print( "Need to setup the mine." )
-        print( "My pos = " .. tostring( pos.coords ) )
-        print( "Mine pos = " .. tostring( mine_start_position ) )
-        go_to_mine_start()
-        turtle.turn( NORTH )
-        dig_mine_shaft()
-        go_to_output_chest()
-        turtle.turn( WEST )
-        drop_inventory()
-        mine_setup = true
-        save_mine()
-    end
-
-    go_to_mine_start()
-    go_down_the_mine()
-    turtle.turn( mine_direction )
-    find_next_branch()
-    --branch_mine()
-end
-
-function find_next_branch()
-    mining_state = "find_next_branch"
-    local branch_index = 0
-
-    while true do
-        -- TODO: Force goto
-        turtle.pathfind_to( get_branch_entrance_pos( branch_index ), true )
-        turtle.turn( LEFT )
-
-        local s, d = turtle.inspect()
-
-        if ( not s or d.name ~= "minecraft:cobblestone" ) then
-            return true
-        end
-
-        turtle.turn( RIGHT )
-        branch_index = branch_index + 1
-
-        if branch_index * 4 >= branch_mine_length then
-            return false
-        end
-    end  
-
-    return false
-end
-
-function go_to_mine_start()
-    turtle.pathfind_to( mine_start_position, false )
-end
-
-function go_to_output_chest()
-    local mine_output_position = vector.new( mine_start_position.x, mine_start_position.y, mine_start_position.z - 1 )
-    turtle.pathfind_to( mine_output_position, false )
-end
-
-function dig_mine_shaft()
-    turtle.turn( NORTH )
-    for i = 1, 58 do
-        turtle.force_move( "down" )
-        turtle.dig()
-    end
-end
-
-function go_down_the_mine()
-    mining_state = "going_down"
-    save_mine()
-    local mine_level_position = vector.new( mine_start_position.x, 6, mine_start_position.z )
-    turtle.pathfind_to( mine_level_position, false )
-end
-
-function drop_inventory()
-    mining_state = "drop_inventory"
-    save_mine()
-
-    for i = 1, 16 do
-        local item = turtle.getItemDetail( i )
-        if item and item.count > 0 then
-            turtle.select( i )
-
-            if item.name == "minecraft:coal" or item.name == "minecraft:charcoal" then
-                turtle.dropUp()
-            else
-                local chest_has_place = turtle.drop()
-
-                while not chest_has_place do
-                    os.sleep( 5 )
-                    chest_has_place = turtle.drop()
-                end
-            end
-        end
-    end
-
-    turtle.select( 1 )
-    turtle.suckUp()
-end
-
-function load_mine()
-    if not fs.exists( "mine" ) then
-        local file = fs.open( "mine", "w" )
-        file.close()
-    end
-
-    local file = fs.open( "mine", "r" )
-    mining_state = file.readLine()
-    local start_pos_split = mysplit( file.readLine() )
-    mine_start_position = vector.new( start_pos_split[ 1 ], start_pos_split[ 2 ], start_pos_split[ 3 ] )
-    mine_level = tonumber( file.readLine() )
-    mine_setup = "true" == file.readLine()
-    mine_layer = tonumber( file.readLine() )
-end
-
-function save_mine()
-    local file = fs.open( "mine", "w" )
-    file.writeLine( mining_state )
-    print( "Save mine pos: " .. tostring( mine_start_position ) )
-    file.writeLine( tostring( mine_start_position.x ) .. " " .. tostring( mine_start_position.y ) .. " " .. tostring( mine_start_position.z ) )
-    file.writeLine( tostring( mine_level ) )
-    file.writeLine( tostring( mine_setup ) )
-    file.writeLine( tostring( mine_layer ) )
-    file.flush()
-    file.close()
-end
-
--------------
 -- Farming --
 -------------
 function rice_farm()
@@ -982,164 +456,6 @@ function cane_farm()
     end
 end
 
---------------
--- Coocking --
---------------
-local coocking_time = 10
-local coal_burn_time = 80
-
-local furnace_fuel_ammount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }
-
-function fill_inv()
-    if not turtle.suck() then
-        print( "The inventory is empty..." )
-
-        while not turtle.suck() do
-            os.sleep( 60 )
-        end
-    end
-
-
-    while turtle.suck() do end
-
-    local item_in_inv = 0
-    for i = 1, 16 do
-        item_in_inv = item_in_inv + turtle.getItemCount( i )
-    end
-
-    turtle.drop( item_in_inv % 16 )
-    return math.floor( item_in_inv / 16 )
-end
-
-function drop_remaining_items()
-    if turtle.has_items() then
-        for i = 1, 16 do
-            if turtle.getItemCount( i ) > 0 then
-                turtle.select( i )
-                while not turtle.drop() do
-                    os.sleep( 5 )
-                end
-            end
-        end
-    end
-end
-
-function refuel_furnace()
-    turtle.turnLeft()
-    turtle.select( 1 )
-    turtle.suck()
-
-    local need_refuel = turtle.getItemCount( 1 ) < 32
-    turtle.drop()
-
-    if need_refuel then
-        print( "Refuelling the furnaces.")
-        turtle.turn180()
-        turtle.select( 1 )
-
-        -- suck all the fuel possible
-        local fuel_to_transfer = fill_inv()
-
-        if each_fuel == 0 then
-            error( "Not enough fuel !" )
-        end
-
-        turtle.turnLeft()
-        turtle.forward()
-        turtle.turnLeft()
-
-        for i = 1, 16 do
-            turtle.forward()
-            turtle.turnLeft()
-            
-            for a = 1, 2 do
-                turtle.select( get_item_index( "coal" ) )
-                turtle.transferTo( 16 )
-            end
-
-            turtle.select( 16 )
-            turtle.drop( fuel_to_transfer )
-            turtle.turnRight()
-        end
-
-        for i = 1, 16 do
-            turtle.back()
-        end
-
-        turtle.turnRight()
-        turtle.back()
-
-        turtle.turnRight()
-        drop_remaining_items()
-        turtle.turnLeft()
-    else
-        turtle.turnRight()
-    end
-end
-
-function insert_ingerdient()
-    turtle.up()
-    turtle.select( 1 )
-    local item_to_insert = fill_inv()
-    local item = turtle.getItemDetail()
-    turtle.turnLeft()
-    
-    for i = 1, 16 do
-        turtle.forward()
-        for x = 1, 16 do
-            if turtle.getItemCount( x ) > 0 then
-                turtle.select( x )
-                turtle.dropDown( item_to_insert )
-            end
-        end
-    end
-
-    for i = 1, 16 do
-        turtle.back()
-    end
-
-    turtle.turnRight()
-    drop_remaining_items()
-    turtle.down()
-end
-
-function empty_furnace()
-    turtle.down()
-    turtle.turnLeft()
-    
-    for i = 1, 16 do
-        turtle.forward()
-        turtle.select( 1 )
-        turtle.suckUp()
-    end
-
-    for i = 1, 16 do
-        turtle.back()
-    end
-
-    turtle.turnRight()
-    drop_remaining_items()
-    turtle.up()
-end
-
-function check_own_fuel()
-    if turtle.getFuelLevel() < 500 then
-        turtle.turnRight()
-        turtle.suck()
-        turtle.refuel()
-        turtle.turnLeft()
-    end
-end
-
-function start_cooking()
-    while true do
-        check_own_fuel()
-        refuel_furnace()
-        empty_furnace()
-        insert_ingerdient()
-        os.sleep( 80 )
-    end
-end
 
 ----------------
 -- Fleet Mode --
@@ -1329,28 +645,26 @@ function show_menu()
 
     if args[ 1 ] == "pos" then
         turtle.set_position( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ), tonumber( args[ 4 ] ), tonumber( args[ 5 ] ) )
-    elseif args[ 1 ] == "flatone" then
-        flat_one()
     elseif args[ 1 ] == "goto" then
         turtle.pathfind_to( vector.new( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ), tonumber( args[ 4 ] ) ), false )
     elseif args[ 1 ] == "setupMine" then
-        setup_mine( vector.new( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ), tonumber( args[ 4 ] ) ) )
+        miner:setup_mine( vector.new( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ), tonumber( args[ 4 ] ) ) )
     elseif args[ 1 ] == "mine" then
-        mine()
+        miner:mine()
     elseif args[ 1 ] == "update" then
         update_master()
     elseif args[ 1 ] == "1" then
-        TreeFarm.start_tree_farm()
+        treeFarm.start_tree_farm()
     elseif args[ 1 ] == "2" then
-        vein_mine( "forward", args[ 2 ] )
+        miner:vein_mine( "forward", args[ 2 ] )
     elseif args[ 1 ] == "3" then
-        dig_out( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ) )
+        miner:dig_out( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ) )
     elseif args[ 1 ] == "4" then
-        place_floor( args[ 2 ] )
+        builder:place_floor( args[ 2 ] )
     elseif args[ 1 ] == "5" then
-        place_wall()
+        builder:place_wall()
     elseif args[ 1 ] == "6" then
-        mine_branch()
+        miner:mine_branch()
     elseif args[ 1 ] == "7" then
         local number_of_chunk = tonumber( args[ 2 ] )
         if number_of_chunk == nil then number_of_chunk = 1 end
@@ -1365,15 +679,11 @@ function show_menu()
             flaten_chunks( number_of_chunk )
         end
     elseif args[ 1 ] == "8" then
-        start_cooking()
+        coocker:start_cooking()
     elseif args[ 1 ] == "9" then
-        branch_mining( args[ 2 ] )
+        miner:branch_mining( args[ 2 ] )
     elseif args[ 1 ] == "10" then
-        if args[ 2 ] == "1" then
-            rice_farm()
-        else
-            cane_farm()
-        end
+        if args[ 2 ] == "1" then rice_farm() else cane_farm() end
     else
         print( "What?... bye." )
     end
