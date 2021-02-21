@@ -1,6 +1,8 @@
 ------------
 -- Update --
 ------------
+local git_path = "https://raw.githubusercontent.com/Calame321/TurtleFleet/main/"
+
 function update_master()
     while turtle.suckDown( 1 ) do
         turtle.place()
@@ -27,25 +29,32 @@ end
 function update()
     fs.delete( "startup" )
     fs.delete( "TurtleFleet" )
-    shell.run( "pastebin get Jabq025z TurtleFleet/Turtle/advanced_turtle.lua" )
-    shell.run( "pastebin get hFmLDBZq TurtleFleet/Stations/station.lua" )
-    shell.run( "pastebin get RTxbBAVM TurtleFleet/Stations/treefarm.lua" )
-    shell.run( "pastebin get BS9zRNJW TurtleFleet/Utils/json.lua" )
-    shell.run( "pastebin get TBpm1C8V startup" )
+    get_file_from_github( git_path .. "Turtle/advanced_turtle.lua","TurtleFleet/Turtle/advanced_turtle.lua" )
+    get_file_from_github( git_path .. "Stations/station.lua","TurtleFleet/Stations/station.lua" )
+    get_file_from_github( git_path .. "Stations/tree_farm.lua","TurtleFleet/Stations/treefarm.lua" )
+    get_file_from_github( git_path .. "startup.lua", "startup" )
 
     rs.setAnalogueOutput( "back", 1 )
     os.sleep( 0.05 )
     rs.setAnalogueOutput( "back", 0 )
 end
 
+function get_file_from_github( url, file_path )
+    local f = fs.open( file_path, "w" )
+    local w = http.get( url )
+    f.write( w.readAll() )
+    f.flush()
+    f.close()
+end
+
 local all_files = {}
 all_files[ 1 ] = "TurtleFleet/Turtle/advanced_turtle.lua"
 all_files[ 2 ] = "TurtleFleet/Stations/station.lua"
 all_files[ 3 ] = "TurtleFleet/Stations/treefarm.lua"
-all_files[ 4 ] = "TurtleFleet/Utils/json.lua"
 
 for i = 1, #all_files do
     if not fs.exists( all_files[ i ] ) then
+        print( "Updating..." )
         update()
         os.reboot()
     end
