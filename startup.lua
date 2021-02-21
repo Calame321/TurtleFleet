@@ -34,7 +34,7 @@ function update()
     get_file_from_github( git_path .. "Stations/tree_farm.lua"      ,"TurtleFleet/Stations/treefarm.lua" )
     get_file_from_github( git_path .. "Jobs/job.lua"                 ,"TurtleFleet/Jobs/job.lua" )
     get_file_from_github( git_path .. "Jobs/builder.lua"             ,"TurtleFleet/Jobs/builder.lua" )
-    get_file_from_github( git_path .. "Jobs/coocker.lua"             ,"TurtleFleet/Jobs/coocker.lua" )
+    get_file_from_github( git_path .. "Jobs/cooker.lua"             ,"TurtleFleet/Jobs/cooker.lua" )
     get_file_from_github( git_path .. "startup.lua"                 , "startup" )
 
     rs.setAnalogueOutput( "back", 1 )
@@ -61,7 +61,7 @@ local all_files = {
     "TurtleFleet/Stations/treefarm.lua",
     "TurtleFleet/Jobs/job.lua",
     "TurtleFleet/Jobs/builder.lua",
-    "TurtleFleet/Jobs/coocker.lua",
+    "TurtleFleet/Jobs/cooker.lua",
 }
 
 for i = 1, #all_files do
@@ -81,7 +81,7 @@ station = dofile( "TurtleFleet/Stations/station.lua" )
 treeFarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
 job = dofile( "TurtleFleet/Jobs/job.lua" )
 builder = dofile( "TurtleFleet/Jobs/builder.lua" )
-coocker = dofile( "TurtleFleet/Jobs/coocker.lua" )
+coocker = dofile( "TurtleFleet/Jobs/cooker.lua" )
 
 -----------
 -- Const --
