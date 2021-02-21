@@ -472,7 +472,8 @@ function turtle.drop_in_enderchest( stuff_to_keep )
                 to_keep[ item.name ] = to_keep[ item.name ] - 1
             else
                 turtle.select( i )
-                if not turtle.dropUp() then os.sleep( 1 ) end
+                -- wait to drop stuff if chest full
+                if not turtle.dropUp() then while not turtle.dropUp() do os.sleep( 1 ) end end
             end
         end
     end
