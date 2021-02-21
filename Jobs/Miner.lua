@@ -7,6 +7,10 @@ miner = job:new()
 miner.chunk_per_region = 5 --from center
 miner.branch_mine_length = 16 * miner.chunk_per_region
 
+miner.stuff_to_keep = {}
+miner.stuff_to_keep[ "minecraft:coal" ] = 2
+miner.stuff_to_keep[ "minecraft:charcoal" ] = 2
+
 function miner:vein_mine( from, block )
     -- up
     if turtle.is_block_name( "up", block ) then
@@ -60,6 +64,8 @@ function miner:dig_out( depth, width )
             if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.up() turtle.down() end
             s, d = turtle.inspectDown()
             if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.down() turtle.up() end
+
+            turtle.drop_in_enderchest( miner.stuff_to_keep )
 
             if y < width then turtle.force_forward() end
         end

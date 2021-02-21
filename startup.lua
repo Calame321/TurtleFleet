@@ -36,7 +36,7 @@ function update()
     get_file_from_github( git_path .. "Jobs/job.lua"                ,"TurtleFleet/Jobs/job.lua" )
     get_file_from_github( git_path .. "Jobs/builder.lua"            ,"TurtleFleet/Jobs/builder.lua" )
     get_file_from_github( git_path .. "Jobs/cooker.lua"             ,"TurtleFleet/Jobs/cooker.lua" )
-    get_file_from_github( git_path .. "Jobs/Miner.lua"             ,"TurtleFleet/Jobs/miner.lua" )
+    get_file_from_github( git_path .. "Jobs/Miner.lua"              ,"TurtleFleet/Jobs/miner.lua" )
     get_file_from_github( git_path .. "startup.lua"                 ,"startup" )
 
     rs.setAnalogueOutput( "back", 1 )
