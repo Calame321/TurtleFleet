@@ -79,9 +79,9 @@ shell.run( "TurtleFleet/Turtle/advanced_turtle.lua" )
 shell.run( "TurtleFleet/Turtle/pathfind.lua" )
 station = dofile( "TurtleFleet/Stations/station.lua" )
 treeFarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
-job = dofile( "TurtleFleet/Job/job.lua" )
-builder = dofile( "TurtleFleet/Job/builder.lua" )
-builder = dofile( "TurtleFleet/Job/coocker.lua" )
+job = dofile( "TurtleFleet/Jobs/job.lua" )
+builder = dofile( "TurtleFleet/Jobs/builder.lua" )
+builder = dofile( "TurtleFleet/Jobs/coocker.lua" )
 
 -----------
 -- Const --
@@ -346,7 +346,7 @@ function flaten_chunks( number_of_chunk )
     end
 end
 
-
+-------------
 -- Farming --
 -------------
 function rice_farm()
