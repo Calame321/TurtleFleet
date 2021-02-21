@@ -66,7 +66,6 @@ end
 shell.run( "TurtleFleet/Turtle/advanced_turtle.lua" )
 Station = dofile( "TurtleFleet/Stations/station.lua" )
 TreeFarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
-json = dofile( "TurtleFleet/Utils/json.lua" )
 
 -- region
 local chunk_per_region = 5 --from center
