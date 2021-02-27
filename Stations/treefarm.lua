@@ -13,7 +13,6 @@ treefarm.IN_LANE = 1
 treefarm.CUTTING = 2
 treefarm.RETURNING = 3
 treefarm.FURNACE = 4
-treefarm.SETUP = 5
 
 function treefarm:cut_tree()
     treefarm.STATE = treefarm.CUTTING
@@ -262,8 +261,6 @@ end
 
 
 function treefarm:setup_tree_farm()
-    treefarm.STATE = treefarm.SETUP
-    turtle.save_job( "treefarm", treefarm.STATE )
     while not have_setup_materials() do os.sleep( 1 ) end
 
     turtle.select( turtle.get_item_index( "coal" ) )
@@ -280,8 +277,6 @@ function treefarm:setup_tree_farm()
     turtle.turnLeft()
     turtle.select( turtle.get_item_index( "sapling" ) )
     turtle.transferTo( 1 )
-    treefarm.STATE = treefarm.AT_START
-    turtle.save_job( "treefarm", treefarm.STATE )
 end
 
 
@@ -333,8 +328,6 @@ function treefarm:resume( state )
         turtle.turn( turtle.NORTH )
         treefarm:manage_furnace()
         treefarm:drop_stuff()
-        treefarm:start_tree_farm()
-    elseif state == treefarm.SETUP then
         treefarm:start_tree_farm()
     end
 
