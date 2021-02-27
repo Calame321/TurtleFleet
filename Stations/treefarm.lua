@@ -286,7 +286,10 @@ end
 
 
 function treefarm:start_tree_farm( length )
-    treefarm.tree_farm_length = length or treefarm.tree_farm_length
+    if length ~= nil then
+        treefarm.tree_farm_length = length
+    end
+    
     turtle.set_position( 0, 0, 0, turtle.NORTH )
 
     print( "- Starting TREE FARM -" )
@@ -308,11 +311,19 @@ function treefarm:resume( state )
     if state == treefarm.AT_START then
         turtle.turn( turtle.NORTH )
     elseif state == treefarm.IN_LANE then
-
+        return_home()
     elseif state == treefarm.CUTTING then
-
+        while turtle.is_block_name_contains( "up", "log" ) do
+            turtle.digUp()
+            turtle.force_up()
+        end
+        while turtle.y ~= 0 do
+            turtle.force_down()
+        end
+        turtle.force_back()
+        return_home()
     elseif state == treefarm.RETURNING then
-
+        return_home()
     elseif state == treefarm.FURNACE then
         if turtle.x == 1 and turtle.y == 2 and turtle.z == 0 then turtle.force_back() end
         if turtle.x == 0 and turtle.y == 2 and turtle.z == 0 then turtle.force_down() end
@@ -320,11 +331,22 @@ function treefarm:resume( state )
         if turtle.x == 1 and turtle.y == 0 and turtle.z == 0 then turtle.force_back() end
         turtle.turn( turtle.NORTH )
         treefarm:manage_furnace()
+        treefarm:drop_stuff()
+        treefarm:start_tree_farm()
     elseif state == treefarm.SETUP then
-
+        treefarm:start_tree_farm()
     end
 
     print( 'End of resume' )
+end
+
+function return_home()
+    turtle.turn( turtle.SOUTH )
+    while turtle.z ~= 0 do
+        turtle.force_forward()
+    end
+    turtle.turn( turtle.NORTH )
+    treefarm:start_tree_farm()
 end
 
 return treefarm
