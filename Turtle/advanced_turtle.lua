@@ -531,4 +531,26 @@ function turtle.try_refuel()
     end
 end
 
+-- Job
+function turtle.load_job()
+    local f = fs.open( "job", "r" )
+    if f then
+        local job = f.readLine()
+        if job == "treefarm" then
+            local state = f.readLine
+            return job, state
+        end
+    end
+
+    return nil
+end
+
+function turtle.save_job( job, state )
+    local f = fs.open( "job", "w" )
+    f.writeLine( job )
+    f.writeLine( state )
+    f.flush()
+    f.close()
+end
+
 turtle.load_position()

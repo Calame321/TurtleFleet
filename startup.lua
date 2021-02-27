@@ -133,11 +133,11 @@ function load_settings()
         file.close()
     end
 
-    for line in io.lines( "map" ) do
-        if line ~= "" then
-            local l = mysplit( line )
-            map_add( vector.new( l[ 1 ], l[ 2 ], l[ 3 ] ), l[ 4 ] )
-        end
+    local f = fs.open( "map", "r" )
+    local line = f.readLine()
+    while line ~= nil do
+        local l = mysplit( line )
+        map_add( vector.new( l[ 1 ], l[ 2 ], l[ 3 ] ), l[ 4 ] )
     end
 end
 
@@ -693,7 +693,21 @@ function show_menu()
     end
 end
 
+local show_menu = true
 -- Check if has redstone analog signal
-if not check_redstone_option() then
+if check_redstone_option() then
+    show_menu = false
+end
+
+-- Check if was doing a task
+local job, state = turtle.load_job()
+if job then
+    if job == "-treefarm" then
+        treefarm:resume( state )
+        show_menu = false
+    end
+end
+
+if show_menu then
     show_menu()
 end

@@ -47,7 +47,7 @@ function miner:vein_mine( from, block )
     end
 
     turtle.turnLeft()
-    turtle.move_reverse( from )
+    turtle.reverse( from )
 end
 
 
@@ -61,9 +61,9 @@ function miner:dig_out( depth, width )
             turtle.dig_all( "down" )
 
             local s, d = turtle.inspectUp()
-            if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.up() turtle.down() end
+            if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_up() turtle.force_down() end
             s, d = turtle.inspectDown()
-            if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.down() turtle.up() end
+            if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_down() turtle.force_up() end
 
             turtle.drop_in_enderchest( miner.stuff_to_keep )
 
