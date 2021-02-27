@@ -104,8 +104,8 @@ function treefarm:manage_furnace()
     turtle.save_job( "treefarm", treefarm.STATE )
     print( "Checking Furnace." )
     --inserting fuel
-    turtle.force_up()
     turtle.turnRight()
+    turtle.force_up()
 
     if fuel_slot > 0 then
         turtle.select( fuel_slot )
@@ -314,9 +314,12 @@ function treefarm:resume( state )
     elseif state == treefarm.RETURNING then
 
     elseif state == treefarm.FURNACE then
-        if turtle.z == 2 and turtle.x then
-
-        end
+        if turtle.x == 1 and turtle.y == 2 and turtle.z == 0 then turtle.force_back() end
+        if turtle.x == 0 and turtle.y == 2 and turtle.z == 0 then turtle.force_down() end
+        if turtle.x == 0 and turtle.y == 1 and turtle.z == 0 then turtle.force_down() end
+        if turtle.x == 1 and turtle.y == 0 and turtle.z == 0 then turtle.force_back() end
+        turtle.turn( NORTH )
+        treefarm:manage_furnace()
     elseif state == treefarm.SETUP then
 
     end
