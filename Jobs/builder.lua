@@ -59,13 +59,13 @@ function builder:place_wall()
         repeat
             turtle.try_refuel()
             turtle.dig_all( "forward" )
-            turtle.select( get_item_index( wall_block ) )
+            turtle.select( turtle.get_item_index( wall_block ) )
             turtle.place()
             moveDir[ direction ]()
         until detectDir[ direction ]()
 
         turtle.dig_all( "forward" )
-        turtle.select( get_item_index( wall_block ) )
+        turtle.select( turtle.get_item_index( wall_block ) )
         turtle.place()
         turtle.turnRight()
 
