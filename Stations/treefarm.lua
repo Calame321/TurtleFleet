@@ -323,6 +323,8 @@ function treefarm:resume( state )
     elseif state == treefarm.SETUP then
 
     end
+
+    print( 'End of resume' )
 end
 
 return treefarm
