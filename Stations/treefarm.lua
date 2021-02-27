@@ -17,6 +17,7 @@ treefarm.SETUP = 5
 
 function treefarm:cut_tree()
     treefarm.STATE = treefarm.CUTTING
+    turtle.save_job( "treefarm", treefarm.STATE )
     print( "Cutting a tree." )
     turtle.dig()
     turtle.forward()
@@ -37,11 +38,13 @@ function treefarm:cut_tree()
     turtle.force_back()
     turtle.suck()
     treefarm.STATE = treefarm.IN_LANE
+    turtle.save_job( "treefarm", treefarm.STATE )
 end
 
 
 function treefarm:plant_trees()
     treefarm.STATE = treefarm.IN_LANE
+    turtle.save_job( "treefarm", treefarm.STATE )
     print( "Planting trees." )
 
     for i = 0, treefarm.tree_farm_length do
@@ -57,6 +60,7 @@ function treefarm:plant_trees()
     turtle.suck()
     turtle.turn180()
     treefarm.STATE = treefarm.RETURNING
+    turtle.save_job( "treefarm", treefarm.STATE )
 
     for i = 0, treefarm.tree_farm_length do
         turtle.suck()
@@ -65,6 +69,7 @@ function treefarm:plant_trees()
 
     turtle.turn180()
     treefarm.STATE = treefarm.AT_START
+    turtle.save_job( "treefarm", treefarm.STATE )
 end
 
 
@@ -93,6 +98,7 @@ function treefarm:manage_furnace()
     if coal_amount > 16 then return end
 
     treefarm.STATE = treefarm.FURNACE
+    turtle.save_job( "treefarm", treefarm.STATE )
     print( "Checking Furnace." )
     --inserting fuel
     turtle.force_up()
@@ -132,6 +138,7 @@ function treefarm:manage_furnace()
     turtle.back()
     turtle.turnLeft()
     treefarm.STATE = treefarm.AT_START
+    turtle.save_job( "treefarm", treefarm.STATE )
 end
 
 
@@ -250,6 +257,7 @@ end
 
 function treefarm:setup_tree_farm()
     treefarm.STATE = treefarm.SETUP
+    turtle.save_job( "treefarm", treefarm.STATE )
     while not have_setup_materials() do os.sleep( 1 ) end
 
     turtle.select( turtle.get_item_index( "coal" ) )
@@ -267,6 +275,7 @@ function treefarm:setup_tree_farm()
     turtle.select( turtle.get_item_index( "sapling" ) )
     turtle.transferTo( 1 )
     treefarm.STATE = treefarm.AT_START
+    turtle.save_job( "treefarm", treefarm.STATE )
 end
 
 
