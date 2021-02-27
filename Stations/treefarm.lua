@@ -287,7 +287,7 @@ end
 
 function treefarm:start_tree_farm( length )
     treefarm.tree_farm_length = length or treefarm.tree_farm_length
-    turtle.set_position( 0, 0, 0, NORTH )
+    turtle.set_position( 0, 0, 0, turtle.NORTH )
 
     print( "- Starting TREE FARM -" )
     if not treefarm:has_tree_farm_setup() then
@@ -306,7 +306,7 @@ end
 
 function treefarm:resume( state )
     if state == treefarm.AT_START then
-        turtle.turn( NORTH )
+        turtle.turn( turtle.NORTH )
     elseif state == treefarm.IN_LANE then
 
     elseif state == treefarm.CUTTING then
@@ -318,7 +318,7 @@ function treefarm:resume( state )
         if turtle.x == 0 and turtle.y == 2 and turtle.z == 0 then turtle.force_down() end
         if turtle.x == 0 and turtle.y == 1 and turtle.z == 0 then turtle.force_down() end
         if turtle.x == 1 and turtle.y == 0 and turtle.z == 0 then turtle.force_back() end
-        turtle.turn( NORTH )
+        turtle.turn( turtle.NORTH )
         treefarm:manage_furnace()
     elseif state == treefarm.SETUP then
 

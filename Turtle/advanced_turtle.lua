@@ -16,12 +16,12 @@ local DO_NOT_MINE = {
     "mysticalworld:amethyst_ore",
 }
 
-NORTH = 0
-EAST = 1
-SOUTH = 2
-WEST = 3
-LEFT = 4
-RIGHT = 5
+turtle.NORTH = 0
+turtle.EAST = 1
+turtle.SOUTH = 2
+turtle.WEST = 3
+turtle.LEFT = 4
+turtle.RIGHT = 5
 
 turtle.x = 0
 turtle.y = 0
@@ -52,10 +52,10 @@ function turtle.position()
 end
 
 function turtle.facing()
-    if     turtle.dz == -1 and turtle.dx ==  0 then return NORTH
-    elseif turtle.dz ==  0 and turtle.dx == -1 then return WEST
-    elseif turtle.dz ==  0 and turtle.dx ==  1 then return EAST
-    elseif turtle.dz ==  1 and turtle.dx ==  0 then return SOUTH
+    if     turtle.dz == -1 and turtle.dx ==  0 then return turtle.NORTH
+    elseif turtle.dz ==  0 and turtle.dx == -1 then return turtle.WEST
+    elseif turtle.dz ==  0 and turtle.dx ==  1 then return turtle.EAST
+    elseif turtle.dz ==  1 and turtle.dx ==  0 then return turtle.SOUTH
     end
     error( "turtle.facing invalid direction!" )
 end
@@ -83,10 +83,10 @@ function turtle.set_position( x, y, z, dir )
     turtle.y = y
     turtle.z = z
 
-    if     dir == NORTH then turtle.dz = -1 turtle.dx =  0
-    elseif dir == WEST  then turtle.dz =  0 turtle.dx = -1
-    elseif dir == EAST  then turtle.dz =  0 turtle.dx =  1
-    elseif dir == SOUTH then turtle.dz =  1 turtle.dx =  0
+    if     dir == turtle.NORTH then turtle.dz = -1 turtle.dx =  0
+    elseif dir == turtle.WEST  then turtle.dz =  0 turtle.dx = -1
+    elseif dir == turtle.EAST  then turtle.dz =  0 turtle.dx =  1
+    elseif dir == turtle.SOUTH then turtle.dz =  1 turtle.dx =  0
     end
     turtle.save_position()
 end
@@ -327,12 +327,12 @@ function turtle.move_toward( destination )
     local distance = destination - turtle.position()
 
     if distance.x ~= 0 then
-        if distance.x > 0 then turtle.turn( EAST ) else turtle.turn( WEST ) end
+        if distance.x > 0 then turtle.turn( turtle.EAST ) else turtle.turn( turtle.WEST ) end
         return turtle.move_inspect( "forward" )
     end
 
     if distance.z ~= 0 then
-        if distance.z > 0 then turtle.turn( SOUTH ) else turtle.turn( NORTH ) end
+        if distance.z > 0 then turtle.turn( turtle.SOUTH ) else turtle.turn( turtle.NORTH ) end
         return turtle.move_inspect( "forward" )
     end
 
@@ -347,12 +347,12 @@ function turtle.dig_toward( destination )
     local distance = destination - turtle.position()
 
     if distance.x ~= 0 then
-        if distance.x > 0 then turtle.turn( EAST ) else turtle.turn( WEST ) end
+        if distance.x > 0 then turtle.turn( turtle.EAST ) else turtle.turn( turtle.WEST ) end
         return turtle.force_move( "forward" )
     end
 
     if distance.z ~= 0 then
-        if distance.z > 0 then turtle.turn( SOUTH ) else turtle.turn( NORTH ) end
+        if distance.z > 0 then turtle.turn( turtle.SOUTH ) else turtle.turn( turtle.NORTH ) end
         return turtle.force_move( "forward" )
     end
 

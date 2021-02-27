@@ -209,10 +209,10 @@ function miner:mine()
         print( "My pos = " .. tostring( pos.coords ) )
         print( "Mine pos = " .. tostring( mine_start_position ) )
         go_to_mine_start()
-        turtle.turn( NORTH )
+        turtle.turn( turtle.NORTH )
         dig_mine_shaft()
         go_to_output_chest()
-        turtle.turn( WEST )
+        turtle.turn( turtle.WEST )
         drop_inventory()
         mine_setup = true
         save_mine()
@@ -261,7 +261,7 @@ function miner:go_to_output_chest()
 end
 
 function miner:dig_mine_shaft()
-    turtle.turn( NORTH )
+    turtle.turn( turtle.NORTH )
     for i = 1, 58 do
         turtle.force_move( "down" )
         turtle.dig()

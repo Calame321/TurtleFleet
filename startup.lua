@@ -501,7 +501,7 @@ function has_flaten_fleet_setup()
             local has_chest_front = s and string.find( d.name, "chest" )
 
             if has_chest_front then
-                turtle.set_position( 0, 0, 0, NORTH )
+                turtle.set_position( 0, 0, 0, turtle.NORTH )
                 return true
             end
 
@@ -658,7 +658,7 @@ function show_menu()
     elseif args[ 1 ] == "update" then
         update_master()
     elseif args[ 1 ] == "1" then
-        treefarm.start_tree_farm()
+        treefarm.start_tree_farm( tonumber( args[ 2 ] ) )
     elseif args[ 1 ] == "2" then
         miner:vein_mine( "forward", args[ 2 ] )
     elseif args[ 1 ] == "3" then

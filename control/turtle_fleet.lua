@@ -889,10 +889,10 @@ function mine()
         print( "My pos = " .. tostring( pos.coords ) )
         print( "Mine pos = " .. tostring( mine_start_position ) )
         go_to_mine_start()
-        turtle.turn( NORTH )
+        turtle.turn( turtle.NORTH )
         dig_mine_shaft()
         go_to_output_chest()
-        turtle.turn( WEST )
+        turtle.turn( turtle.WEST )
         drop_inventory()
         mine_setup = true
         save_mine()
@@ -941,7 +941,7 @@ function go_to_output_chest()
 end
 
 function dig_mine_shaft()
-    turtle.turn( NORTH )
+    turtle.turn( turtle.NORTH )
     for i = 1, 58 do
         turtle.force_move( "down" )
         turtle.dig()
@@ -1344,7 +1344,7 @@ function fleet_flatten()
         turtle.turn180()
         place_mining_turtle()
     else
-        turtle.turn( SOUTH )
+        turtle.turn( turtle.SOUTH )
         turtle.wait_forward()
         turtle.turn180()
         place_mining_turtle()
@@ -1352,9 +1352,8 @@ function fleet_flatten()
         goto_next_free_spot()
     end
 
-    turtle.turn( NORTH )
+    turtle.turn( turtle.NORTH )
 
-    
     if not is_last then
         wait_for_start_signal()
     end
