@@ -693,10 +693,10 @@ function show_menu()
     end
 end
 
-local show_menu = true
+local has_task = false
 -- Check if has redstone analog signal
 if check_redstone_option() then
-    show_menu = false
+    has_task = true
 end
 
 -- Check if was doing a task
@@ -704,10 +704,10 @@ local job, state = turtle.load_job()
 if job then
     if job == "-treefarm" then
         treefarm:resume( state )
-        show_menu = false
+        has_task = true
     end
 end
 
-if show_menu then
+if not has_task then
     show_menu()
 end
