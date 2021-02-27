@@ -23,18 +23,18 @@ function treefarm:cut_tree()
 
     local height = 0
 
-    while turtle.is_block_tag( "up", "minecraft:logs" ) do
+    while turtle.is_block_name_contains( "up", "log" ) do
         turtle.digUp()
-        turtle.force_up( "minecraft:leaves" )
+        turtle.force_up()
         height = height + 1
     end
 
     for i = 0, height - 1 do
-        turtle.force_down( "minecraft:leaves" )
+        turtle.force_down()
     end
 
     turtle.suck()
-    turtle.back()
+    turtle.force_back()
     turtle.suck()
     treefarm.STATE = treefarm.IN_LANE
 end
@@ -46,7 +46,7 @@ function treefarm:plant_trees()
 
     for i = 0, treefarm.tree_farm_length do
         turtle.suck()
-        turtle.force_forward( "minecraft:leaves" )
+        turtle.force_forward()
         turtle.turnLeft()
         treefarm:inspect_tree()
         turtle.turn180()
@@ -60,7 +60,7 @@ function treefarm:plant_trees()
 
     for i = 0, treefarm.tree_farm_length do
         turtle.suck()
-        turtle.force_forward( "minecraft:leaves" )
+        turtle.force_forward()
     end
 
     turtle.turn180()
@@ -72,7 +72,7 @@ function treefarm:inspect_tree()
     local result, data = turtle.inspect()
 
     if result then
-        if data.tags[ "minecraft:logs" ] then
+        if data.name == "minecraft:log" or data.tags[ "minecraft:logs" ] then
             treefarm:cut_tree()
         end
     end

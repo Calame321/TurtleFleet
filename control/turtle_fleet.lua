@@ -420,7 +420,7 @@ function cut_tree()
 
     local height = 0
 
-    while is_block_tag( "up", "minecraft:logs" ) do
+    while is_block_name( "up", "minecraft:log" ) do
         turtle.digUp()
         turtle.force_up( "minecraft:leaves" )
         height = height + 1

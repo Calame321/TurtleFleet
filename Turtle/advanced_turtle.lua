@@ -165,7 +165,7 @@ end
 function turtle.move( direction, block_to_break )
     turtle.try_refuel()
     local moved = turtle.moveDir( direction )
-    if not moved and block_to_break and ( turtle.is_block_tag( direction, block_to_break ) or turtle.is_block_name( direction, block_to_break ) ) then
+    if not moved and block_to_break and turtle.is_block_name( direction, block_to_break ) then
         turtle.digDir( direction )
         return turtle.moveDir( direction )
     end
@@ -185,7 +185,7 @@ function turtle.force_move( direction, block_to_break )
         local s, d = turtle.inspectDir( direction )
         if s and string.find( d.name, "turtle" ) then
             os.sleep( 0.5 )
-        elseif not block_to_break or turtle.is_block_tag( direction, block_to_break ) or turtle.is_block_name( direction, block_to_break ) then
+        elseif not block_to_break or turtle.is_block_name( direction, block_to_break ) then
             turtle.digDir( direction )
         end
     end
@@ -396,6 +396,11 @@ end
 function turtle.is_block_name( direction, block_name )
     local s, d = turtle.inspectDir( direction )
     return s and d.name == block_name
+end
+
+function turtle.is_block_name_contains( direction, block_name )
+    local s, d = turtle.inspectDir( direction )
+    return s and string.find( d.name, block_name )
 end
 
 function turtle.is_block_tag( direction, tag )
