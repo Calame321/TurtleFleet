@@ -287,6 +287,7 @@ end
 
 function treefarm:start_tree_farm( length )
     treefarm.tree_farm_length = length or treefarm.tree_farm_length
+    turtle.set_position( 0, 0, 0, NORTH )
 
     print( "- Starting TREE FARM -" )
     if not treefarm:has_tree_farm_setup() then
@@ -305,16 +306,7 @@ end
 
 function treefarm:resume( state )
     if state == treefarm.AT_START then
-        local has_chest_front = s and string.find( d.name, "chest" )
-        while not has_chest_front do
-            turtle.turnLeft()
-        end
-        turtle.turnRight()
-        has_chest_front = s and string.find( d.name, "chest" )
-        if has_chest_front then
-            turtle.turnRight()
-        end
-        treefarm:start_tree_farm()
+        turtle.turn( NORTH )
     elseif state == treefarm.IN_LANE then
 
     elseif state == treefarm.CUTTING then
@@ -322,7 +314,9 @@ function treefarm:resume( state )
     elseif state == treefarm.RETURNING then
 
     elseif state == treefarm.FURNACE then
+        if turtle.z == 2 and turtle.x then
 
+        end
     elseif state == treefarm.SETUP then
 
     end

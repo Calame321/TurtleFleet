@@ -134,6 +134,7 @@ function turtle.up()
     turtle.try_refuel()
     if not up() then return false end
     turtle.y = turtle.y + 1
+    print( "turtle.y = " .. tostring( turtle.y ) )
     turtle.save_position()
     return true
 end
