@@ -30,12 +30,12 @@ turtle.dz = -1
 turtle.dx = 0
 
 if turtle.position then
-    local forward =   turtle.forward
-    local back =      turtle.back
-    local up =        turtle.up
-    local down =      turtle.down
-    local turnLeft =  turtle.turnLeft
-    local turnRight = turtle.turnRight
+    forward =   turtle.forward
+    back =      turtle.back
+    up =        turtle.up
+    down =      turtle.down
+    turnLeft =  turtle.turnLeft
+    turnRight = turtle.turnRight
 end
 
 function turtle.reverseDir( direction )
