@@ -702,7 +702,7 @@ end
 -- Check if was doing a task
 local job, state = turtle.load_job()
 if job then
-    if job == "-treefarm" then
+    if job == "treefarm" then
         treefarm:resume( state )
         has_task = true
     end

@@ -290,7 +290,16 @@ end
 
 function treefarm:resume( state )
     if state == treefarm.AT_START then
-        
+        local has_chest_front = s and string.find( d.name, "chest" )
+        while not has_chest_front do
+            turtle.turnLeft()
+        end
+        turtle.turnRight()
+        has_chest_front = s and string.find( d.name, "chest" )
+        if has_chest_front then
+            turtle.turnRight()
+        end
+        treefarm:start_tree_farm()
     elseif state == treefarm.IN_LANE then
 
     elseif state == treefarm.CUTTING then
