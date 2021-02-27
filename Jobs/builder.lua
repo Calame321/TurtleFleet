@@ -31,7 +31,7 @@ function builder:place_floor( direction )
         turtle.select( block_index )
         turtle.placeDir( direction )
 
-        if not move( "forward", "minecraft:torch" ) or turtle.is_block_name( "down", floor_block ) then
+        if not turtle.move( "forward", "minecraft:torch" ) or turtle.is_block_name( "down", floor_block ) then
             if rightTurn then turtle.turnRight() else turtle.turnLeft() end
             if not move( "forward", "minecraft:torch" ) then can_continue = false end
 
