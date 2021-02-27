@@ -105,8 +105,11 @@ function treefarm:manage_furnace()
     --inserting fuel
     turtle.force_up()
     turtle.turnRight()
-    turtle.select( fuel_slot )
-    turtle.drop( math.ceil( coal_amount / 2 ) )
+
+    if fuel_slot > 0 then
+        turtle.select( fuel_slot )
+        turtle.drop( math.ceil( coal_amount / 2 ) )
+    end
 
     -- inserting logs
     local has_log = false
