@@ -29,12 +29,14 @@ turtle.z = 0
 turtle.dz = -1
 turtle.dx = 0
 
-local forward =   turtle.forward
-local back =      turtle.back
-local up =        turtle.up
-local down =      turtle.down
-local turnLeft =  turtle.turnLeft
-local turnRight = turtle.turnRight
+if turtle.position then
+    local forward =   turtle.forward
+    local back =      turtle.back
+    local up =        turtle.up
+    local down =      turtle.down
+    local turnLeft =  turtle.turnLeft
+    local turnRight = turtle.turnRight
+end
 
 function turtle.reverseDir( direction )
     if     direction == "forward" then return "back"
@@ -134,7 +136,6 @@ function turtle.up()
     turtle.try_refuel()
     if not up() then return false end
     turtle.y = turtle.y + 1
-    print( "turtle.y = " .. tostring( turtle.y ) )
     turtle.save_position()
     return true
 end
