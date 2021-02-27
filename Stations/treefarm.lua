@@ -93,9 +93,11 @@ end
 
 function treefarm:manage_furnace()
     local fuel_slot = turtle.get_valid_fuel_index()
-    local coal_amount = turtle.getItemCount( fuel_slot )
+    if fuel_slot > 0 then
+        local coal_amount = turtle.getItemCount( fuel_slot )
 
-    if coal_amount > 16 then return end
+        if coal_amount > 16 then return end
+    end
 
     treefarm.STATE = treefarm.FURNACE
     turtle.save_job( "treefarm", treefarm.STATE )
