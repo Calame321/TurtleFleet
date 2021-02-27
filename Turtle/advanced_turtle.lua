@@ -543,7 +543,7 @@ function turtle.load_job()
         local job = f.readLine()
         if job == "treefarm" then
             local state = f.readLine
-            return job, state
+            return job, tonumber( state )
         end
     end
 
