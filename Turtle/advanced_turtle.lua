@@ -52,10 +52,10 @@ function turtle.position()
 end
 
 function turtle.facing()
-    if     dz == -1 and dx ==  0 then return NORTH
-    elseif dz ==  0 and dx == -1 then return WEST
-    elseif dz ==  0 and dx ==  1 then return EAST
-    elseif dz ==  1 and dx ==  0 then return SOUTH
+    if     turtle.dz == -1 and turtle.dx ==  0 then return NORTH
+    elseif turtle.dz ==  0 and turtle.dx == -1 then return WEST
+    elseif turtle.dz ==  0 and turtle.dx ==  1 then return EAST
+    elseif turtle.dz ==  1 and turtle.dx ==  0 then return SOUTH
     end
     error( "turtle.facing invalid direction!" )
 end
