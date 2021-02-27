@@ -83,7 +83,7 @@ end
 shell.run( "TurtleFleet/Turtle/advanced_turtle.lua" )
 shell.run( "TurtleFleet/Turtle/pathfind.lua" )
 station = dofile( "TurtleFleet/Stations/station.lua" )
-treeFarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
+treefarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
 job = dofile( "TurtleFleet/Jobs/job.lua" )
 builder = dofile( "TurtleFleet/Jobs/builder.lua" )
 cooker = dofile( "TurtleFleet/Jobs/cooker.lua" )
@@ -658,7 +658,7 @@ function show_menu()
     elseif args[ 1 ] == "update" then
         update_master()
     elseif args[ 1 ] == "1" then
-        treeFarm.start_tree_farm()
+        treefarm.start_tree_farm()
     elseif args[ 1 ] == "2" then
         miner:vein_mine( "forward", args[ 2 ] )
     elseif args[ 1 ] == "3" then

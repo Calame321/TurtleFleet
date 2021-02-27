@@ -1,22 +1,22 @@
 ---------------
 -- TREE FARM --
 ---------------
-treeFarm = station:new()
+treefarm = station:new()
 station = dofile( "TurtleFleet/Stations/station.lua" )
 
 -- Tree Farm
-treeFarm.tree_farm_length = 15
-treeFarm.STATE = 0
+treefarm.tree_farm_length = 15
+treefarm.STATE = 0
 
-treeFarm.AT_START = 0
-treeFarm.IN_LANE = 1
-treeFarm.CUTTING = 2
-treeFarm.RETURNING = 3
-treeFarm.FURNACE = 4
-treeFarm.SETUP = 5
+treefarm.AT_START = 0
+treefarm.IN_LANE = 1
+treefarm.CUTTING = 2
+treefarm.RETURNING = 3
+treefarm.FURNACE = 4
+treefarm.SETUP = 5
 
-function treeFarm:cut_tree()
-    treeFarm.STATE = treeFarm.CUTTING
+function treefarm:cut_tree()
+    treefarm.STATE = treefarm.CUTTING
     print( "Cutting a tree." )
     turtle.dig()
     turtle.forward()
@@ -36,63 +36,63 @@ function treeFarm:cut_tree()
     turtle.suck()
     turtle.back()
     turtle.suck()
-    treeFarm.STATE = treeFarm.IN_LANE
+    treefarm.STATE = treefarm.IN_LANE
 end
 
 
-function treeFarm:plant_trees()
-    treeFarm.STATE = treeFarm.IN_LANE
+function treefarm:plant_trees()
+    treefarm.STATE = treefarm.IN_LANE
     print( "Planting trees." )
 
-    for i = 0, treeFarm.tree_farm_length do
+    for i = 0, treefarm.tree_farm_length do
         turtle.suck()
         turtle.force_forward( "minecraft:leaves" )
         turtle.turnLeft()
-        treeFarm:inspect_tree()
+        treefarm:inspect_tree()
         turtle.turn180()
-        treeFarm:inspect_tree()
+        treefarm:inspect_tree()
         turtle.turnLeft()
     end
 
     turtle.suck()
     turtle.turn180()
-    treeFarm.STATE = treeFarm.RETURNING
+    treefarm.STATE = treefarm.RETURNING
 
-    for i = 0, treeFarm.tree_farm_length do
+    for i = 0, treefarm.tree_farm_length do
         turtle.suck()
         turtle.force_forward( "minecraft:leaves" )
     end
 
     turtle.turn180()
-    treeFarm.STATE = treeFarm.AT_START
+    treefarm.STATE = treefarm.AT_START
 end
 
 
-function treeFarm:inspect_tree()
+function treefarm:inspect_tree()
     local result, data = turtle.inspect()
 
     if result then
         if data.tags[ "minecraft:logs" ] then
-            treeFarm:cut_tree()
+            treefarm:cut_tree()
         end
     end
 
     turtle.suck()
 
-    if treeFarm:has_sapling() then
+    if treefarm:has_sapling() then
         turtle.select( 1 )
         turtle.place()
     end
 end
 
 
-function treeFarm:manage_furnace()
+function treefarm:manage_furnace()
     local fuel_slot = turtle.get_valid_fuel_index()
     local coal_amount = turtle.getItemCount( fuel_slot )
 
     if coal_amount > 16 then return end
 
-    treeFarm.STATE = treeFarm.FURNACE
+    treefarm.STATE = treefarm.FURNACE
     print( "Checking Furnace." )
     --inserting fuel
     turtle.force_up()
@@ -131,11 +131,11 @@ function treeFarm:manage_furnace()
     turtle.suckUp()
     turtle.back()
     turtle.turnLeft()
-    treeFarm.STATE = treeFarm.AT_START
+    treefarm.STATE = treefarm.AT_START
 end
 
 
-function treeFarm:drop_stuff()
+function treefarm:drop_stuff()
     print( "Unloading items." )
     turtle.turn180()
 
@@ -174,14 +174,14 @@ function treeFarm:drop_stuff()
 end
 
 
-function treeFarm:has_sapling()
+function treefarm:has_sapling()
     local item = turtle.getItemDetail( 1 )
     local is_sapling = item and string.find( item.name, "sapling" )
     return is_sapling
 end
 
 
-function treeFarm:refil_sapling()
+function treefarm:refil_sapling()
     turtle.turnLeft()
     turtle.select( 1 )
 
@@ -191,7 +191,7 @@ function treeFarm:refil_sapling()
 end
 
 
-function treeFarm:check_sapling()
+function treefarm:check_sapling()
     turtle.select( 1 )
     local item = turtle.getItemDetail( 1 )
     
@@ -201,11 +201,11 @@ function treeFarm:check_sapling()
         turtle.turn180()
     end
 
-    treeFarm:refil_sapling()
+    treefarm:refil_sapling()
 end
 
 
-function treeFarm:has_tree_farm_setup()
+function treefarm:has_tree_farm_setup()
     turtle.turnLeft()
     
     local success, data = turtle.inspect()
@@ -248,8 +248,8 @@ function have_setup_materials()
 end
 
 
-function treeFarm:setup_tree_farm()
-    treeFarm.STATE = treeFarm.SETUP
+function treefarm:setup_tree_farm()
+    treefarm.STATE = treefarm.SETUP
     while not have_setup_materials() do os.sleep( 1 ) end
 
     turtle.select( turtle.get_item_index( "coal" ) )
@@ -266,42 +266,42 @@ function treeFarm:setup_tree_farm()
     turtle.turnLeft()
     turtle.select( turtle.get_item_index( "sapling" ) )
     turtle.transferTo( 1 )
-    treeFarm.STATE = treeFarm.AT_START
+    treefarm.STATE = treefarm.AT_START
 end
 
 
-function treeFarm:start_tree_farm( length )
-    treeFarm.tree_farm_length = length or treeFarm.tree_farm_length
+function treefarm:start_tree_farm( length )
+    treefarm.tree_farm_length = length or treefarm.tree_farm_length
 
     print( "- Starting TREE FARM -" )
-    if not treeFarm:has_tree_farm_setup() then
-        treeFarm:setup_tree_farm()
+    if not treefarm:has_tree_farm_setup() then
+        treefarm:setup_tree_farm()
     end
 
     while true do
-        treeFarm.STATE = treeFarm.AT_START
-        treeFarm:check_sapling()
-        treeFarm:plant_trees()
-        treeFarm:manage_furnace()
-        treeFarm:drop_stuff()
+        treefarm.STATE = treefarm.AT_START
+        treefarm:check_sapling()
+        treefarm:plant_trees()
+        treefarm:manage_furnace()
+        treefarm:drop_stuff()
         os.sleep( 10 )
     end
 end
 
 function treefarm:resume( state )
-    if state == treeFarm.AT_START then
+    if state == treefarm.AT_START then
         
-    elseif state == treeFarm.IN_LANE then
+    elseif state == treefarm.IN_LANE then
 
-    elseif state == treeFarm.CUTTING then
+    elseif state == treefarm.CUTTING then
 
-    elseif state == treeFarm.RETURNING then
+    elseif state == treefarm.RETURNING then
 
-    elseif state == treeFarm.FURNACE then
+    elseif state == treefarm.FURNACE then
 
-    elseif state == treeFarm.SETUP then
+    elseif state == treefarm.SETUP then
 
     end
 end
 
-return treeFarm
+return treefarm
