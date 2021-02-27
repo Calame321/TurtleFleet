@@ -29,13 +29,13 @@ turtle.z = 0
 turtle.dz = -1
 turtle.dx = 0
 
-if turtle.position then
-    forward =   turtle.forward
-    back =      turtle.back
-    up =        turtle.up
-    down =      turtle.down
-    turnLeft =  turtle.turnLeft
-    turnRight = turtle.turnRight
+if turtle.old_up == nil then
+    turtle.old_turnRight = turtle.turnRight
+    turtle.old_turnLeft =  turtle.turnLeft
+    turtle.old_forward =   turtle.forward
+    turtle.old_down =      turtle.down
+    turtle.old_back =      turtle.back
+    turtle.old_up =        turtle.up
 end
 
 function turtle.reverseDir( direction )
@@ -96,7 +96,7 @@ end
 -- Forward --
 function turtle.forward()
     turtle.try_refuel()
-    if not forward() then return false end
+    if not turtle.old_forward() then return false end
     turtle.x = turtle.x + turtle.dx
     turtle.z = turtle.z + turtle.dz
     turtle.save_position()
@@ -109,7 +109,7 @@ function turtle.force_forward( block_to_break ) turtle.force_move( "forward", bl
 -- Down --
 function turtle.down()
     turtle.try_refuel()
-    if not down() then return false end
+    if not turtle.old_down() then return false end
     turtle.y = turtle.y - 1
     turtle.save_position()
     return true
@@ -121,7 +121,7 @@ function turtle.force_down( block_to_break ) turtle.force_move( "down", block_to
 -- Back --
 function turtle.back()
     turtle.try_refuel()
-    if not back() then return false end
+    if not turtle.old_back() then return false end
     turtle.x = turtle.x - turtle.dx
     turtle.z = turtle.z - turtle.dz
     turtle.save_position()
@@ -134,7 +134,7 @@ function turtle.force_back( block_to_break ) turtle.force_move( "back", block_to
 -- Up --
 function turtle.up()
     turtle.try_refuel()
-    if not up() then return false end
+    if not turtle.old_up() then return false end
     turtle.y = turtle.y + 1
     turtle.save_position()
     return true
@@ -195,7 +195,7 @@ end
 
 --- Turning ---
 function turtle.turnRight()
-    turnRight()
+    turtle.old_turnRight()
     local old_dx = turtle.dx
     turtle.dx = -turtle.dz
     turtle.dz = old_dx
@@ -204,7 +204,7 @@ function turtle.turnRight()
 end
 
 function turtle.turnLeft()
-    turnLeft()
+    turtle.old_turnLeft()
     local old_dx = turtle.dx
     turtle.dx = turtle.dz
     turtle.dz = -old_dx
