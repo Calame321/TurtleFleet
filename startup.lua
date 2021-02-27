@@ -658,7 +658,7 @@ function show_menu()
     elseif args[ 1 ] == "update" then
         update_master()
     elseif args[ 1 ] == "1" then
-        treefarm.start_tree_farm( tonumber( args[ 2 ] ) )
+        treefarm:start_tree_farm( tonumber( args[ 2 ] ) )
     elseif args[ 1 ] == "2" then
         miner:vein_mine( "forward", args[ 2 ] )
     elseif args[ 1 ] == "3" then
@@ -702,6 +702,8 @@ end
 -- Check if was doing a task
 local job, state = turtle.load_job()
 if job then
+    print( "Turtle resume job: " .. job )
+    
     if job == "treefarm" then
         treefarm:resume( state )
         has_task = true

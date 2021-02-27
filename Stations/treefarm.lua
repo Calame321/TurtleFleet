@@ -289,7 +289,7 @@ function treefarm:start_tree_farm( length )
     if length ~= nil then
         treefarm.tree_farm_length = length
     end
-    
+
     turtle.set_position( 0, 0, 0, turtle.NORTH )
 
     print( "- Starting TREE FARM -" )
@@ -310,6 +310,7 @@ end
 function treefarm:resume( state )
     if state == treefarm.AT_START then
         turtle.turn( turtle.NORTH )
+        treefarm:start_tree_farm()
     elseif state == treefarm.IN_LANE then
         return_home()
     elseif state == treefarm.CUTTING then
