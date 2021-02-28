@@ -700,7 +700,7 @@ if check_redstone_option() then
 end
 
 -- Check if was doing a task
-local job, data1, data2 = turtle.load_job()
+local job, data1, data2, data3 = turtle.load_job()
 if job then
     print( "Turtle resume job: " .. job )
     print( "Delete the job file to stop it." )
@@ -708,7 +708,7 @@ if job then
     if job == "treefarm" then
         treefarm:resume( data1 )
     elseif job == "dig_out" then
-        miner:dig_out_start( data1, data2 )
+        miner:dig_out_resume( data1, data2, data3 )
     end
 
     has_task = true

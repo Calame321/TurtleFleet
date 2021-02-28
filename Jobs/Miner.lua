@@ -91,7 +91,7 @@ function miner:dig_out_row()
         if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_down() turtle.force_up() end
 
         turtle.drop_in_enderchest( miner.stuff_to_keep )
-        if do_width_remaining ~= 0 then turtle.force_forward() end
+        if do_width_remaining ~= 1 then turtle.force_forward() end
 
         do_width_remaining = do_width_remaining - 1
         turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
@@ -100,8 +100,8 @@ end
 
 function miner:dig_out_change_row()
     -- dont need to change row if at the end
-    if do_width_remaining ~= 0 then
-        if x % 2 == 0 then turtle.turnRight() else turtle.turnLeft() end
+    if do_width_remaining ~= 1 then
+        if turtle.x == 0 then turtle.turnRight() else turtle.turnLeft() end
     end
 
     do_width_remaining = do_width_start
@@ -109,8 +109,8 @@ function miner:dig_out_change_row()
     turtle.force_forward()
     turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
 
-    if do_width_remaining ~= 0 then
-        if x % 2 == 0 then turtle.turnRight() else turtle.turnLeft() end
+    if do_width_remaining ~= 1 then
+        if turtle.x == 0 then turtle.turnRight() else turtle.turnLeft() end
     end
 end
 

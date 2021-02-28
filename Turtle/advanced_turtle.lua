@@ -48,7 +48,7 @@ function turtle.reverseDir( direction )
 end
 
 function turtle.position()
-    return vector.new( x, y, z )
+    return vector.new( turtle.x, turtle.y, turtle.z )
 end
 
 function turtle.facing()
@@ -62,14 +62,14 @@ end
 
 -- settings -- 
 function turtle.load_position()
-    local position = settings.get( "position" )
+    local pos = settings.get( "position" )
     
-    if position then
-        turtle.x = position[ 1 ].x or 0
-        turtle.y = position[ 1 ].y or 0
-        turtle.z = position[ 1 ].z or 0
-        turtle.dz = position[ 2 ] or -1
-        turtle.dx = position[ 3 ] or 0
+    if pos then
+        turtle.x = pos[ 1 ].x or 0
+        turtle.y = pos[ 1 ].y or 0
+        turtle.z = pos[ 1 ].z or 0
+        turtle.dz = pos[ 2 ] or -1
+        turtle.dx = pos[ 3 ] or 0
     end
 end
 
@@ -549,20 +549,22 @@ function turtle.load_job()
             return job, tonumber( state )
         elseif job == "dig_out" then
             local depth_remaining = tonumber( f.readLine() )
+            local width_start = tonumber( f.readLine() )
             local width_remaining = tonumber( f.readLine() )
             f.close()
-            return job, depth_remaining, width_remaining
+            return job, depth_remaining, width_start, width_remaining
         end
     end
 
     return nil
 end
 
-function turtle.save_job( job, data1, data2 )
+function turtle.save_job( job, data1, data2, data3 )
     local f = fs.open( "job", "w" )
     f.writeLine( job )
     f.writeLine( data1 )
     if data2 then f.writeLine( data2 ) end
+    if data3 then f.writeLine( data3 ) end
     f.flush()
     f.close()
 end
