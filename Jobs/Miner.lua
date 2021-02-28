@@ -70,6 +70,8 @@ function miner:dig_out_start( depth, width )
 end
 
 function miner:dig_out_resume( depth, width, remaining )
+    if turtle.y > 0 then turtle.force_down() end
+    if turtle.y < 0 then turtle.force_up() end
 
     fs.delete( "job" )
 end
@@ -77,8 +79,14 @@ end
 function miner:dig_out()
     while do_row_remaining ~= 0 do
         miner:dig_out_row()
-        if do_row_remaining ~= 1 then miner:dig_out_change_row() end
+        if do_row_remaining ~= 1 then
+            miner:dig_out_change_row()
+        else
+            do_row_remaining = 0
+        end
     end
+
+    return_start()
 end
 
 function miner:dig_out_row()
@@ -91,7 +99,7 @@ function miner:dig_out_row()
         s, d = turtle.inspectDown()
         if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_down() turtle.force_up() end
 
-        turtle.drop_in_enderchest( miner.stuff_to_keep )
+        if turtle.is_inventory_full() then turtle.drop_in_enderchest( miner.stuff_to_keep ) end
         if do_width_remaining ~= 1 then turtle.force_forward() end
 
         do_width_remaining = do_width_remaining - 1
@@ -106,6 +114,15 @@ function miner:dig_out_change_row()
     turtle.force_forward()
     turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
     if turtle.x == 0 then turtle.turnRight() else turtle.turnLeft() end
+end
+
+function return_start()
+    if turtle.x > 0 then
+        turtle.turn( turtle.WEST )
+        while turtle.x ~= 0 do turtle.force_forward() end
+    end
+    turtle.turn( turtle.NORTH )
+    turtle.drop_in_enderchest()
 end
 
 -------------------

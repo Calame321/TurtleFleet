@@ -291,30 +291,16 @@ function flaten_chunk()
     for x = 1, 16 do
         for y = 1, 4 do
             flat_one()
-            
-            if turtle.is_inventory_full() then
-                turtle.drop_in_enderchest( flat_stuff_to_keep )
-            end
-            
+            if turtle.is_inventory_full() then turtle.drop_in_enderchest( flat_stuff_to_keep ) end
             if y < 4 then turtle.force_forward() end
             flat_place_torch()
         end
 
         -- dont need to change row if at the end
         if x < 16 then
-            if x % 2 == 0 then
-                turtle.turnRight()
-            else
-                turtle.turnLeft()
-            end
-
+            if x % 2 == 0 then turtle.turnRight() else turtle.turnLeft() end
             turtle.force_forward()
-
-            if x % 2 == 0 then
-                turtle.turnRight()
-            else
-                turtle.turnLeft()
-            end
+            if x % 2 == 0 then turtle.turnRight() else turtle.turnLeft() end
         end
     end
 

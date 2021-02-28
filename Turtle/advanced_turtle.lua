@@ -452,15 +452,15 @@ function turtle.is_inventory_full()
 end
 
 function turtle.drop_in_enderchest( stuff_to_keep )
-    if not turtle.is_inventory_full() then return end
-
     local enderchest_index = turtle.get_item_index( "enderstorage:ender_chest" )
 
     if enderchest_index == -1 then return end
 
     local to_keep = {}
-    for k, v in pairs( stuff_to_keep ) do
-        to_keep[ k ] = v
+    if stuff_to_keep then
+        for k, v in pairs( stuff_to_keep ) do
+            to_keep[ k ] = v
+        end
     end
 
     turtle.dig_all( "up" )
