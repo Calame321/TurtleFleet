@@ -70,9 +70,12 @@ function miner:dig_out_start( depth, width )
 end
 
 function miner:dig_out_resume( depth, width, remaining )
+    do_row_remaining = depth
+    do_width_start = width
+    do_width_remaining = remaining
     if turtle.y > 0 then turtle.force_down() end
     if turtle.y < 0 then turtle.force_up() end
-
+    miner:dig_out()
     fs.delete( "job" )
 end
 
