@@ -50,40 +50,73 @@ function miner:vein_mine( from, block )
     turtle.reverse( from )
 end
 
+-------------
+-- Dig Out --
+-------------
+miner.do_width_remaining = 0
+miner.do_row_remaining = 0
+miner.do_width_start = 0
 
-function miner:dig_out( depth, width )
+function miner:dig_out_start( depth, width )
+    turtle.set_position( 0, 0, 0, turtle.NORTH )
     turtle.force_forward()
     turtle.turnRight()
+    do_width_remaining = width
+    do_width_start = width
+    do_row_remaining = depth
+    turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
+    miner:dig_out()
+end
 
-    for x = 1, depth do
-        for y = 1, width do
-            turtle.dig_all( "up" )
-            turtle.dig_all( "down" )
+function miner:dig_out_resume( depth, width, remaining )
 
-            local s, d = turtle.inspectUp()
-            if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_up() turtle.force_down() end
-            s, d = turtle.inspectDown()
-            if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_down() turtle.force_up() end
+    fs.delete( "job" )
+end
 
-            turtle.drop_in_enderchest( miner.stuff_to_keep )
-
-            if y < width then turtle.force_forward() end
-        end
-
-        -- dont need to change row if at the end
-        if x < depth then
-            if x % 2 == 0 then
-                turtle.turnRight()
-                turtle.force_forward()
-                turtle.turnRight()
-            else
-                turtle.turnLeft()
-                turtle.force_forward()
-                turtle.turnLeft()
-            end
-        end
+function miner:dig_out()
+    while do_row_remaining ~= 0 do
+        miner:dig_out_row()
+        miner:dig_out_change_row()
     end
 end
+
+function miner:dig_out_row()
+    while do_width_remaining ~= 0 do
+        turtle.dig_all( "up" )
+        turtle.dig_all( "down" )
+
+        local s, d = turtle.inspectUp()
+        if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_up() turtle.force_down() end
+        s, d = turtle.inspectDown()
+        if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_down() turtle.force_up() end
+
+        turtle.drop_in_enderchest( miner.stuff_to_keep )
+        if do_width_remaining ~= 0 then turtle.force_forward() end
+
+        do_width_remaining = do_width_remaining - 1
+        turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
+    end
+end
+
+function miner:dig_out_change_row()
+    -- dont need to change row if at the end
+    if do_width_remaining ~= 0 then
+        if x % 2 == 0 then turtle.turnRight() else turtle.turnLeft() end
+    end
+
+    do_width_remaining = do_width_start
+    do_row_remaining = do_row_remaining - 1
+    turtle.force_forward()
+    turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
+
+    if do_width_remaining ~= 0 then
+        if x % 2 == 0 then turtle.turnRight() else turtle.turnLeft() end
+    end
+end
+
+-------------------
+-- Branch Mining --
+-------------------
 
 function miner:check_ore( direction )
     local ore_tag = "forge:ores"

@@ -662,7 +662,7 @@ function show_menu()
     elseif args[ 1 ] == "2" then
         miner:vein_mine( "forward", args[ 2 ] )
     elseif args[ 1 ] == "3" then
-        miner:dig_out( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ) )
+        miner:dig_out_start( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ) )
     elseif args[ 1 ] == "4" then
         builder:place_floor( args[ 2 ] )
     elseif args[ 1 ] == "5" then
@@ -700,14 +700,18 @@ if check_redstone_option() then
 end
 
 -- Check if was doing a task
-local job, state = turtle.load_job()
+local job, data1, data2 = turtle.load_job()
 if job then
     print( "Turtle resume job: " .. job )
-    
+    print( "Delete the job file to stop it." )
+
     if job == "treefarm" then
-        treefarm:resume( state )
-        has_task = true
+        treefarm:resume( data1 )
+    elseif job == "dig_out" then
+        miner:dig_out_start( data1, data2 )
     end
+
+    has_task = true
 end
 
 if not has_task then

@@ -547,16 +547,22 @@ function turtle.load_job()
             local state = f.readLine()
             f.close()
             return job, tonumber( state )
+        elseif job == "dig_out" then
+            local depth_remaining = tonumber( f.readLine() )
+            local width_remaining = tonumber( f.readLine() )
+            f.close()
+            return job, depth_remaining, width_remaining
         end
     end
 
     return nil
 end
 
-function turtle.save_job( job, state )
+function turtle.save_job( job, data1, data2 )
     local f = fs.open( "job", "w" )
     f.writeLine( job )
-    f.writeLine( state )
+    f.writeLine( data1 )
+    if data2 then f.writeLine( data2 ) end
     f.flush()
     f.close()
 end
