@@ -16,6 +16,10 @@ local DO_NOT_MINE = {
     "mysticalworld:amethyst_ore",
 }
 
+turtle.enderchest_index = 1
+turtle.fuel_chest_index = 2
+turtle.turtle_chest_index = 3
+
 turtle.NORTH = 0
 turtle.EAST = 1
 turtle.SOUTH = 2
@@ -313,6 +317,17 @@ end
 
 function turtle.wait_place() while not turtle.place() do os.sleep( 1 ) end end
 
+-- Suck --
+function turtle.suckDir( direction )
+    if     direction == "forward"  then return turtle.suck()
+    elseif direction == "up"       then return turtle.suckUp()
+    elseif direction == "down"     then return turtle.suckDown()
+    end
+    error( "turtle.placeDir invalid direction" )
+end
+
+function turtle.wait_suck( direction ) while not turtle.suckDir( direction ) do os.sleep( 1 ) end end
+
 -- Return succes and if false, the name of the block
 function turtle.move_inspect( direction )
     if turtle.moveDir( direction ) then
@@ -451,10 +466,28 @@ function turtle.is_inventory_full()
     return true
 end
 
-function turtle.drop_in_enderchest( stuff_to_keep )
-    local enderchest_index = turtle.get_item_index( "enderstorage:ender_chest" )
+function turtle.get_info_paper_index()
+    for i = 1, 16 do
+        local item = turtle.getItemDetail( i, true )
+        if item and item.name == "minecraft:paper" and item.displayName ~= "Paper" then
+            return i
+        end
+    end
+    return -1
+end
 
-    if enderchest_index == -1 then return end
+function turtle.has_chest( index )
+    if turtle.getItemDetail( index ).name == "enderstorage:ender_chest" then return true end
+    return false
+end
+
+function turtle.has_fuel_chest() return turtle.has_chest( turtle.fuel_chest_index ) end
+function turtle.has_turtle_chest() return turtle.has_chest( turtle.turtle_chest_index ) end
+function turtle.has_drop_chest() return turtle.has_chest( turtle.enderchest_index ) end
+
+
+function turtle.drop_in_enderchest( stuff_to_keep )
+    if not turtle.has_drop_chest() then return false end
 
     local to_keep = {}
     if stuff_to_keep then
@@ -464,7 +497,7 @@ function turtle.drop_in_enderchest( stuff_to_keep )
     end
 
     turtle.dig_all( "up" )
-    turtle.select( enderchest_index )
+    turtle.select( turtle.enderchest_index )
     while not turtle.placeUp() do
         os.sleep( 0.1 )
     end
@@ -518,12 +551,12 @@ function turtle.try_refuel()
     if turtle.getFuelLevel() < 100 then
         local fuel_index = turtle.get_valid_fuel_index()
 
-        if fuel_index == -1 then
+        if fuel_index == -1 and not get_fuel_from_enderchest() then
             print( "Give me fuel please!" )
             print( "Valid fluel:" )
 
             for f = 1, #valid_fuel do
-                print( valid_fuel[ f ] )
+                print( " - " .. valid_fuel[ f ] )
             end
 
             while fuel_index == -1 do
@@ -536,6 +569,28 @@ function turtle.try_refuel()
         turtle.select( fuel_index )
         turtle.refuel( 2 )
     end
+end
+
+function get_fuel_from_enderchest()
+    if not turtle.has_fuel_chest() then return false end
+
+    turtle.select( turtle.fuel_chest_index )
+    local dir_to_place = get_empty_block()
+    if dir_to_place == "" then
+        dir_to_place = "up"
+        turtle.dig_all( "up" )
+    end
+
+    while not placeDir( dir_to_place ) do os.sleep( 0.1 ) end
+    turtle.wait_suck( dir_to_place )
+    turtle.digDir( dir_to_place )
+    return true
+end
+
+function get_empty_block()
+    if not turtle.detectUp() then return "up" end
+    if not turtle.detectDown() then return "down" end
+    return ""
 end
 
 -- Job
@@ -570,3 +625,19 @@ function turtle.save_job( job, data1, data2, data3 )
 end
 
 turtle.load_position()
+
+--------------
+-- Redstone --
+--------------
+
+function turtle.wait_for_signal( direction, strength )
+    local valid_signal = false
+
+    while not valid_signal do
+        os.pullEvent( "redstone" )
+
+        if rs.getAnalogueInput( direction, strength ) then
+            valid_signal = true
+        end
+    end
+end

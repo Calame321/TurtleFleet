@@ -10,6 +10,7 @@ miner.branch_mine_length = 16 * miner.chunk_per_region
 miner.stuff_to_keep = {}
 miner.stuff_to_keep[ "minecraft:coal" ] = 2
 miner.stuff_to_keep[ "minecraft:charcoal" ] = 2
+miner.stuff_to_keep[ "enderstorage:ender_chest" ] = 2
 
 function miner:vein_mine( from, block )
     -- up
@@ -57,7 +58,48 @@ miner.do_width_remaining = 0
 miner.do_row_remaining = 0
 miner.do_width_start = 0
 
-function miner:dig_out_start( depth, width )
+
+
+function miner:dig_out_start( depth, width, height )
+    if height == nil or height == 3 then miner:dig_out( depth, with ) end
+
+    if height % 3 ~= 0 then
+        print( "The height must be divisible by 3." )
+        return
+    end
+    
+    local layer = height / 3
+
+    local info_paper_index = turtle.get_info_paper_index()
+    if turtle.has_drop_chest() and turtle.has_fuel_chest() and turtle.has_turtle_chest() and info_paper_index > 0 then
+        for i = 1, layer do
+            turtle.force_up()
+            turtle.select( turtle.turtle_chest_index )
+            turtle.dig_all_up()
+            turtle.wait_place( "up" )
+            turtle.suckUp( 1 )
+            turtle.digUp()
+            turtle.select( 5 )
+            turtle.wait_place( "down" )
+            turtle.select( turtle.enderchest_index )
+            turtle.dropDown( 1 )
+            turtle.select( turtle.fuel_chest_index )
+            turtle.dropDown( 1 )
+            turtle.select( info_paper_index )
+            turtle.dropDown()
+            rs.setAnalogueOutput( "down", 3 )
+            os.sleep( 0.5 )
+            peripheral.call( "down", "turnOn" )
+            turtle.wait_for_signal( "down", 3 )
+            turtle.force_up()
+            turtle.force_up()
+        end
+    else
+        print( "You must provide " .. tostring( layer ) .. " enderchest for dropping stuff in slot 1, " .. tostring( layer ) .. " enderchest for fuel in slot 2, a enderchest for turtles in slot 3 and a paper renamed with depth and width." )
+    end
+end
+
+function miner:dig_out( depth, with )
     turtle.set_position( 0, 0, 0, turtle.NORTH )
     turtle.force_forward()
     turtle.turnRight()
@@ -103,10 +145,9 @@ function miner:dig_out_row()
         if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_down() turtle.force_up() end
 
         if turtle.is_inventory_full() then turtle.drop_in_enderchest( miner.stuff_to_keep ) end
-        if do_width_remaining ~= 1 then turtle.force_forward() end
-
         do_width_remaining = do_width_remaining - 1
         turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
+        if do_width_remaining ~= 1 then turtle.force_forward() end
     end
 end
 

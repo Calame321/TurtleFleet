@@ -99,9 +99,7 @@ local SIDES = redstone.getSides()
 ----------------------------
 
 function mysplit( str, sep )
-    if sep == nil then
-        sep = "%s"
-    end
+    if sep == nil then sep = "%s" end
 
     local t = {}
 
@@ -211,6 +209,7 @@ flat_stuff_to_keep[ "minecraft:coal" ] = 1
 flat_stuff_to_keep[ "minecraft:charcoal" ] = 1
 flat_stuff_to_keep[ "minecraft:torch" ] = 1
 flat_stuff_to_keep[ "minecraft:dirt" ] = 2
+flat_stuff_to_keep[ "enderstorage:ender_chest" ] = 2
 
 
 function flat_one()
@@ -458,7 +457,16 @@ function check_redstone_option()
     for s = 1, #SIDES do
         local redstone_option = rs.getAnalogueInput( SIDES[ s ] )
 
-        if redstone_option == 7 then
+        if redstone_option == 3 then
+            local data = turtle.getItemDetail( 3, true )
+            turtle.select( 3 )
+            turtle.dropUp()
+            turtle.setAnalogueOutput( "up", 3 )
+            os.sleep( 0.5 )
+            turtle.setAnalogueOutput( "up", 0 )
+            local split_data = mysplit( data )
+            miner:dig_out_start( tonumber( d[ 1 ] ), tonumber( d[ 2 ] ) )
+        elseif redstone_option == 7 then
             rs.setAnalogueOutput( "back", 7 )
             os.sleep( 0.1 )
             has_flaten_fleet_setup()
@@ -503,9 +511,7 @@ end
 function fleet_flatten()
     turtle.suckUp()
     
-    if not turtle.suck() then
-        is_last = true
-    end
+    if not turtle.suck() then is_last = true end
 
     turtle.force_back()
 
@@ -515,7 +521,6 @@ function fleet_flatten()
             local paper_detail = turtle.getItemDetail( paper_index, true )
             flatten_length = tonumber( paper_detail.displayName )
         end
-    
     else
         place_mining_turtle()
     end
@@ -525,7 +530,7 @@ function fleet_flatten()
     turtle.turn180()
     
     if not is_last then
-        wait_for_start_signal( "back", 10 )
+        turtle.wait_for_signal( "back", 10 )
     end
 
     rs.setAnalogueOutput( "front", 10 )
@@ -535,44 +540,7 @@ function fleet_flatten()
 
     for y = 1, flatten_length / 4 do
         flat_one()
-        --flat_empty_inventory()
         turtle.force_forward()
-    end
-end
-
-function flat_empty_inventory()
-    if turtle.is_inventory_full() then
-        last_pos = turtle.position()
-        turtle.pathfind_to( vector.new( 0, 0, 0 ), false )
-    
-        local has_fuel = false
-        for i = 1, 16 do
-            local item = turtle.getItemDetail( i )
-
-            if item then
-                if item.name == "minecraft:charcoal" then
-                    turtle.select( i )
-                    turtle.suckUp( 64 - item.count )
-                else
-                    turtle.select( i )
-                    turtle.dropDown()
-                end
-            end
-        end
-
-        turtle.pathfind_to( last_pos, false )
-    end
-end
-
-function wait_for_start_signal( direction, strength )
-    local valid_signal = false
-
-    while not valid_signal do
-        os.pullEvent( "redstone" )
-
-        if rs.getAnalogueInput( direction, strength ) then
-            valid_signal = true
-        end
     end
 end
 
@@ -608,7 +576,7 @@ function place_mining_turtle()
 
     os.sleep( 0.05 )
     peripheral.call( "front", "turnOn" )
-    wait_for_start_signal( "front", 7 )
+    turtle.wait_for_signal( "front", 7 )
     rs.setAnalogueOutput( "front", 0 )
     os.sleep( 0.10 )
 end
