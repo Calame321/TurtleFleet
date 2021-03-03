@@ -103,18 +103,18 @@ function miner:dig_out( depth, with )
     turtle.set_position( 0, 0, 0, turtle.NORTH )
     turtle.force_forward()
     turtle.turnRight()
-    do_width_remaining = width
-    do_width_start = width
-    do_row_remaining = depth
-    turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
+    miner.do_width_remaining = width
+    miner.do_width_start = width
+    miner.do_row_remaining = depth
+    turtle.save_job( "dig_out", miner.do_row_remaining, miner.do_width_start, miner.do_width_remaining )
     miner:dig_out()
     fs.delete( "job" )
 end
 
 function miner:dig_out_resume( depth, width, remaining )
-    do_row_remaining = depth
-    do_width_start = width
-    do_width_remaining = remaining
+    miner.do_row_remaining = depth
+    miner.do_width_start = width
+    miner.do_width_remaining = remaining
     if turtle.y > 0 then turtle.force_down() end
     if turtle.y < 0 then turtle.force_up() end
     miner:dig_out()
@@ -122,12 +122,12 @@ function miner:dig_out_resume( depth, width, remaining )
 end
 
 function miner:dig_out()
-    while do_row_remaining ~= 0 do
+    while miner.do_row_remaining ~= 0 do
         miner:dig_out_row()
-        if do_row_remaining ~= 1 then
+        if miner.do_row_remaining ~= 1 then
             miner:dig_out_change_row()
         else
-            do_row_remaining = 0
+            miner.do_row_remaining = 0
         end
     end
 
@@ -135,7 +135,7 @@ function miner:dig_out()
 end
 
 function miner:dig_out_row()
-    while do_width_remaining ~= 0 do
+    while miner.do_width_remaining ~= 0 do
         turtle.dig_all( "up" )
         turtle.dig_all( "down" )
 
@@ -145,18 +145,18 @@ function miner:dig_out_row()
         if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_down() turtle.force_up() end
 
         if turtle.is_inventory_full() then turtle.drop_in_enderchest( miner.stuff_to_keep ) end
-        do_width_remaining = do_width_remaining - 1
-        turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
-        if do_width_remaining ~= 1 then turtle.force_forward() end
+        miner.do_width_remaining = miner.do_width_remaining - 1
+        turtle.save_job( "dig_out", miner.do_row_remaining, miner.do_width_start, miner.do_width_remaining )
+        if miner.do_width_remaining ~= 1 then turtle.force_forward() end
     end
 end
 
 function miner:dig_out_change_row()
     if turtle.x == 0 then turtle.turnRight() else turtle.turnLeft() end
-    do_width_remaining = do_width_start
-    do_row_remaining = do_row_remaining - 1
+    miner.do_width_remaining = miner.do_width_start
+    miner.do_row_remaining = miner.do_row_remaining - 1
     turtle.force_forward()
-    turtle.save_job( "dig_out", do_row_remaining, do_width_start, do_width_remaining )
+    turtle.save_job( "dig_out", miner.do_row_remaining, miner.do_width_start, miner.do_width_remaining )
     if turtle.x == 0 then turtle.turnRight() else turtle.turnLeft() end
 end
 

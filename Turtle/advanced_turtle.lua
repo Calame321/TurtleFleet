@@ -477,7 +477,8 @@ function turtle.get_info_paper_index()
 end
 
 function turtle.has_chest( index )
-    if turtle.getItemDetail( index ).name == "enderstorage:ender_chest" then return true end
+    local item = turtle.getItemDetail( index )
+    if item and item.name == "enderstorage:ender_chest" then return true end
     return false
 end
 
