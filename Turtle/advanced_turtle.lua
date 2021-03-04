@@ -553,7 +553,7 @@ function turtle.try_refuel()
     if turtle.getFuelLevel() < 100 then
         local fuel_index = turtle.get_valid_fuel_index()
 
-        if fuel_index == -1 and not get_fuel_from_enderchest() then
+        if fuel_index == -1 and not turtle.get_fuel_from_enderchest() then
             print( "Give me fuel please!" )
             print( "Valid fluel:" )
 
@@ -573,7 +573,7 @@ function turtle.try_refuel()
     end
 end
 
-function get_fuel_from_enderchest()
+function turtle.get_fuel_from_enderchest()
     if not turtle.has_fuel_chest() then return false end
 
     turtle.select( turtle.fuel_chest_index )
