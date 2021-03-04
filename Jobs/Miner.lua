@@ -100,7 +100,7 @@ function miner:dig_out_start( depth, width, height )
         print( "You must provide " .. tostring( layer ) .. " enderchest for dropping stuff in slot 1, " .. tostring( layer ) .. " enderchest for fuel in slot 2, a enderchest for turtles in slot 3 and a paper renamed with depth and width." )
     end
 
-    miner:dig_out( depth, with )
+    miner:dig_out( depth, width )
 end
 
 function miner:dig_out( depth, width )
@@ -149,9 +149,9 @@ function miner:dig_out_row()
         if s and d.name == "minecraft:lava" and d.state.level == 0 then turtle.force_down() turtle.force_up() end
 
         if turtle.is_inventory_full() then turtle.drop_in_enderchest( miner.stuff_to_keep ) end
+        if miner.do_width_remaining ~= 1 then turtle.force_forward() end
         miner.do_width_remaining = miner.do_width_remaining - 1
         turtle.save_job( "dig_out", miner.do_row_remaining, miner.do_width_start, miner.do_width_remaining )
-        if miner.do_width_remaining ~= 1 then turtle.force_forward() end
     end
 end
 
