@@ -58,8 +58,6 @@ miner.do_width_remaining = 0
 miner.do_row_remaining = 0
 miner.do_width_start = 0
 
-
-
 function miner:dig_out_start( depth, width, height )
     print( "Starting dig out with: " .. tostring( depth ) .. " " .. tostring( width ) .. " " .. tostring( height ) )
     if height == nil or height == 3 then miner:dig_out( depth, with ) return end
@@ -105,7 +103,7 @@ function miner:dig_out_start( depth, width, height )
     miner:dig_out( depth, with )
 end
 
-function miner:dig_out( depth, with )
+function miner:dig_out( depth, width )
     turtle.set_position( 0, 0, 0, turtle.NORTH )
     turtle.force_forward()
     turtle.turnRight()
