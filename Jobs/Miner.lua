@@ -61,7 +61,7 @@ miner.do_width_start = 0
 
 
 function miner:dig_out_start( depth, width, height )
-    if height == nil or height == 3 then miner:dig_out( depth, with ) end
+    if height == nil or height == 3 then miner:dig_out( depth, with ) return end
 
     if height % 3 ~= 0 then
         print( "The height must be divisible by 3." )
