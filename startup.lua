@@ -616,7 +616,11 @@ function show_menu()
     elseif args[ 1 ] == "2" then
         miner:vein_mine( "forward", args[ 2 ] )
     elseif args[ 1 ] == "3" then
-        miner:dig_out_start( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ) )
+        if args[ 4 ] == nil then
+            miner:dig_out_start( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ) )
+        else
+            miner:dig_out_start( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ), tonumber( args[ 4 ] ) )
+        end
     elseif args[ 1 ] == "4" then
         builder:place_floor( args[ 2 ] )
     elseif args[ 1 ] == "5" then
