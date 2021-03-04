@@ -101,6 +101,8 @@ function miner:dig_out_start( depth, width, height )
     else
         print( "You must provide " .. tostring( layer ) .. " enderchest for dropping stuff in slot 1, " .. tostring( layer ) .. " enderchest for fuel in slot 2, a enderchest for turtles in slot 3 and a paper renamed with depth and width." )
     end
+
+    miner:dig_out( depth, with )
 end
 
 function miner:dig_out( depth, with )
