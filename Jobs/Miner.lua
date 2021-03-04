@@ -63,7 +63,6 @@ miner.do_width_start = 0
 function miner:dig_out_start( depth, width, height )
     print( "Starting dig out with: " .. tostring( depth ) .. " " .. tostring( width ) .. " " .. tostring( height ) )
     if height == nil or height == 3 then miner:dig_out( depth, with ) return end
-    print( "test?1" )
 
     if height % 3 ~= 0 then
         print( "The height must be divisible by 3." )
@@ -72,15 +71,13 @@ function miner:dig_out_start( depth, width, height )
     
     local layer = height / 3
 
-    print( "test?" )
-
     local info_paper_index = turtle.get_info_paper_index()
     if turtle.has_drop_chest() and turtle.has_fuel_chest() and turtle.has_turtle_chest() and info_paper_index > 0 then
         print( "everithing is ok, starting!" )
         for i = 1, layer do
             turtle.force_up()
             turtle.select( turtle.turtle_chest_index )
-            turtle.dig_all_up()
+            turtle.dig_all( "up" )
             turtle.wait_place( "up" )
             turtle.suckUp( 1 )
             turtle.digUp()
