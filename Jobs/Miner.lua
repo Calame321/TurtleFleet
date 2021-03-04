@@ -113,7 +113,7 @@ function miner:dig_out( depth, with )
     miner.do_width_start = width
     miner.do_row_remaining = depth
     turtle.save_job( "dig_out", miner.do_row_remaining, miner.do_width_start, miner.do_width_remaining )
-    miner:dig_out()
+    miner:dig_out_loop()
     fs.delete( "job" )
 end
 
@@ -123,11 +123,11 @@ function miner:dig_out_resume( depth, width, remaining )
     miner.do_width_remaining = remaining
     if turtle.y > 0 then turtle.force_down() end
     if turtle.y < 0 then turtle.force_up() end
-    miner:dig_out()
+    miner:dig_out_loop()
     fs.delete( "job" )
 end
 
-function miner:dig_out()
+function miner:dig_out_loop()
     while miner.do_row_remaining ~= 0 do
         miner:dig_out_row()
         if miner.do_row_remaining ~= 1 then
