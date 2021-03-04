@@ -583,7 +583,7 @@ function turtle.get_fuel_from_enderchest()
         turtle.dig_all( "up" )
     end
 
-    while not placeDir( dir_to_place ) do os.sleep( 0.1 ) end
+    while not turtle.placeDir( dir_to_place ) do os.sleep( 0.1 ) end
     turtle.wait_suck( dir_to_place )
     turtle.digDir( dir_to_place )
     return true

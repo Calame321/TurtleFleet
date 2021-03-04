@@ -465,7 +465,7 @@ function check_redstone_option()
             os.sleep( 0.5 )
             rs.setAnalogueOutput( "top", 0 )
             local d = mysplit( data.displayName )
-            miner:dig_out_start( tonumber( d[ 1 ] ), tonumber( d[ 2 ] ) )
+            miner:dig_out( tonumber( d[ 1 ] ), tonumber( d[ 2 ] ) )
         elseif redstone_option == 7 then
             rs.setAnalogueOutput( "back", 7 )
             os.sleep( 0.1 )
