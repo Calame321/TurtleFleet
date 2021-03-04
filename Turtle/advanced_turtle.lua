@@ -470,6 +470,7 @@ function turtle.get_info_paper_index()
     for i = 1, 16 do
         local item = turtle.getItemDetail( i, true )
         if item and item.name == "minecraft:paper" and item.displayName ~= "Paper" then
+            print( "info paper found" )
             return i
         end
     end
@@ -477,7 +478,7 @@ function turtle.get_info_paper_index()
 end
 
 function turtle.has_chest( index )
-    local item = turtle.getItemDetail( index )
+    local item = turtle.getItemDetail( index, true )
     if item and item.name == "enderstorage:ender_chest" then return true end
     return false
 end

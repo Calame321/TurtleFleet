@@ -72,6 +72,7 @@ function miner:dig_out_start( depth, width, height )
 
     local info_paper_index = turtle.get_info_paper_index()
     if turtle.has_drop_chest() and turtle.has_fuel_chest() and turtle.has_turtle_chest() and info_paper_index > 0 then
+        print( "everithing is ok, starting!" )
         for i = 1, layer do
             turtle.force_up()
             turtle.select( turtle.turtle_chest_index )
