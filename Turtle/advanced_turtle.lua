@@ -315,7 +315,7 @@ function turtle.placeDir( direction )
     error( "turtle.placeDir invalid direction" )
 end
 
-function turtle.wait_place() while not turtle.place() do os.sleep( 1 ) end end
+function turtle.wait_place( direction ) while not turtle.placeDir( direction ) do os.sleep( 1 ) end end
 
 -- Suck --
 function turtle.suckDir( direction )
