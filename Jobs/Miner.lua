@@ -183,8 +183,8 @@ function miner:check_ore( direction )
         local success, data = turtle.inspectDir( direction )
         local ore_name = data.name
 
-        for b = 1, #DO_NOT_MINE do
-            if ore_name == DO_NOT_MINE[ b ] then
+        for b = 1, #turtle.DO_NOT_MINE do
+            if ore_name == turtle.DO_NOT_MINE[ b ] then
                 return false
             end
         end

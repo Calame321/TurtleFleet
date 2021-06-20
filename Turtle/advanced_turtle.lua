@@ -5,12 +5,12 @@ if not turtle then
     return
 end
 
-local valid_fuel = {
+turtle.valid_fuel = {
     "minecraft:charcoal",
     "minecraft:coal",
 }
 
-local DO_NOT_MINE = {
+turtle.DO_NOT_MINE = {
     "forbidden_arcanus:stella_arcanum",
     "minecraft:diamond_ore",
     "mysticalworld:amethyst_ore",
@@ -180,9 +180,9 @@ end
 
 function turtle.force_move( direction, block_to_break )
     if direction ~= "back" then
-        for b = 1, #DO_NOT_MINE do
-            if turtle.is_block_name( direction, DO_NOT_MINE[ b ] ) then
-                error( "I am scared of this " .. DO_NOT_MINE[ b ] )
+        for b = 1, #turtle.DO_NOT_MINE do
+            if turtle.is_block_name( direction, turtle.DO_NOT_MINE[ b ] ) then
+                error( "I am scared of this " .. turtle.DO_NOT_MINE[ b ] )
             end
         end
     end
@@ -529,8 +529,8 @@ function turtle.get_valid_fuel_index()
     for i = 1, 16 do
         local item = turtle.getItemDetail( i )
 
-        for f = 1, #valid_fuel do
-            if item and string.find( item.name, valid_fuel[ f ] ) then
+        for f = 1, #turtle.valid_fuel do
+            if item and string.find( item.name, turtle.valid_fuel[ f ] ) then
                 return i
             end
         end
@@ -540,8 +540,8 @@ function turtle.get_valid_fuel_index()
 end
 
 function turtle.is_valid_fuel( item_name )
-    for f = 1, #valid_fuel do
-        if item_name == valid_fuel[ f ] then
+    for f = 1, #turtle.valid_fuel do
+        if item_name == turtle.valid_fuel[ f ] then
             return true
         end
     end
@@ -562,8 +562,8 @@ function turtle.try_refuel()
             print( "Give me fuel please!" )
             print( "Valid fluel:" )
 
-            for f = 1, #valid_fuel do
-                print( " - " .. valid_fuel[ f ] )
+            for f = 1, #turtle.valid_fuel do
+                print( " - " .. turtle.valid_fuel[ f ] )
             end
 
             while fuel_index == -1 do
