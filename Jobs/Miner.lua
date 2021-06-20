@@ -246,8 +246,9 @@ end
 
 function miner:branch_mining( side )
     local branch_index = 0
+    local number_of_branch = branch_mine_length / 4
 
-    for b = 1, branch_mine_length / 4 do
+    for b = 1, number_of_branch do
         turtle.turn180()
 
         for i = 1, ( branch_index * 4 ) do
