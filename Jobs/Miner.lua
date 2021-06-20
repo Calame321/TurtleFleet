@@ -204,12 +204,12 @@ function miner:mine_branch()
         depth = depth + 1
         turtle.force_forward()
 
-        if not check_ore( "up" ) then found_forbidden_ore = true end
-        if not check_ore( "down" ) then found_forbidden_ore = true end
+        if not miner:check_ore( "up" ) then found_forbidden_ore = true end
+        if not miner:check_ore( "down" ) then found_forbidden_ore = true end
         turtle.turnLeft()
-        if not check_ore( "forward" ) then found_forbidden_ore = true end
+        if not miner:check_ore( "forward" ) then found_forbidden_ore = true end
         turtle.turn180()
-        if not check_ore( "forward" ) then found_forbidden_ore = true end
+        if not miner:check_ore( "forward" ) then found_forbidden_ore = true end
         turtle.turnLeft()
 
         if found_forbidden_ore then print( "FOUND DO_NOT_MINE ORE !!!!" ) break end
@@ -256,7 +256,7 @@ function miner:branch_mining( side )
 
         if side == "left" then turtle.turnLeft() else turtle.turnRight() end
 
-        mine_branch()
+        miner:mine_branch()
 
         if side == "left" then turtle.turnLeft() else  turtle.turnRight() end
         
@@ -279,7 +279,7 @@ local mine_direction = 0
 
 function miner:setup_mine( mine_position )
     mine_start_position = mine_position
-    save_mine()
+    miner:save_mine()
 end
 
 function miner:get_mine_y()
@@ -288,7 +288,7 @@ end
 
 function miner:get_branch_entrance_pos( branch_index )
     local x = mine_start_position.x + ( ( ( ( mine_layer % 2 ) * 2 ) + 2 ) * ( mine_direction % 2 ) )
-    local y = get_mine_y()
+    local y = miner:get_mine_y()
     local z = mine_start_position.z + ( ( ( ( mine_layer % 2 ) * 2 ) + 2 ) * ( ( 1 + mine_direction ) % 2 ) )
 end
 
@@ -299,14 +299,14 @@ function miner:mine()
         print( "Need to setup the mine." )
         print( "My pos = " .. tostring( pos.coords ) )
         print( "Mine pos = " .. tostring( mine_start_position ) )
-        go_to_mine_start()
+        miner:go_to_mine_start()
         turtle.turn( turtle.NORTH )
-        dig_mine_shaft()
-        go_to_output_chest()
+        miner:dig_mine_shaft()
+        miner:go_to_output_chest()
         turtle.turn( turtle.WEST )
-        drop_inventory()
+        miner:drop_inventory()
         mine_setup = true
-        save_mine()
+        miner:save_mine()
     end
 
     miner:go_to_mine_start()
