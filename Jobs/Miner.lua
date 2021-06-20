@@ -200,7 +200,7 @@ function miner:mine_branch()
     local found_forbidden_ore = false
     local depth = 0
 
-    for i = 1, branch_mine_length do
+    for i = 1, miner.branch_mine_length do
         depth = depth + 1
         turtle.force_forward()
 
@@ -246,9 +246,8 @@ end
 
 function miner:branch_mining( side )
     local branch_index = 0
-    local number_of_branch = branch_mine_length / 4
 
-    for b = 1, number_of_branch do
+    for b = 1, miner.branch_mine_length / 4 do
         turtle.turn180()
 
         for i = 1, ( branch_index * 4 ) do
@@ -335,7 +334,7 @@ function miner:find_next_branch()
         turtle.turn( RIGHT )
         branch_index = branch_index + 1
 
-        if branch_index * 4 >= branch_mine_length then
+        if branch_index * 4 >= miner.branch_mine_length then
             return false
         end
     end  
