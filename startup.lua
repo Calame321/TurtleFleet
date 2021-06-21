@@ -37,6 +37,7 @@ function update()
     get_file_from_github( git_path .. "Jobs/builder.lua"            ,"TurtleFleet/Jobs/builder.lua" )
     get_file_from_github( git_path .. "Jobs/cooker.lua"             ,"TurtleFleet/Jobs/cooker.lua" )
     get_file_from_github( git_path .. "Jobs/Miner.lua"              ,"TurtleFleet/Jobs/miner.lua" )
+    get_file_from_github( git_path .. "Utils/visual.lua"            ,"TurtleFleet/Utils/visual.lua" )
     get_file_from_github( git_path .. "startup.lua"                 ,"startup" )
 
     rs.setAnalogueOutput( "back", 1 )
@@ -65,6 +66,7 @@ local all_files = {
     "TurtleFleet/Jobs/builder.lua",
     "TurtleFleet/Jobs/cooker.lua",
     "TurtleFleet/Jobs/miner.lua",
+    "TurtleFleet/Utils/visual.lua",
 }
 
 for i = 1, #all_files do
@@ -88,6 +90,7 @@ job = dofile( "TurtleFleet/Jobs/job.lua" )
 builder = dofile( "TurtleFleet/Jobs/builder.lua" )
 cooker = dofile( "TurtleFleet/Jobs/cooker.lua" )
 miner = dofile( "TurtleFleet/Jobs/miner.lua" )
+visual = dofile( "TurtleFleet/Utils/visual.lua" )
 
 -----------
 -- Const --
@@ -612,6 +615,8 @@ function show_menu()
         miner:mine()
     elseif args[ 1 ] == "update" then
         update_master()
+    elseif args[ 1 ] == "v" then
+        visual:draw_table()
     elseif args[ 1 ] == "1" then
         treefarm:start_tree_farm( tonumber( args[ 2 ] ) )
     elseif args[ 1 ] == "2" then
