@@ -20,7 +20,7 @@ function visual:draw_table()
 
             if x == 1 or x == height then
                 print( LR )
-            elseif y == 1 or y == height
+            elseif y == 1 or y == height then
                 print( U )
             end
         end
