@@ -1,4 +1,4 @@
-os.loadAPI( "disk/turtleFleet/mainMenu" )
+os.loadAPI( "disk/turtleFleet/main_menu" )
 os.loadAPI( "disk/turtleFleet/utils" 	)
 
 function savePos( pos )
@@ -39,7 +39,7 @@ function run()
         end
 
         term.clear()
-        mainMenu.draw( event )
+        main_menu.draw( event )
         term.setBackgroundColor( colors.black )
     end
 end

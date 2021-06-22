@@ -506,6 +506,24 @@ end
 ----------
 -- Menu --
 ----------
+function run_menu()
+    -- Timer to display time
+    local clock_timer = os.startTimer( 1 )
+    
+    while true do
+        event = { os.pullEvent() }
+        if event[ 1 ] == "timer" and event[ 2 ] == clock_timer then
+            clock_timer = os.startTimer( 1 )
+        elseif event[ 1 ] == "modem_connected" then
+            print( "modem_connected" )
+        elseif event[ 1 ] == "rednet_message" then
+            print( "rednet_message" )
+        end
+
+        main_menu.draw( event )
+    end
+end
+
 function show_menu()
     term.clear()
     load_settings()
@@ -534,7 +552,7 @@ function show_menu()
     elseif args[ 1 ] == "update" then
         update.master()
     elseif args[ 1 ] == "v" then
-        visual:draw_table()
+        run_menu()
     elseif args[ 1 ] == "1" then
         treefarm:start_tree_farm( tonumber( args[ 2 ] ) )
     elseif args[ 1 ] == "2" then
