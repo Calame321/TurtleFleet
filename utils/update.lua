@@ -28,8 +28,11 @@ local all_files = {
     "utils/utils.lua",
 }
 
-function update_master()
+function master()
+    local is_master = false
+
     while turtle.suckDown( 1 ) do
+        is_master = true
         turtle.place()
         peripheral.call( "front", "turnOn" )
 
@@ -47,7 +50,7 @@ function update_master()
         turtle.dropUp()
     end
 
-    turtle.forward()
+    if is_master then turtle.forward() end
     update()
 end
 

@@ -9,6 +9,7 @@ job = dofile( "turtlefleet/jobs/job.lua" )
 builder = dofile( "turtlefleet/jobs/builder.lua" )
 cooker = dofile( "turtlefleet/jobs/cooker.lua" )
 miner = dofile( "turtlefleet/jobs/miner.lua" )
+update = dofile( "turtlefleet/utils/update.lua" )
 
 -----------
 -- Const --
@@ -531,7 +532,7 @@ function show_menu()
     elseif args[ 1 ] == "mine" then
         miner:mine()
     elseif args[ 1 ] == "update" then
-        update_master()
+        update.master()
     elseif args[ 1 ] == "v" then
         visual:draw_table()
     elseif args[ 1 ] == "1" then
