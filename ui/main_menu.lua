@@ -1,11 +1,10 @@
 ---------------
 -- Main Menu --
 ---------------
-
-os.loadAPI( "disk/turtleFleet/ui/topMenuBar" )
-os.loadAPI( "disk/turtleFleet/ui/iconGrid"   )
-os.loadAPI( "disk/turtleFleet/ui/statusBar"  )
-os.loadAPI( "disk/turtleFleet/ui/popup"  	 )
+os.loadAPI( "turtlefleet/ui/top_menu_bar" )
+os.loadAPI( "turtlefleet/ui/icon_grid"   )
+os.loadAPI( "turtlefleet/ui/status_bar"  )
+os.loadAPI( "turtlefleet/ui/popup"  	 )
 
 topMenuBar.addMenuItem( "file", "File" )
 topMenuBar.addSubItem( "file", "reboot"	 , "Reboot"		 , function() os.reboot() 	end )
