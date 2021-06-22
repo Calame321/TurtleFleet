@@ -1,14 +1,14 @@
 ------------
 -- config --
 ------------
-shell.run( "TurtleFleet/Turtle/advanced_turtle.lua" )
-shell.run( "TurtleFleet/Turtle/pathfind.lua" )
-station = dofile( "TurtleFleet/Stations/station.lua" )
-treefarm = dofile( "TurtleFleet/Stations/treefarm.lua" )
-job = dofile( "TurtleFleet/Jobs/job.lua" )
-builder = dofile( "TurtleFleet/Jobs/builder.lua" )
-cooker = dofile( "TurtleFleet/Jobs/cooker.lua" )
-miner = dofile( "TurtleFleet/Jobs/miner.lua" )
+shell.run( "turtlefleet/turtle/advanced_turtle.lua" )
+shell.run( "furtlefleet/turtle/pathfind.lua" )
+station = dofile( "turtlefleet/stations/station.lua" )
+treefarm = dofile( "turtlefleet/stations/treefarm.lua" )
+job = dofile( "turtlefleet/Jobs/job.lua" )
+builder = dofile( "turtlefleet/jobs/builder.lua" )
+cooker = dofile( "turtlefleet/jobs/cooker.lua" )
+miner = dofile( "turtlefleet/jobs/miner.lua" )
 
 -----------
 -- Const --
