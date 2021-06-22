@@ -1,8 +1,6 @@
 ------------
 -- Update --
 ------------
-local git_path = "https://raw.githubusercontent.com/Calame321/TurtleFleet/main/"
-local fleet_folder = "turtlefleet/"
 local all_files = {
     "computer/computer_startup.lua",
     "control/disk_install.lua",
@@ -27,6 +25,9 @@ local all_files = {
     "utils/update.lua",
     "utils/utils.lua",
 }
+
+local git_path = "https://raw.githubusercontent.com/Calame321/TurtleFleet/main/"
+local fleet_folder = "turtlefleet/"
 
 function update_master()
     while turtle.suckDown( 1 ) do
@@ -55,7 +56,10 @@ function update()
     fs.delete( "startup" )
     fs.delete( "turtlefleet" )
 
-    for i = 1, #all_files do get_file_from_github( all_files[ i ] ) end
+    for i = 1, #all_files do
+        get_file_from_github( all_files[ i ] )
+    end
+
     get_startup_from_github()
 
     rs.setAnalogueOutput( "back", 1 )
