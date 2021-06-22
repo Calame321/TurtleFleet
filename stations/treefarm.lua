@@ -2,7 +2,6 @@
 -- TREE FARM --
 ---------------
 treefarm = station:new()
-station = dofile( "TurtleFleet/Stations/station.lua" )
 
 -- Tree Farm
 treefarm.tree_farm_length = 15

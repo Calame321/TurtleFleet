@@ -16,7 +16,7 @@ function addIcon( iconName, text, func, icon )
 		error( "iconName cannot be nil." )
 	end
 
-	local iconPath = "disk/turtleFleet/img/" .. ( icon or "iconMissing" )
+	local iconPath = "turtlefleet/img/" .. ( icon or "iconMissing" )
 	
 	local id = table.getn( icons ) + 1
 	icons[ id ] = {}

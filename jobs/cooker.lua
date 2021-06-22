@@ -1,6 +1,6 @@
---------------
+-------------
 -- Coocker --
---------------
+-------------
 cooker = job:new()
 
 local coocking_time = 10
