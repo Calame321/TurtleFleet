@@ -1,9 +1,11 @@
 ------------
 -- Update --
 ------------
-local git_path = "https://raw.githubusercontent.com/Calame321/TurtleFleet/main/"
-local fleet_folder = "turtlefleet/"
-local all_files = {
+local update = {}
+
+update.git_path = "https://raw.githubusercontent.com/Calame321/TurtleFleet/main/"
+update.fleet_folder = "turtlefleet/"
+update.all_files = {
     "computer/computer_startup.lua",
     "control/disk_install.lua",
     "control/manual_command.lua",
@@ -28,7 +30,7 @@ local all_files = {
     "utils/utils.lua",
 }
 
-function master()
+function update.master()
     local is_master = false
 
     while turtle.suckDown( 1 ) do
@@ -51,24 +53,24 @@ function master()
     end
 
     if is_master then turtle.forward() end
-    update()
+    update.update()
 end
 
-function update()
+function update.update()
     fs.delete( "startup" )
     fs.delete( "turtlefleet" )
 
-    for i = 1, #all_files do get_file_from_github( all_files[ i ] ) end
-    get_startup_from_github()
+    for i = 1, #update.all_files do update.get_file_from_github( update.all_files[ i ] ) end
+    update.get_startup_from_github()
 
     rs.setAnalogueOutput( "back", 1 )
     os.sleep( 0.05 )
     rs.setAnalogueOutput( "back", 0 )
 end
 
-function get_file_from_github( file_path, in_folder )
-    local f = fs.open( fleet_folder .. file_path, "w" )
-    local w, m = http.get( git_path .. file_path )
+function update.get_file_from_github( file_path, in_folder )
+    local f = fs.open( update.fleet_folder .. file_path, "w" )
+    local w, m = http.get( update.git_path .. file_path )
     if w then
         f.write( w.readAll() )
         f.flush()
@@ -78,9 +80,9 @@ function get_file_from_github( file_path, in_folder )
     end
 end
 
-function get_startup_from_github()
+function update.get_startup_from_github()
     local f = fs.open( "startup", "w" )
-    local w, m = http.get( git_path .. "startup.lua" )
+    local w, m = http.get( update.git_path .. "startup.lua" )
     if w then
         f.write( w.readAll() )
         f.flush()
@@ -90,12 +92,14 @@ function get_startup_from_github()
     end
 end
 
-for i = 1, #all_files do
-    if not fs.exists( fleet_folder .. all_files[ i ] ) then
+for i = 1, #update.all_files do
+    if not fs.exists( update.fleet_folder .. update.all_files[ i ] ) then
         print( "Updating..." )
-        update()
+        update.update()
         print( "Updated! press a key to reboot" )
         read()
         os.reboot()
     end
 end
+
+return update

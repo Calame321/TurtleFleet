@@ -1,19 +1,16 @@
 -----------
 -- Popup --
 -----------
+local popup = {}
 
 -- Main variable
-local text = ""
-local visible = false
-local btnOk = false
+local popup.text = ""
+local popup.visible = false
 
-function draw()
-    if not visible then
-        return
-    end
+function popup.draw()
+    if not popup.visible then return end
 
 	local lastBgColor = term.getBackgroundColor()
-
     local x, y = term.getSize()
     
     paintutils.drawFilledBox( 4, 4, x - 3, y - 3, colors.white )
@@ -29,23 +26,20 @@ function draw()
 
     write( title )
 
-    startX = utils.getCenterX( string.len( text ), x )
+    startX = utils.getCenterX( string.len( popup.text ), x )
     term.setCursorPos( startX, 9 )
 
-    write( text )
-
+    write( popup.text )
 	term.setBackgroundColor( lastBgColor )
 end
 
-function isVisible()
-    return visible
+function popup.show( txt )
+    popup.text = txt
+    popup.visible = true
 end
 
-function show( txt )
-    text = txt
-    visible = true
+function popup.hide()
+    popup.visible = false
 end
 
-function hide()
-    visible = false
-end
+return popup

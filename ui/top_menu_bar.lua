@@ -1,54 +1,52 @@
 ------------------
 -- Menu top bar --
 ------------------
+local top_menu_bar = {}
 
 -- Main variable
-local menuItem = {}
-local txtColor = colors.white
-local backgroundColor = colors.lightBlue
-local height = 1
-local nbMenu = 0
+local top_menu_bar.menu_item = {}
+local top_menu_bar.txt_color = colors.white
+local top_menu_bar.background_color = colors.lightBlue
+local top_menu_bar.height = 1
+local top_menu_bar.total_menu = 0
 
-function getHeight()
-	return height
-end
 
-function getPos( text )
+function top_menu_bar.get_position( text )
 	local _size = string.len( text ) + 2
-	local count = nbMenu
+	local count = top_menu_bar.total_menu
 
 	if count == 0 then
 	   return { x = 1, y = 1, size = _size }
 	end
 
-	local _x = menuItem[ count ].pos.x + menuItem[ count ].pos.size
+	local _x = top_menu_bar.menu_item[ count ].pos.x + top_menu_bar.menu_item[ count ].pos.size
 	local _y = 1
 	
 	return { x = _x, y = _y, size = _size }
 end
 
 
-function addMenuItem( menuName, text )
-	if menuName == nil then
-		error( "menuName cannot be nil." )
+function top_menu_bar.add_menu_item( menu_name, text )
+	if menu_name == nil then
+		error( "menu_name cannot be nil." )
 	end
 
 	local newMenu = {}
-	newMenu.menuName = menuName
+	newMenu.menu_name = menu_name
 	newMenu.text = text
 	newMenu.show = false
 	newMenu.subSize = 1
 	newMenu.nbSub = 0
-	newMenu.pos = getPos( text )
-	table.insert( menuItem, newMenu )
+	newMenu.pos = top_menu_bar.get_position( text )
+	table.insert( top_menu_bar.menu_item, newMenu )
 
-	nbMenu = nbMenu + 1
+	top_menu_bar.total_menu = top_menu_bar.total_menu + 1
 end
 
 
-function getParentIndex( parentName )
-	for index, data in pairs( menuItem ) do
-		if data.menuName == parentName then
+function top_menu_bar.getParentIndex( parentName )
+	for index, data in pairs( top_menu_bar.menu_item ) do
+		if data.menu_name == parentName then
 			return index
 		end
 	end
@@ -57,15 +55,15 @@ function getParentIndex( parentName )
 end
 
 
-function addSubItem( menuName, subName, text, func, checked, color, backgroundColor )
-	if menuName == nil or subName == nil then
-		error( "menuName and subName cannot be nil." )
+function addSubItem( menu_name, subName, text, func, checked, color, top_menu_bar.background_color )
+	if menu_name == nil or subName == nil then
+		error( "menu_name and subName cannot be nil." )
 	end
 
-	local parentIndex = getParentIndex( menuName )
+	local parentIndex = top_menu_bar.getParentIndex( menu_name )
 
-	if string.len( text ) > menuItem[ parentIndex ].subSize then
-		menuItem[ parentIndex ].subSize = string.len( text )
+	if string.len( text ) > top_menu_bar.menu_item[ parentIndex ].subSize then
+		top_menu_bar.menu_item[ parentIndex ].subSize = string.len( text )
 	end
 
 	newSub = {}
@@ -74,40 +72,40 @@ function addSubItem( menuName, subName, text, func, checked, color, backgroundCo
 	newSub.func = func
 	newSub.checked = checked or false
 	newSub.color = color or colors.white
-	newSub.backgroundColor = backgroundColor or colors.blue
-	table.insert( menuItem[ parentIndex ], newSub )
+	newSub.top_menu_bar.background_color = top_menu_bar.background_color or colors.blue
+	table.insert( top_menu_bar.menu_item[ parentIndex ], newSub )
 	
-	menuItem[ parentIndex ].nbSub = menuItem[ parentIndex ].nbSub + 1
+	top_menu_bar.menu_item[ parentIndex ].nbSub = top_menu_bar.menu_item[ parentIndex ].nbSub + 1
 end
 
 
 -- Draw the menu bar
-function draw()
-	local lastBgColor = term.getBackgroundColor()
+function top_menu_bar.draw()
+	local lastBgColor = term.gettop_menu_bar.background_color()
 
-	term.setBackgroundColor( backgroundColor )
-	term.setTextColor( txtColor )
+	term.settop_menu_bar.background_color( top_menu_bar.background_color )
+	term.setTextColor( top_menu_bar.txt_color )
 	local sizeX = term.getSize()
 	
-	paintutils.drawFilledBox( 1, 1, sizeX, height, backgroundColor )
+	paintutils.drawFilledBox( 1, 1, sizeX, top_menu_bar.height, top_menu_bar.background_color )
 	term.setCursorPos( 1, 1 )
 	
-	for index, data in pairs( menuItem ) do
+	for index, data in pairs( top_menu_bar.menu_item ) do
 		term.setCursorPos( data.pos.x, data.pos.y )
 		write( " " .. data.text .. " " )
 
 		if data.show then
-			drawSubMenu( data )
+			top_menu_bar.drawSubMenu( data )
 		end
 	end
 
-	term.setBackgroundColor( lastBgColor )
+	term.settop_menu_bar.background_color( lastBgColor )
 end
 
 
 -- Draw subMenu if clicked
-function drawSubMenu( parentData )
-	local lastBgColor = term.getBackgroundColor()
+function top_menu_bar.drawSubMenu( parentData )
+	local lastBgColor = term.gettop_menu_bar.background_color()
 
 	paintutils.drawFilledBox( parentData.pos.x, parentData.pos.y + 1, parentData.pos.x + parentData.subSize + 1, parentData.nbSub + 1, colors.blue )
 
@@ -118,31 +116,31 @@ function drawSubMenu( parentData )
 		i = i + 1
 	end
 
-	term.setBackgroundColor( lastBgColor )
+	term.settop_menu_bar.background_color( lastBgColor )
 end
 
 
-function onClick( x, y )
-	for index, data in pairs( menuItem ) do
+function top_menu_bar.onClick( x, y )
+	for index, data in pairs( top_menu_bar.menu_item ) do
 		local s_x = data.pos.x
 		local s_y = data.pos.y
 		local e_x = data.pos.x + data.pos.size - 1
-		local e_y = data.pos.y + height - 1
+		local e_y = data.pos.y + top_menu_bar.height - 1
 
 		if data.show then
-			onSubClick( x, y, data )
+			top_menu_bar.onSubClick( x, y, data )
 		end
 
-		menuItem[ index ].show = x >= s_x and x <= e_x and y >= s_y and y <= e_y
+		top_menu_bar.menu_item[ index ].show = x >= s_x and x <= e_x and y >= s_y and y <= e_y
 	end
 end
 
 
-function onSubClick( x, y, data )
+function top_menu_bar.onSubClick( x, y, data )
 	local i = 1
 	while data[ i ] ~= nil do
 		local s_x = data.pos.x
-		local s_y = height + i
+		local s_y = top_menu_bar.height + i
 		local e_x = data.pos.x + data.pos.size
 		local e_y = s_y
 
@@ -155,7 +153,9 @@ function onSubClick( x, y, data )
 end
 
 
-function clear()
-	menuItem = {}
-	nbMenu = 0
+function top_menu_bar.clear()
+	top_menu_bar.menu_item = {}
+	top_menu_bar.total_menu = 0
 end
+
+return top_menu_bar
