@@ -1,5 +1,5 @@
-os.loadAPI( "disk/turtleFleet/main_menu" )
-os.loadAPI( "disk/turtleFleet/utils" 	)
+os.loadAPI( "turtlefleet/main_menu" )
+os.loadAPI( "turtlefleet/utils" 	)
 
 function savePos( pos )
     settings.set( "pos", { face = pos.face, coords = pos.coords } )

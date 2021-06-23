@@ -10,7 +10,7 @@ builder = dofile( "turtlefleet/jobs/builder.lua" )
 cooker = dofile( "turtlefleet/jobs/cooker.lua" )
 miner = dofile( "turtlefleet/jobs/miner.lua" )
 update = dofile( "turtlefleet/utils/update.lua" )
-main_menu = dofile( "turtlefleet/ui/main_menu" )
+main_menu = dofile( "turtlefleet/ui/main_menu.lua" )
 
 -----------
 -- Const --
