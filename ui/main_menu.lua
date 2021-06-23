@@ -77,8 +77,18 @@ function draw( event )
 end
 
 --Execute on load
-if ( peripheral.getType( "top" ) == nil ) then
-	onPeripheralDetach( "top" )
-else
-	os.queueEvent( "peripheral", "modem", "top" )
+function on_load()
+	if ( peripheral.getType( "top" ) == nil ) then
+		onPeripheralDetach( "top" )
+	else
+		os.queueEvent( "peripheral", "modem", "top" )
+	end
 end
+
+return {
+	onClick = onClick,
+	onPeripheral = onPeripheral,
+	onPeripheralDetach = onPeripheralDetach,
+	draw = draw,
+	on_load = on_load
+}
