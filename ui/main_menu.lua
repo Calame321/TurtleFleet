@@ -4,9 +4,9 @@
 local main_menu = {}
 
 main_menu.icon_grid = require( "turtlefleet.ui.icon_grid" )
-main_menu.popup = require( "turtlefleet/ui/popup.lua" )
-main_menu.status_bar = require( "turtlefleet/ui/status_bar.lua" )
-main_menu.top_menu_bar = require( "turtlefleet/ui/main_menu.top_menu_bar.lua" )
+main_menu.popup = require( "turtlefleet.ui.popup" )
+main_menu.status_bar = require( "turtlefleet.ui.status_bar" )
+main_menu.top_menu_bar = require( "turtlefleet.ui.main_menu.top_menu_bar" )
 
 main_menu.top_menu_bar.addMenuItem( "file", "File" )
 main_menu.top_menu_bar.addSubItem( "file", "reboot"	 , "Reboot"		 , function() os.reboot() 	end )
