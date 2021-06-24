@@ -18,14 +18,14 @@ update = require( "update" )
 ----------
 -- Menu --
 ----------
-main_menu.top_menu_bar.add_menu_item( "file", "1.File", 1 )
-main_menu.top_menu_bar.add_sub_item( "file", "reboot"  , "Reboot"	   , function() os.reboot()   end )
-main_menu.top_menu_bar.add_sub_item( "file", "shutdown", "Shutdown"	   , function() os.shutdown() end )
-main_menu.top_menu_bar.add_sub_item( "file", "returnOs", "Return to OS", function() os.exit() 	  end )
+main_menu.top_menu_bar.add_menu_item( "file", "1.File", "1" )
+main_menu.top_menu_bar.add_sub_item( "file", "reboot"  , "Reboot"	   , "r", function() os.reboot()   end )
+main_menu.top_menu_bar.add_sub_item( "file", "shutdown", "Shutdown"	   , "s", function() os.shutdown() end )
+main_menu.top_menu_bar.add_sub_item( "file", "returnOs", "Return to OS", "o", function() os.exit() 	   end )
 
-main_menu.top_menu_bar.add_menu_item( "option", "2.Option", 2 )
-main_menu.top_menu_bar.add_sub_item( "option", "settings", "Settings", function() print( "Setting" ) end )
-main_menu.top_menu_bar.add_sub_item( "option", "about"   , "About"   , function() print( "About"   ) end )
+main_menu.top_menu_bar.add_menu_item( "option", "2.Option", "2" )
+main_menu.top_menu_bar.add_sub_item( "option", "settings", "Settings", "s", function() print( "Setting" ) end )
+main_menu.top_menu_bar.add_sub_item( "option", "about"   , "About"   , "a", function() print( "About"   ) end )
 
 main_menu.icon_grid.add_icon( "inventory", "Inventory", function() end, "inventory" )
 main_menu.icon_grid.add_icon( "mining"	 , "Mining"   , function() end, "mine" 		)

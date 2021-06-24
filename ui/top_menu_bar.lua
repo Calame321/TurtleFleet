@@ -56,7 +56,7 @@ function top_menu_bar.get_parent_index( parentName )
 end
 
 
-function top_menu_bar.add_sub_item( menu_name, subName, text, func, checked, color, background_color )
+function top_menu_bar.add_sub_item( menu_name, subName, text, char, func, checked, color, background_color )
 	if menu_name == nil or subName == nil then
 		error( "menu_name and subName cannot be nil." )
 	end
@@ -73,6 +73,7 @@ function top_menu_bar.add_sub_item( menu_name, subName, text, func, checked, col
 	newSub.func = func
 	newSub.checked = checked or false
 	newSub.color = color or colors.white
+	newSub.char = char
 	newSub.background_color = background_color or colors.blue
 	table.insert( top_menu_bar.menu_item[ parentIndex ], newSub )
 	
@@ -140,12 +141,7 @@ end
 function top_menu_bar.on_sub_click( x, y, data )
 	local i = 1
 	while data[ i ] ~= nil do
-		local s_x = data.pos.x
-		local s_y = top_menu_bar.height + i
-		local e_x = data.pos.x + data.pos.size
-		local e_y = s_y
-
-		if x >= s_x and x <= e_x and y >= s_y and y <= e_y then
+		if data[ i ].char == char then
 			data[ i ].func()
 			return
 		end
@@ -157,10 +153,27 @@ end
 function top_menu_bar.on_char( char )
 	for index, data in pairs( top_menu_bar.menu_item ) do
 		if data.show then
-			top_menu_bar.on_sub_click( x, y, data )
+			top_menu_bar.on_sub_char( char, data )
 		end
 
-		top_menu_bar.menu_item[ index ].show = top_menu_bar.menu_item[ index ].char == char
+		top_menu_bar.menu_item[ index ].show = data.char == char
+	end
+end
+
+
+function top_menu_bar.on_sub_char( char, data )
+	local i = 1
+	while data[ i ] ~= nil do
+		local s_x = data.pos.x
+		local s_y = top_menu_bar.height + i
+		local e_x = data.pos.x + data.pos.size
+		local e_y = s_y
+
+		if x >= s_x and x <= e_x and y >= s_y and y <= e_y then
+			data[ i ].func()
+			return
+		end
+		i = i + 1
 	end
 end
 
