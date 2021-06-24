@@ -28,6 +28,10 @@ update.all_files = {
     "utils/position.lua",
     "utils/update.lua",
     "utils/utils.lua",
+    "img/mine",
+    "img/tree",
+    "img/inventory",
+    "img/icon_missing",
 }
 
 function update.master()
