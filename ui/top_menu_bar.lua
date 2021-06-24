@@ -72,7 +72,7 @@ function top_menu_bar.add_sub_item( menu_name, subName, text, func, checked, col
 	newSub.func = func
 	newSub.checked = checked or false
 	newSub.color = color or colors.white
-	newSub.top_menu_bar.background_color = background_color or colors.blue
+	newSub.background_color = background_color or colors.blue
 	table.insert( top_menu_bar.menu_item[ parentIndex ], newSub )
 	
 	top_menu_bar.menu_item[ parentIndex ].nbSub = top_menu_bar.menu_item[ parentIndex ].nbSub + 1
@@ -99,7 +99,7 @@ function top_menu_bar.draw()
 		end
 	end
 
-	term.settop_menu_bar.background_color( lastBgColor )
+	term.setBackgroundColor( lastBgColor )
 end
 
 
