@@ -4,11 +4,11 @@
 local top_menu_bar = {}
 
 -- Main variable
-local top_menu_bar.menu_item = {}
-local top_menu_bar.txt_color = colors.white
-local top_menu_bar.background_color = colors.lightBlue
-local top_menu_bar.height = 1
-local top_menu_bar.total_menu = 0
+top_menu_bar.menu_item = {}
+top_menu_bar.txt_color = colors.white
+top_menu_bar.background_color = colors.lightBlue
+top_menu_bar.height = 1
+top_menu_bar.total_menu = 0
 
 
 function top_menu_bar.get_position( text )
@@ -55,7 +55,7 @@ function top_menu_bar.getParentIndex( parentName )
 end
 
 
-function addSubItem( menu_name, subName, text, func, checked, color, top_menu_bar.background_color )
+function addSubItem( menu_name, subName, text, func, checked, color, background_color )
 	if menu_name == nil or subName == nil then
 		error( "menu_name and subName cannot be nil." )
 	end
@@ -72,7 +72,7 @@ function addSubItem( menu_name, subName, text, func, checked, color, top_menu_ba
 	newSub.func = func
 	newSub.checked = checked or false
 	newSub.color = color or colors.white
-	newSub.top_menu_bar.background_color = top_menu_bar.background_color or colors.blue
+	newSub.top_menu_bar.background_color = background_color or colors.blue
 	table.insert( top_menu_bar.menu_item[ parentIndex ], newSub )
 	
 	top_menu_bar.menu_item[ parentIndex ].nbSub = top_menu_bar.menu_item[ parentIndex ].nbSub + 1
@@ -81,9 +81,9 @@ end
 
 -- Draw the menu bar
 function top_menu_bar.draw()
-	local lastBgColor = term.gettop_menu_bar.background_color()
+	local lastBgColor = term.getBackgroundColor()
 
-	term.settop_menu_bar.background_color( top_menu_bar.background_color )
+	term.setBackgroundColor( top_menu_bar.background_color )
 	term.setTextColor( top_menu_bar.txt_color )
 	local sizeX = term.getSize()
 	
@@ -105,7 +105,7 @@ end
 
 -- Draw subMenu if clicked
 function top_menu_bar.drawSubMenu( parentData )
-	local lastBgColor = term.gettop_menu_bar.background_color()
+	local lastBgColor = term.getBackgroundColor()
 
 	paintutils.drawFilledBox( parentData.pos.x, parentData.pos.y + 1, parentData.pos.x + parentData.subSize + 1, parentData.nbSub + 1, colors.blue )
 
@@ -116,7 +116,7 @@ function top_menu_bar.drawSubMenu( parentData )
 		i = i + 1
 	end
 
-	term.settop_menu_bar.background_color( lastBgColor )
+	term.setBackgroundColor( lastBgColor )
 end
 
 

@@ -4,11 +4,11 @@
 local status_bar = {}
 
 -- Main variable
-local status_bar.last_log = "---"
-local status_bar.logs = {}
-local status_bar.txt_color = colors.white
-local status_bar.background_color = colors.lightGray
-local status_bar.height = 1
+status_bar.last_log = "---"
+status_bar.logs = {}
+status_bar.txt_color = colors.white
+status_bar.background_color = colors.lightGray
+status_bar.height = 1
 
 function status_bar.set_log( log )
 	if log == nil or log[ 1 ] == "timer" then
