@@ -44,7 +44,7 @@ function top_menu_bar.add_menu_item( menu_name, text )
 end
 
 
-function top_menu_bar.getParentIndex( parentName )
+function top_menu_bar.get_parent_index( parentName )
 	for index, data in pairs( top_menu_bar.menu_item ) do
 		if data.menu_name == parentName then
 			return index
@@ -55,12 +55,12 @@ function top_menu_bar.getParentIndex( parentName )
 end
 
 
-function addSubItem( menu_name, subName, text, func, checked, color, background_color )
+function top_menu_bar.add_sub_item( menu_name, subName, text, func, checked, color, background_color )
 	if menu_name == nil or subName == nil then
 		error( "menu_name and subName cannot be nil." )
 	end
 
-	local parentIndex = top_menu_bar.getParentIndex( menu_name )
+	local parentIndex = top_menu_bar.get_parent_index( menu_name )
 
 	if string.len( text ) > top_menu_bar.menu_item[ parentIndex ].subSize then
 		top_menu_bar.menu_item[ parentIndex ].subSize = string.len( text )
@@ -95,7 +95,7 @@ function top_menu_bar.draw()
 		write( " " .. data.text .. " " )
 
 		if data.show then
-			top_menu_bar.drawSubMenu( data )
+			top_menu_bar.draw_sub_menu( data )
 		end
 	end
 
@@ -104,7 +104,7 @@ end
 
 
 -- Draw subMenu if clicked
-function top_menu_bar.drawSubMenu( parentData )
+function top_menu_bar.draw_sub_menu( parentData )
 	local lastBgColor = term.getBackgroundColor()
 
 	paintutils.drawFilledBox( parentData.pos.x, parentData.pos.y + 1, parentData.pos.x + parentData.subSize + 1, parentData.nbSub + 1, colors.blue )
@@ -120,7 +120,7 @@ function top_menu_bar.drawSubMenu( parentData )
 end
 
 
-function top_menu_bar.onClick( x, y )
+function top_menu_bar.on_click( x, y )
 	for index, data in pairs( top_menu_bar.menu_item ) do
 		local s_x = data.pos.x
 		local s_y = data.pos.y
@@ -128,7 +128,7 @@ function top_menu_bar.onClick( x, y )
 		local e_y = data.pos.y + top_menu_bar.height - 1
 
 		if data.show then
-			top_menu_bar.onSubClick( x, y, data )
+			top_menu_bar.on_sub_click( x, y, data )
 		end
 
 		top_menu_bar.menu_item[ index ].show = x >= s_x and x <= e_x and y >= s_y and y <= e_y
@@ -136,7 +136,7 @@ function top_menu_bar.onClick( x, y )
 end
 
 
-function top_menu_bar.onSubClick( x, y, data )
+function top_menu_bar.on_sub_click( x, y, data )
 	local i = 1
 	while data[ i ] ~= nil do
 		local s_x = data.pos.x

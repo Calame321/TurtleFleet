@@ -2,6 +2,7 @@
 -- Icon Grid --
 ---------------
 local icon_grid = {}
+
 icon_grid.icons = {}
 icon_grid.grid_size = 11
 icon_grid.grid_height = 8
