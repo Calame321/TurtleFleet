@@ -137,11 +137,15 @@ function top_menu_bar.on_click( x, y )
 	end
 end
 
-
 function top_menu_bar.on_sub_click( x, y, data )
 	local i = 1
 	while data[ i ] ~= nil do
-		if data[ i ].char == char then
+		local s_x = data.pos.x
+		local s_y = top_menu_bar.height + i
+		local e_x = data.pos.x + data.pos.size
+		local e_y = s_y
+
+		if x >= s_x and x <= e_x and y >= s_y and y <= e_y then
 			data[ i ].func()
 			return
 		end
@@ -160,16 +164,10 @@ function top_menu_bar.on_char( char )
 	end
 end
 
-
 function top_menu_bar.on_sub_char( char, data )
 	local i = 1
 	while data[ i ] ~= nil do
-		local s_x = data.pos.x
-		local s_y = top_menu_bar.height + i
-		local e_x = data.pos.x + data.pos.size
-		local e_y = s_y
-
-		if x >= s_x and x <= e_x and y >= s_y and y <= e_y then
+		if data[ i ].char == char then
 			data[ i ].func()
 			return
 		end
