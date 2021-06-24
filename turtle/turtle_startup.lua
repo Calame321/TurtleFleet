@@ -14,31 +14,6 @@ miner = dofile( "turtlefleet/jobs/miner.lua" )
 main_menu = require( "main_menu" )
 update = require( "update" )
 
-
-----------
--- Menu --
-----------
-main_menu.top_menu_bar.add_menu_item( "file", "1.Computer", "1" )
-main_menu.top_menu_bar.add_sub_item( "file", "reboot"  , "Reboot"	   , "r", function() os.reboot()   end )
-main_menu.top_menu_bar.add_sub_item( "file", "shutdown", "Shutdown"	   , "s", function() os.shutdown() end )
-main_menu.top_menu_bar.add_sub_item( "file", "returnOs", "Return to OS", "o", function() os.exit() 	   end )
-
-main_menu.top_menu_bar.add_menu_item( "turtle", "2.Turtle", "2" )
-main_menu.top_menu_bar.add_sub_item( "turtle", "canefarm"    , "0.Cane Farm"    , "0", cane_farm() )
-main_menu.top_menu_bar.add_sub_item( "turtle", "treefarm"    , "1.Tree Farm"    , "1", treefarm:start_tree_farm() )
-main_menu.top_menu_bar.add_sub_item( "turtle", "veinmine"    , "2.Vein Mine"    , "2", miner:vein_mine( "forward", "micenraft:coal_ore" ) )
-main_menu.top_menu_bar.add_sub_item( "turtle", "digout"      , "3.Dig Out"      , "3", miner:dig_out_start( 3, 3 ) )
-main_menu.top_menu_bar.add_sub_item( "turtle", "placefloor"  , "4.Place Floor"  , "4", builder:place_floor( args[ 2 ] ) )
-main_menu.top_menu_bar.add_sub_item( "turtle", "placewall"   , "5.Place Wall"   , "5", builder:place_wall() )
-main_menu.top_menu_bar.add_sub_item( "turtle", "minebranch"  , "6.Mine Branch"  , "6", miner:mine_branch() )
-main_menu.top_menu_bar.add_sub_item( "turtle", "flatchunk"   , "7.Flatten Chunk", "7", flaten_chunks( 1 ) )
-main_menu.top_menu_bar.add_sub_item( "turtle", "cooking"     , "8.Start Cooking", "8", cooker:start_cooking() )
-main_menu.top_menu_bar.add_sub_item( "turtle", "branchmining", "9.Branch Mining", "9", miner:branch_mining() )
-        
-main_menu.icon_grid.add_icon( "inventory", "Inventory", function() end, "inventory" )
-main_menu.icon_grid.add_icon( "mining"	 , "Mining"   , function() end, "mine" 		)
-main_menu.icon_grid.add_icon( "building" , "Building" , function() end, "tree" 		)
-
 -----------
 -- Const --
 -----------
@@ -551,6 +526,31 @@ function run_menu()
         main_menu.draw( event )
     end
 end
+
+----------
+-- Menu --
+----------
+main_menu.top_menu_bar.add_menu_item( "file", "1.Computer", "1" )
+main_menu.top_menu_bar.add_sub_item( "file", "reboot"  , "Reboot"	   , "r", function() os.reboot()   end )
+main_menu.top_menu_bar.add_sub_item( "file", "shutdown", "Shutdown"	   , "s", function() os.shutdown() end )
+main_menu.top_menu_bar.add_sub_item( "file", "returnOs", "Return to OS", "o", function() os.exit() 	   end )
+
+main_menu.top_menu_bar.add_menu_item( "turtle", "2.Turtle", "2" )
+main_menu.top_menu_bar.add_sub_item( "turtle", "canefarm"    , "0.Cane Farm"    , "0", cane_farm() )
+main_menu.top_menu_bar.add_sub_item( "turtle", "treefarm"    , "1.Tree Farm"    , "1", treefarm:start_tree_farm() )
+main_menu.top_menu_bar.add_sub_item( "turtle", "veinmine"    , "2.Vein Mine"    , "2", miner:vein_mine( "forward", "micenraft:coal_ore" ) )
+main_menu.top_menu_bar.add_sub_item( "turtle", "digout"      , "3.Dig Out"      , "3", miner:dig_out_start( 3, 3 ) )
+main_menu.top_menu_bar.add_sub_item( "turtle", "placefloor"  , "4.Place Floor"  , "4", builder:place_floor( args[ 2 ] ) )
+main_menu.top_menu_bar.add_sub_item( "turtle", "placewall"   , "5.Place Wall"   , "5", builder:place_wall() )
+main_menu.top_menu_bar.add_sub_item( "turtle", "minebranch"  , "6.Mine Branch"  , "6", miner:mine_branch() )
+main_menu.top_menu_bar.add_sub_item( "turtle", "flatchunk"   , "7.Flatten Chunk", "7", flaten_chunks( 1 ) )
+main_menu.top_menu_bar.add_sub_item( "turtle", "cooking"     , "8.Start Cooking", "8", cooker:start_cooking() )
+main_menu.top_menu_bar.add_sub_item( "turtle", "branchmining", "9.Branch Mining", "9", miner:branch_mining() )
+        
+main_menu.icon_grid.add_icon( "inventory", "Inventory", function() end, "inventory" )
+main_menu.icon_grid.add_icon( "mining"	 , "Mining"   , function() end, "mine" 		)
+main_menu.icon_grid.add_icon( "building" , "Building" , function() end, "tree" 		)
+
 
 function show_menu()
     term.clear()
