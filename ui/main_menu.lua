@@ -8,36 +8,12 @@ main_menu.icon_grid = require( "icon_grid" )
 main_menu.status_bar = require( "status_bar" )
 main_menu.top_menu_bar = require( "top_menu_bar" )
 
-main_menu.top_menu_bar.add_menu_item( "file", "File" )
-main_menu.top_menu_bar.add_sub_item( "file", "reboot"	 , "Reboot"		 , function() os.reboot() 	end )
-main_menu.top_menu_bar.add_sub_item( "file", "shutdown", "Shutdown"	 , function() os.shutdown() end )
-main_menu.top_menu_bar.add_sub_item( "file", "returnOs", "Return to OS", function() os.exit() 	end )
-
-main_menu.top_menu_bar.add_menu_item( "option", "Option" )
-main_menu.top_menu_bar.add_sub_item( "option", "settings", "Settings", function() print( "Setting" ) end )
-main_menu.top_menu_bar.add_sub_item( "option", "about"   , "About"   , function() print( "About"   ) end )
-
-main_menu.top_menu_bar.add_menu_item( "help", "Help" )
-main_menu.top_menu_bar.add_sub_item( "help", "status"		, "Status"	 , function() os.queueEvent( "Status", 1, "1") end )
-main_menu.top_menu_bar.add_sub_item( "help", "inventory"	, "Inventory", function() print( "Inventory") end )
-main_menu.top_menu_bar.add_sub_item( "help", "crafting"	, "Crafting" , function() print( "Crafting"	) end )
-main_menu.top_menu_bar.add_sub_item( "help", "mining"		, "Mining"	 , function() print( "Mining"	) end )
-main_menu.top_menu_bar.add_sub_item( "help", "building"	, "Building" , function() print( "Building"	) end )
-main_menu.top_menu_bar.add_sub_item( "help", "highway"	, "Highway"	 , function() print( "Highway"	) end )
-main_menu.top_menu_bar.add_sub_item( "help", "station"	, "Station"	 , function() print( "Station"	) end )
-main_menu.top_menu_bar.add_sub_item( "help", "log"		, "Log"		 , function() print( "Log"		) end )
-
-main_menu.icon_grid.add_icon( "status"	 , "Status"   , function() end )
-main_menu.icon_grid.add_icon( "inventory", "Inventory", function() end, "inventory" )
-main_menu.icon_grid.add_icon( "crafting" , "Crafting" , function() end )
-main_menu.icon_grid.add_icon( "mining"	 , "Mining"   , function() end, "mine" 		)
-main_menu.icon_grid.add_icon( "building" , "Building" , function() end, "tree" 		)
-main_menu.icon_grid.add_icon( "highway"	 , "Highway"  , function() end )
-main_menu.icon_grid.add_icon( "station"	 , "Station"  , function() end )
-main_menu.icon_grid.add_icon( "log"		 , "Log" 	  , function() end )
-
 function main_menu.on_click( x, y )
 	main_menu.top_menu_bar.on_click( x, y )
+end
+
+function main_menu.on_char( char )
+	main_menu.top_menu_bar.on_char( char )
 end
 
 function main_menu.on_peripheral( side )
@@ -60,6 +36,8 @@ function main_menu.draw( event )
 	if event then
 		if event[ 1 ] == "mouse_click" then
 			main_menu.on_click( event[ 3 ], event[ 4 ] )
+		elseif event[ 1 ] == "char" then
+			main_menu.on_char( event[ 2 ] )
 		elseif event[ 1 ] == "peripheral" then
 			main_menu.on_peripheral( event[ 2 ] )
 		elseif event[ 1 ] == "peripheral_detach" then

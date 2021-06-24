@@ -15,6 +15,8 @@ function status_bar.set_log( log )
 		return
 	elseif log[ 1 ] == "mouse_click" then
 		status_bar.last_log = "Click| btn: " .. log[ 2 ] .. " x: " .. log[ 3 ] .. " y:" .. log[ 4 ]
+	elseif log[ 1 ] == "char" then
+		status_bar.last_log = "Char| " .. log[ 2 ]
 	else
 		status_bar.last_log = log[ 1 ]
 	end

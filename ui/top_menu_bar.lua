@@ -26,7 +26,7 @@ function top_menu_bar.get_position( text )
 end
 
 
-function top_menu_bar.add_menu_item( menu_name, text )
+function top_menu_bar.add_menu_item( menu_name, text, char )
 	if menu_name == nil then
 		error( "menu_name cannot be nil." )
 	end
@@ -37,6 +37,7 @@ function top_menu_bar.add_menu_item( menu_name, text )
 	newMenu.show = false
 	newMenu.subSize = 1
 	newMenu.nbSub = 0
+	newMenu.char = char
 	newMenu.pos = top_menu_bar.get_position( text )
 	table.insert( top_menu_bar.menu_item, newMenu )
 
@@ -149,6 +150,17 @@ function top_menu_bar.on_sub_click( x, y, data )
 			return
 		end
 		i = i + 1
+	end
+end
+
+
+function top_menu_bar.on_char( char )
+	for index, data in pairs( top_menu_bar.menu_item ) do
+		if data.show then
+			top_menu_bar.on_sub_click( x, y, data )
+		end
+
+		top_menu_bar.menu_item[ index ].show = top_menu_bar.menu_item[ index ].char == char
 	end
 end
 
