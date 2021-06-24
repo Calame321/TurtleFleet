@@ -1,6 +1,8 @@
 ----------------------
 -- TurtleFleet Main --
 ----------------------
+os.loadAPI( "turtlefleet/utils/utils.lua" )
+
 if turtle == nil then
 	os.loadAPI( "turtlefleet/computer/computer_startup" )
 	computer_startup.run()
