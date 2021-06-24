@@ -17,7 +17,7 @@ function icon_grid.add_icon( icon_name, text, func, icon )
 		error( "icon_name cannot be nil." )
 	end
 
-	local iconPath = "turtlefleet/img/" .. ( icon or "iconMissing" )
+	local iconPath = "turtlefleet/img/" .. ( icon or "icon_missing" )
 	
 	local id = table.getn( icon_grid.icons ) + 1
 	icon_grid.icons[ id ] = {}
@@ -35,11 +35,11 @@ function icon_grid.draw()
 	local monX, monY = term.getSize()
 	
 	for i = 1, table.getn( icon_grid.icons ) do
-		local imgX = utils.getCenterX( 6, icon_grid.grid_size )
+		local imgX = utils.get_center_x( 6, icon_grid.grid_size )
 		paintutils.drawImage( paintutils.loadImage( icon_grid.icons[ i ].icon ), gridX + imgX, gridY + 1 )
 
 		--Center text
-		local txtX = utils.getCenterX( string.len( icon_grid.icons[ i ].text ), icon_grid.grid_size )
+		local txtX = utils.get_center_x( string.len( icon_grid.icons[ i ].text ), icon_grid.grid_size )
 		term.setCursorPos( gridX + txtX, gridY + 7 )
 		write( icon_grid.icons[ i ].text )
 

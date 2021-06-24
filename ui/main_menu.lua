@@ -67,7 +67,7 @@ function main_menu.draw( event )
 		end
 	end
 
-	main_menu.icon_grid.set_start_y( main_menu.top_menu_bar.get_height() )
+	main_menu.icon_grid.set_start_y( main_menu.top_menu_bar.height )
 	main_menu.icon_grid.draw()
 
 	main_menu.top_menu_bar.draw()
