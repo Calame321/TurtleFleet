@@ -3,10 +3,10 @@
 ---------------
 local main_menu = {}
 
-main_menu.icon_grid = require( "turtlefleet.ui.icon_grid" )
-main_menu.popup = require( "turtlefleet.ui.popup" )
-main_menu.status_bar = require( "turtlefleet.ui.status_bar" )
-main_menu.top_menu_bar = require( "turtlefleet.ui.top_menu_bar" )
+main_menu.popup = require( "popup" )
+main_menu.icon_grid = require( "icon_grid" )
+main_menu.status_bar = require( "status_bar" )
+main_menu.top_menu_bar = require( "top_menu_bar" )
 
 main_menu.top_menu_bar.add_menu_item( "file", "File" )
 main_menu.top_menu_bar.add_sub_item( "file", "reboot"	 , "Reboot"		 , function() os.reboot() 	end )

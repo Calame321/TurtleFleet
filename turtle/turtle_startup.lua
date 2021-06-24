@@ -1,6 +1,8 @@
 ------------
 -- config --
 ------------
+package.path = package.path .. ';/turtlefleet/ui/?.lua;/turtlefleet/utils/?.lua'
+
 shell.run( "turtlefleet/turtle/advanced_turtle.lua" )
 shell.run( "turtlefleet/turtle/pathfind.lua" )
 station = dofile( "turtlefleet/stations/station.lua" )
@@ -9,8 +11,8 @@ job = dofile( "turtlefleet/jobs/job.lua" )
 builder = dofile( "turtlefleet/jobs/builder.lua" )
 cooker = dofile( "turtlefleet/jobs/cooker.lua" )
 miner = dofile( "turtlefleet/jobs/miner.lua" )
-update = require( "turtlefleet.utils.update" )
-main_menu = require( "turtlefleet.ui.main_menu" )
+main_menu = require( "main_menu" )
+update = require( "update" )
 
 -----------
 -- Const --

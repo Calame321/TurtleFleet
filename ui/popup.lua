@@ -6,7 +6,6 @@ local popup = {}
 -- Main variable
 popup.text = ""
 popup.visible = false
-popup.utils = require( "turtlefleet.utils.utils" )
 
 function popup.draw()
     if not popup.visible then return end
@@ -19,7 +18,7 @@ function popup.draw()
     paintutils.drawLine( 4, 7, x - 3, 7, colors.gray )
     
     local title = "Information"
-    local startX = popup.utils.get_center_x( string.len( title ), x )
+    local startX = utils.get_center_x( string.len( title ), x )
 
     term.setBackgroundColor( colors.white )
     term.setTextColor( colors.black )
@@ -27,7 +26,7 @@ function popup.draw()
 
     write( title )
 
-    startX = popup.utils.get_center_x( string.len( popup.text ), x )
+    startX = utils.get_center_x( string.len( popup.text ), x )
     term.setCursorPos( startX, 9 )
 
     write( popup.text )
