@@ -17,6 +17,8 @@ update.all_files = {
     "stations/mine.lua",
     "stations/station.lua",
     "stations/treefarm.lua",
+    "stations/treefarm_1_12_2.lua",
+    "turtle/advanced_turtle_1_12_2.lua",
     "turtle/advanced_turtle.lua",
     "turtle/pathfind.lua",
     "turtle/turtle_startup.lua",
