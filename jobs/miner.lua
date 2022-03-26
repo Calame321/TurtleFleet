@@ -202,8 +202,8 @@ function miner:mine_branch()
 
     for i = 1, miner.branch_mine_length do
         depth = depth + 1
-        turtle.force_forward()
-
+        if not miner:check_ore( "forward" ) then found_forbidden_ore = true end
+        if not found_forbidden_ore then turtle.force_forward() end
         if not miner:check_ore( "up" ) then found_forbidden_ore = true end
         if not miner:check_ore( "down" ) then found_forbidden_ore = true end
         turtle.turnLeft()

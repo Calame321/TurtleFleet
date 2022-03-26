@@ -3,10 +3,19 @@
 ------------
 package.path = package.path .. ';/turtlefleet/ui/?.lua;/turtlefleet/utils/?.lua'
 
-shell.run( "turtlefleet/turtle/advanced_turtle.lua" )
-shell.run( "turtlefleet/turtle/pathfind.lua" )
-station = dofile( "turtlefleet/stations/station.lua" )
-treefarm = dofile( "turtlefleet/stations/treefarm.lua" )
+if pcall(settings.save) then
+    shell.run( "turtlefleet/turtle/advanced_turtle.lua" )
+    shell.run( "turtlefleet/turtle/pathfind.lua" )
+    station = dofile( "turtlefleet/stations/station.lua" )
+    treefarm = dofile( "turtlefleet/stations/treefarm.lua" )
+else
+    print("Minecraft 1.12.2")
+    shell.run( "turtlefleet/turtle/advanced_turtle_1_12_2.lua" )
+    shell.run( "turtlefleet/turtle/pathfind.lua" )
+    station = dofile( "turtlefleet/stations/station.lua" )
+    treefarm = dofile( "turtlefleet/stations/treefarm_1_12_2.lua" )
+end
+
 job = dofile( "turtlefleet/jobs/job.lua" )
 builder = dofile( "turtlefleet/jobs/builder.lua" )
 cooker = dofile( "turtlefleet/jobs/cooker.lua" )
@@ -322,14 +331,14 @@ function cane_farm()
 
         for x = 1, 16 do
             for y = 1, 15 do
-                if turtle.is_block_name( "down", "minecraft:sugar_cane" ) then
+                if turtle.is_block_name( "down", "minecraft:sugar_cane" ) or turtle.is_block_name( "down", "minecraft:reeds" ) then
                     turtle.digDown()
                 end
 
                 turtle.force_forward()
             end
 
-            if turtle.is_block_name( "down", "minecraft:sugar_cane" ) then
+            if turtle.is_block_name( "down", "minecraft:sugar_cane" ) or turtle.is_block_name( "down", "minecraft:reeds" ) then
                 turtle.digDown()
             end
 
@@ -353,14 +362,16 @@ function cane_farm()
 
                 turtle.turn180()
 
-                local index = get_item_index( "sugar_cane" )
+                local index = turtle.get_item_index( "sugar_cane" )
+                if index == -1 then index = turtle.get_item_index( "minecraft:reeds" ) end
                 while index > 0 do
                     turtle.select( index )
                     if not turtle.dropDown() then
                         print( "The chest is full..." )
                         read()
                     end
-                    index = get_item_index( "sugar_cane" )
+                    index = turtle.get_item_index( "sugar_cane" )
+                    if index == -1 then index = turtle.get_item_index( "minecraft:reeds" ) end
                 end
             end
         end

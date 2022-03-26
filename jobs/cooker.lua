@@ -17,7 +17,6 @@ function cooker:fill_inv()
         end
     end
 
-
     while turtle.suck() do end
 
     local item_in_inv = 0
@@ -56,7 +55,7 @@ function cooker:refuel_furnace()
         turtle.select( 1 )
 
         -- suck all the fuel possible
-        local fuel_to_transfer = fill_inv()
+        local fuel_to_transfer = cooker:fill_inv()
 
         if each_fuel == 0 then
             error( "Not enough fuel !" )
@@ -71,7 +70,7 @@ function cooker:refuel_furnace()
             turtle.turnLeft()
             
             for a = 1, 2 do
-                turtle.select( get_item_index( "coal" ) )
+                turtle.select( turtle.get_item_index( "coal" ) )
                 turtle.transferTo( 16 )
             end
 
@@ -98,7 +97,7 @@ end
 function cooker:insert_ingerdient()
     turtle.up()
     turtle.select( 1 )
-    local item_to_insert = fill_inv()
+    local item_to_insert = cooker:fill_inv()
     local item = turtle.getItemDetail()
     turtle.turnLeft()
     
