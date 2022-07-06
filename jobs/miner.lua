@@ -491,16 +491,6 @@ end
 function miner:dig_tunnel()
   -- infinite loop
   while true do
-    -- check for forbidden ores
-    local found_forbidden_ore = false
-    if not miner:check_ore( "forward" ) then found_forbidden_ore = true end
-    if not miner:check_ore( "up" ) then found_forbidden_ore = true end
-
-    if found_forbidden_ore then
-      print( "FOUND DO_NOT_MINE ORE !!!!" )
-      return
-    end
-
     turtle.dig_all( "forward" )
     turtle.force_forward()
     turtle.dig_all( "up" )
