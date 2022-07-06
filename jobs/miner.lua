@@ -517,7 +517,7 @@ function miner:dig_tunnel()
         turtle.force_up()
         turtle.placeRight( cobble_index )
         turtle.force_down()
-        turtle.placeUp()
+        turtle.placeUp( torch_index )
       end
       turtle.force_forward()
 

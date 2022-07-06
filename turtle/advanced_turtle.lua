@@ -364,19 +364,17 @@ function turtle.placeDown( item_index )
 end
 
 -- Place a block to its right.
-function turtle.placeRight( torch_index )
+function turtle.placeRight( item_index )
   turtle.turnRight()
-  if item_index then turtle.select( item_index ) end
-  local placed = turtle.old_place()
+  local placed = turtle.place( item_index )
   turtle.turnLeft()
   return placed
 end
 
 -- Place a block to its left.
-function turtle.placeLeft( torch_index )
+function turtle.placeLeft( item_index )
   turtle.turnLeft()
-  if item_index then turtle.select( item_index ) end
-  local placed = turtle.old_place()
+  local placed = turtle.place( item_index )
   turtle.turnRight()
   return placed
 end
