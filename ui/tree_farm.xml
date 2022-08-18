@@ -1,0 +1,43 @@
+<!-- Title -->
+<frame x="13" y="2" width="13" height="1" bg="purple" fg="white" bar="true" barBG="brown" barFG="white" barText="  Tree Farm  " borderColor="yellow" borderLeft="true" borderRight="true">
+  <label x="1" text=""/>
+  <label x="100%" text=""/>
+</frame>
+
+<!-- Start button -->
+<label x="5" y="6" text="" bg="white" fg="black" zIndex="15"/>
+<button x="6" y="5" text="Start" width="9" height="3" zIndex="15"/>
+
+<!-- Options frame -->
+<frame x="22" y="4" width="16" height="4" bg="pink" bar="true" barBG="purple" barFG="white" barText="Options:" borderColor="purple" borderLeft="true" borderRight="true" borderBottom="true">
+  <label x="2" y="3" text="Length:" fg="brown"/>
+  <input x="10" y="3" width="5" type="number" limit="15" value="1" bg="lightGray" fg="white" />
+  <!-- arrow -->
+  <label x="9" y="3" text="" fg="black"/>
+</frame>
+
+<!-- Plan frame -->
+<frame x="3" y="9" width="35" height="11" bg="pink" fg="brown" bar="true" barBG="purple" barFG="white" barText="Plan: *Built by the Turtle*" borderColor="purple" borderLeft="true" borderRight="true" borderBottom="true">
+  <label x="2" y="2" text=" = Tree"/>
+  <label x="2" y="3" text=" = Sapling's Chest"/>
+  <label x="2" y="4" text=" = Turtle's Starting Position"/>
+  <label x="2" y="5" text="© = Output Chest"/>
+  <label x="2" y="6" text=" = Furnace"/>
+
+  <label x="3" y="8" text="...Length..."/>
+  <label x="2" y="9" text="©"/>
+  <label x="3" y="10" text="...Length..."/>
+</frame>
+
+<!-- Instructions frame -->
+<frame id="tf_instruction" x="3" y="21" width="35" height="35" bg="pink" fg="brown" bar="true" barBG="purple" barFG="white" barText="Instructions:" borderColor="purple" borderLeft="true" borderRight="true" borderBottom="true">
+  <label x="2" y="2" width="34" text="For the initial setup, you will need to give the turtle:"/>
+  <label x="3" y="4" width="34" text="- 2 Normal Chest."/>
+  <label x="3" y="5" width="34" text="- 1 Furnace."/>
+  <label x="3" y="6" width="34" text="- Some Sapling."/>
+  <label x="3" y="7" width="34" text="- Some fuel."/>
+  <label x="2" y="9" width="31" text="He will place the furnace to cook his own fuel from the logs. One chest will be used for storing sapling, while the other one will be the output. If there is no more place in the output chest, the turtle will wait until he can drop what he has."/>
+  <label x="2" y="18" width="31" text="If the setup is already done, you can simply place the turtle facing away from the output chest and start, it should detect the current setup and start planting trees."/>
+  <label x="2" y="25" width="31" text="It works well with straight trees like spruce, but can cut all of them. (If not, I'll add them)."/>
+  <label x="2" y="29" width="31" text="If it gets unloaded, when he will start again, he will try to go back to his starting location to restart. You can stop him by holding Ctrl+T then typing 'delete job'."/>
+</frame>

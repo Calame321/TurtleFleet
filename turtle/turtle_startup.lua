@@ -3,24 +3,14 @@
 ------------
 package.path = package.path .. ';/turtlefleet/ui/?.lua;/turtlefleet/utils/?.lua'
 
-if pcall( settings.save ) then
-  shell.run( "turtlefleet/turtle/advanced_turtle.lua" )
-  shell.run( "turtlefleet/turtle/pathfind.lua" )
-  station = dofile( "turtlefleet/stations/station.lua" )
-  treefarm = dofile( "turtlefleet/stations/treefarm.lua" )
-else
-  print( "Minecraft 1.12.2" )
-  shell.run( "turtlefleet/turtle/advanced_turtle_1_12_2.lua" )
-  shell.run( "turtlefleet/turtle/pathfind.lua" )
-  station = dofile( "turtlefleet/stations/station.lua" )
-  treefarm = dofile( "turtlefleet/stations/treefarm_1_12_2.lua" )
-end
-
+shell.run( "turtlefleet/turtle/advanced_turtle.lua" )
+shell.run( "turtlefleet/turtle/pathfind.lua" )
+station = dofile( "turtlefleet/stations/station.lua" )
+treefarm = dofile( "turtlefleet/stations/treefarm.lua" )
 job = dofile( "turtlefleet/jobs/job.lua" )
 builder = dofile( "turtlefleet/jobs/builder.lua" )
 cooker = dofile( "turtlefleet/jobs/cooker.lua" )
 miner = dofile( "turtlefleet/jobs/miner.lua" )
-main_menu = require( "main_menu" )
 update = require( "update" )
 
 -----------
@@ -32,19 +22,17 @@ local SIDES = redstone.getSides()
 -- global helper function --
 ----------------------------
 function mysplit( str, sep )
-  if sep == nil then sep = "%s" end
+  if sep == nil then
+    sep = "%s"
+  end
 
   local t = {}
 
-  for str in string.gmatch( str, "([^" .. sep .. "]+)" ) do table.insert( t, str ) end
+  for str in string.gmatch( str, "([^" .. sep .. "]+)" ) do
+    table.insert( t, str )
+  end
 
   return t
-end
-
-function has_value( table, val )
-  for i = 1, #table do if tostring( table[i] ) == tostring( val ) then return true end end
-
-  return false
 end
 
 --------------
@@ -112,12 +100,6 @@ local aditionnal_up = 5
 local last_height = 0
 local height = 0
 local torch_counter = 0
-local flat_stuff_to_keep = {}
-flat_stuff_to_keep["minecraft:coal"] = 1
-flat_stuff_to_keep["minecraft:charcoal"] = 1
-flat_stuff_to_keep["minecraft:torch"] = 1
-flat_stuff_to_keep["minecraft:dirt"] = 2
-flat_stuff_to_keep["enderstorage:ender_chest"] = 2
 
 function flat_one()
   replace_for_dirt()
@@ -195,7 +177,7 @@ function flaten_chunk()
   for x = 1, 16 do
     for y = 1, 4 do
       flat_one()
-      if turtle.is_inventory_full() then turtle.drop_in_enderchest( flat_stuff_to_keep ) end
+      if turtle.is_inventory_full() then turtle.drop_in_storage() end
       if y < 4 then turtle.force_forward() end
       flat_place_torch()
     end
@@ -238,7 +220,16 @@ function flat_place_torch()
   end
 end
 
-function flaten_chunks( number_of_chunk ) for c = 1, number_of_chunk do flaten_chunk() end end
+function flaten_chunks( number_of_chunk )
+  turtle.do_not_store_items = {
+    ["minecraft:torch"] = 1,
+    ["minecraft:dirt"] = 2
+  }
+
+  for c = 1, number_of_chunk do
+    flaten_chunk()
+  end
+end
 
 -------------
 -- Farming --
@@ -302,13 +293,15 @@ function cane_farm()
     for x = 1, 16 do
       for y = 1, 15 do
         if turtle.is_block_name( "down", "minecraft:sugar_cane" ) or
-            turtle.is_block_name( "down", "minecraft:reeds" ) then turtle.digDown() end
+          turtle.is_block_name( "down", "minecraft:reeds" ) then turtle.digDown()
+        end
 
         turtle.force_forward()
       end
 
       if turtle.is_block_name( "down", "minecraft:sugar_cane" ) or
-          turtle.is_block_name( "down", "minecraft:reeds" ) then turtle.digDown() end
+        turtle.is_block_name( "down", "minecraft:reeds" ) then turtle.digDown()
+      end
 
       -- dont need to change row if at the end
       if x < 16 then
@@ -344,6 +337,27 @@ function cane_farm()
 
     os.sleep( 222 )
   end
+end
+
+function set_cane_farm()
+  turtle.wait_move( "forward" )
+  turtle.turnRight()
+  -- place first water
+  turtle.digDown()
+  turtle.select( 1 )
+  turtle.placeDown()
+  -- get a new source
+  turtle.wait_move( "forward" )
+  turtle.digDown()
+  turtle.wait_move( "forward" )
+  turtle.digDown()
+  turtle.select( 2 )
+  turtle.placeDown()
+  turtle.wait_move( "back" )
+  turtle.placeDown()
+  turtle.select( 1 )
+  os.sleep( 1 )
+  turtle.placeDown()
 end
 
 ----------------
@@ -482,203 +496,511 @@ end
 ----------
 -- Menu --
 ----------
-function run_menu()
-  -- Timer to display time
-  local clock_timer = os.startTimer( 1 )
+local w, h = term.getSize()
+local current_menu = {}
 
-  while true do
-    event = { os.pullEvent() }
-    if event[1] == "timer" and event[2] == clock_timer then
-      clock_timer = os.startTimer( 1 )
-    elseif event[1] == "modem_connected" then
-      print( "modem_connected" )
-    elseif event[1] == "rednet_message" then
-      print( "rednet_message" )
-    end
+function display_menu( menu )
+  current_menu = menu
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( menu.path )
+  print( menu.prompt )
 
-    main_menu.draw( event )
+  for i = 1, #menu.options do
+    print( menu.options[ i ].name )
+  end
+
+  if current_menu.parent then
+    term.setCursorPos( 1, h )
+    write( "b - Go Back")
   end
 end
 
-----------
--- Menu --
-----------
-main_menu.top_menu_bar.add_menu_item( "file", "1.Computer", "1" )
-main_menu.top_menu_bar.add_sub_item( "file", "reboot", "Reboot", "r", function() os.reboot() end )
-main_menu.top_menu_bar.add_sub_item(
-    "file", "shutdown", "Shutdown", "s", function() os.shutdown() end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "file", "returnOs", "Return to OS", "o", function() os.exit() end
- )
 
-main_menu.top_menu_bar.add_menu_item( "turtle", "2.Turtle", "2" )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "canefarm", "0.Cane Farm", "0", function() cane_farm() end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "treefarm", "1.Tree Farm", "1", function() treefarm:start_tree_farm() end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "veinmine", "2.Vein Mine", "2",
-    function() miner:vein_mine( "forward", "micenraft:coal_ore" ) end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "digout", "3.Dig Out", "3", function() miner:dig_out_start( 3, 3 ) end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "placefloor", "4.Place Floor", "4", function() builder:place_floor( args[2] ) end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "placewall", "5.Place Wall", "5", function() builder:place_wall() end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "minebranch", "6.Mine Branch", "6", function() miner:mine_branch() end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "flatchunk", "7.Flatten Chunk", "7", function() flaten_chunks( 1 ) end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "cooking", "8.Start Cooking", "8", function() cooker:start_cooking() end
- )
-main_menu.top_menu_bar.add_sub_item(
-    "turtle", "branchmining", "9.Branch Mining", "9", function() miner:branch_mining() end
- )
-
-main_menu.icon_grid.add_icon( "inventory", "Inventory", function() end, "inventory" )
-main_menu.icon_grid.add_icon( "mining", "Mining", function() end, "mine" )
-main_menu.icon_grid.add_icon( "building", "Building", function() end, "tree" )
-
-function show_menu()
+function show_tree_farm_page()
   term.clear()
-  load_settings()
-  print( "What should I do ?" )
-  print( "1 - Tree Farm. [optionnal -> farm length]" )
-  print( "2 - Vein Mine. [block name]" )
-  print( "3 - Dig Out. [depth width]" )
-  print( "4 - Place Floor. [ 'up' for ceiling ]" )
-  print( "5 - Place Wall." )
-  print( "6 - Mine Branch." )
-  print( "7 - Flatten 16 x 16. [chunks qty, xtra height]" )
-  print( "8 - Start cooking." )
-  print( "9 - branch mining." )
-  print( "10 - Farm [ 1 = rice, 2 = sugar_cane ]" )
+  term.setCursorPos( 1, 1 )
+  print( "- Tree Farm -" )
+  print( "The turtle will plant trees and harvest them. It will also cook its own fuel." )
+  print()
+  print( "Length? (default = 15)")
+  os.sleep( 0.2 )
   local input = read()
-  local args = mysplit( input )
+  local tree_farm_length = 15
 
-  -- Set position
-  if args[1] == "pos" then
-    turtle.set_position(
-      tonumber( args[2] ), tonumber( args[3] ), tonumber( args[4] ), tonumber( args[5] )
-    )
+  if input ~= "" then
+    tree_farm_length = tonumber( input )
+  end
 
+  treefarm:start_tree_farm( tree_farm_length )
+end
+
+function show_digout_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Dig out -" )
+  print( "This will dig a 3 blocks high area the size you specify.")
+  print( "It's recomended to configure some storages before if you can." )
+  print()
+  print( "Depth = ?")
+  os.sleep( 0.2 )
+  local input = read()
+  local depth = tonumber( input )
+
+  print( "Width = ?")
+  os.sleep( 0.2 )
+  input = read()
+  local width = tonumber( input )
+
+  --print( "Height = ? (special instruction...)")
+  --os.sleep( 0.2 )
+  --input = read()
+  
+  --if input == "" then
+    miner:dig_out_start( depth, width )
+  --else
+  --  local height = tonumber( input )
+  --  miner:dig_out_start( depth, width, height )
+  --end
+
+  show_menu()
+end
+
+function show_flatten_chunk_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Flatten Chunk (16 x 16) -" )
+  print( "This will flatten a 16 by 16 area. (from the back left corner). The extra height is to prevent floating blocks." )
+  print( "It's recomended to configure some storages before if you can." )
+  print()
+  print( "Number of chunk = ? (default = 1)")
+  os.sleep( 0.2 )
+  local input = read()
+  local nb_chunk = 1
+  if input ~= "" then nb_chunk = tonumber( input ) end
+  
+  print( "extra height = ? (default = 5)")
+  os.sleep( 0.2 )
+  input = read()
+  local extra_height = 5
+  if input ~= "" then
+    extra_height = tonumber( input )
+    last_average_height = extra_height
+    initial_aditionnal_up = extra_height
+  end
+
+  if has_flaten_fleet_setup() then
+    fleet_flatten()
+  else
+    flaten_chunks( nb_chunk )
+  end
+  show_menu()
+end
+
+-- Vein mine
+function show_vein_mine_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Vein Mine -" )
+  print( "This will mine all block specified that are connected by a side. (Diagonal dosen't work.)" )
+  print()
+
+  print( "Block to mine = ? (default = The block in front)")
+  os.sleep( 0.2 )
+  local input = read()
+  if input == "" then
+    local found_block, block_data = turtle.inspectDir( "forward" )
+    if found_block then
+      input = block_data.name
+    end
+  end
+
+  miner:vein_mine( "forward", input )
+  show_menu()
+end
+
+-- Place Ceiling
+function start_place_ceiling()
+  builder:place_floor( "up" )
+  show_menu()
+end
+
+-- Branch mining
+function show_branch_mining()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Branch Mining -" )
+  print( "For this one, the turtle need to be facing a chest. It will mine the number of branches of specified of the specified length." )
+  print( "*It can use the configured storage." )
+  print()
+
+  print( "The turtle should turn left or right? (default = left)")
+  os.sleep( 0.2 )
+  local branch_side = read()
+  if branch_side == "" then
+    branch_side = "left"
+  end
+
+  print( "Number of branches? (default = 20)" )
+  os.sleep( 0.2 )
+  local input = read()
+  if input ~= "" then
+    miner.branch_mine_quantity = tonumber( input )
+  end
+
+  print( "Length of a branche? (default = 80)")
+  os.sleep( 0.2 )
+  input = read()
+  if input ~= "" then
+    miner.branch_mine_length = tonumber( input )
+  end
+
+  miner:branch_mining( branch_side )
+  show_menu()
+end
+
+function show_current_config_page()
+  display_current_storage()
+  term.setCursorPos( 1, h )
+  write( "press enter." )
+  os.sleep( 0.2 )
+  read()
+
+  display_current_valid_fuel()
+  term.setCursorPos( 1, h )
+  write( "press enter." )
+  os.sleep( 0.2 )
+  read()
+
+  display_current_forbidden_block()
+  term.setCursorPos( 1, h )
+  write( "press enter." )
+  os.sleep( 0.2 )
+  read()
+
+  show_menu()
+end
+
+function display_current_storage()
+  term.clear()
+  local current_title = "- current storage, slot: type -"
+  term.setCursorPos( w - #current_title, 1 )
+  print( current_title )
+  local line_y = 2
+  for i = 1, 16 do
+    if turtle.storage[ i ] then
+      local s = i .. ": " .. turtle.storage[ i ].type
+      term.setCursorPos( w - #s, line_y )
+      write( s )
+      line_y = line_y + 1
+    end
+  end
+end
+
+function display_current_valid_fuel()
+  term.clear()
+  local current_title = "- Current Valid Fuel -"
+  term.setCursorPos( w - #current_title, 1 )
+  print( current_title )
+  local line_y = 2
+  for k, v in pairs( turtle.valid_fuel ) do
+    term.setCursorPos( w - #v, line_y )
+    write( v )
+    line_y = line_y + 1
+  end
+end
+
+function display_current_forbidden_block()
+  term.clear()
+  local current_title = "- Current Forbidden Blocks -"
+  term.setCursorPos( w - #current_title, 1 )
+  print( current_title )
+  local line_y = 2
+  for k, v in pairs( turtle.forbidden_block ) do
+    term.setCursorPos( w - #v, line_y )
+    write( v )
+    line_y = line_y + 1
+  end
+end
+
+function show_set_storage_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Storage -" )
+  print( "Here you can give a storage that maintain it's content when broken, like a ShulkerBox, to the turtle." )
+  print( "To add a new storage, enter witch slot in the turtle's inventory it will be." )
+  print()
+  print( "Index: *Enter existing index to remove." )
+  os.sleep( 0.2 )
+  local input = read()
+  local inventory_slot = tonumber( input )
+
+  -- Check if need to remove
+  local was_removed = false
+  for k, v in pairs( turtle.storage ) do
+    if k == inventory_slot then
+      turtle.remove_storage_config( inventory_slot )
+      was_removed = true
+      break
+    end
+  end
+
+  if not was_removed then
+    term.clear()
+    term.setCursorPos( 1, 1 )
+    print( "What type is it?" )
+    print( "1: The turtle will pick fuel from it." )
+    print( "2: It will drop it's inventory in the storage when full." )
+    print( "3: Turtle, used for advanced features, soon XD." )
+    print( "4: Filtered, can be used to drop item in a trash or a special storage." )
+    print()
+    print( "Type:" )
+    os.sleep( 0.2 )
+    input = read()
+    local new_storage = { type = tonumber( input ) }
+
+    if new_storage.type == 4 then
+      term.clear()
+      term.setCursorPos( 1, 1 )
+      print( "Place the item to be filtered in the inventory and press enter.")
+      os.sleep( 0.2 )
+      input = read()
+      new_storage.filtered_items = {}
+
+      for i = 1, 16 do
+        local item = turtle.getItemDetail( i )
+        if item then
+          table.insert( new_storage.filtered_items, item.name )
+        end
+      end
+    end
+    
+    turtle.set_storage( inventory_slot, new_storage )
+  end
+
+  print( "Setup another storage? y, n")
+  os.sleep( 0.2 )
+  input = read()
+
+  if input == "y" then
+    show_set_storage_page()
+  end
+
+  show_menu()
+end
+
+function show_set_valid_fuel_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Valid Fuel -" )
+  print( "A turtle can consume any fuel a furnace can burn." )
+  print( "Enter the item name or place it in the first slot of the turtle's inventory then press enter." )
+  print( "*same to remove it." )
+  print()
+  print( "Item name:" )
+  os.sleep( 0.2 )
+  local input = read()
+  
+  -- if the input is empty, try to get the first item name
+  if input == "" then
+    turtle.select( 1 )
+    local item_data = turtle.getItemDetail()
+
+    if item_data then
+      input = item_data.name
+    end
+  end
+
+  -- if input not empty, add the new item
+  if input ~= "" then
+    turtle.add_or_remove_valid_fuel( input )
+  end
+
+  display_current_valid_fuel()
+  print( "Add another item? y, n")
+  os.sleep( 0.2 )
+  input = read()
+
+  if input == "y" then
+    show_set_valid_fuel_page()
+  end
+
+  show_menu()
+end
+
+function show_set_forbidden_block_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Forbidden -" )
+  print( "Blocks that the turtle should not mine! Used if you want to mine diamond ore with fortune or for stuff that can explode." )
+  print( "Enter block name or place it in front of the turtle then press enter." )
+  print( "*same to remove it." )
+  os.sleep( 0.2 )
+  local input = read()
+  
+  -- if the input is empty, try to get the block in front
+  if input == "" then
+    local has_block, block_data = turtle.inspect()
+
+    if has_block then
+      input = block_data.name
+    end
+  end
+
+  -- if input not empty, add the new block
+  if input ~= "" then
+    turtle.add_or_remove_forbidden_block( input )
+  end
+
+  display_current_forbidden_block()
+  print( "Add another block? y, n")
+  os.sleep( 0.2 )
+  input = read()
+
+  if input == "y" then
+    show_set_forbidden_block_page()
+  end
+
+  show_menu()
+end
+
+function old_show_menu()
   -- Go to position
-  elseif args[1] == "goto" then
+  if args[1] == "goto" then
     turtle.pathfind_to(
         vector.new( tonumber( args[2] ), tonumber( args[3] ), tonumber( args[4] ) ), false
      )
-  
   -- setup a mine
   elseif args[1] == "setupMine" then
     miner:setup_mine( vector.new( tonumber( args[2] ), tonumber( args[3] ), tonumber( args[4] ) ) )
-  
   -- start mining
   elseif args[1] == "mine" then
     miner:mine()
-
   -- update the program
   elseif args[1] == "update" then
     update.master()
-
-  -- look at the gui
-  elseif args[1] == "v" then
-    run_menu()
-
-  -- Tree Farm
-  elseif args[1] == "1" then
-    treefarm:start_tree_farm( tonumber( args[2] ) )
-
-  -- Vein mine
-  elseif args[1] == "2" then
-    miner:vein_mine( "forward", args[2] )
-
-  -- Dig out
-  elseif args[1] == "3" then
-    if args[4] == nil then
-      miner:dig_out_start( tonumber( args[2] ), tonumber( args[3] ) )
-    else
-      miner:dig_out_start( tonumber( args[2] ), tonumber( args[3] ), tonumber( args[4] ) )
-    end
-
-  -- Place floor
-  elseif args[1] == "4" then
-    builder:place_floor( args[2] )
-
-  -- Place Wall
-  elseif args[1] == "5" then
-    builder:place_wall()
-
-  -- Mine one branch
-  elseif args[1] == "6" then
-    miner:mine_branch()
-
-  -- Flatten chunk
-  elseif args[1] == "7" then
-    local number_of_chunk = tonumber( args[2] )
-    if number_of_chunk == nil then number_of_chunk = 1 end
-    local extra_height = tonumber( args[3] )
-    if extra_height ~= nil then
-      last_average_height = extra_height
-      initial_aditionnal_up = extra_height
-    end
-    if has_flaten_fleet_setup() then
-      fleet_flatten()
-    else
-      flaten_chunks( number_of_chunk )
-    end
-
-  -- Cooking
-  elseif args[1] == "8" then
-    cooker:start_cooking()
-
-  -- Branch mining
-  elseif args[1] == "9" then
-    miner:branch_mining( args[2] )
-
-  -- Crop farm
-  elseif args[1] == "10" then
-    if args[2] == "1" then
-      rice_farm()
-    else
-      cane_farm()
-    end
-
-  -- Tunnel
-  elseif args[1] == "t" then
-    miner:dig_tunnel()
-
   else
     print( "What?... bye." )
   end
 end
 
-local has_task = false
--- Check if has redstone analog signal
-if check_redstone_option() then has_task = true end
+local all_menu = {
+  main_menu = {
+    path = "Menu",
+    prompt = "Choose an option:",
+    parent = nil,
+    options = {
+      { key = "one", name = "1 - Stations", menu = "menu_stations" },
+      { key = "two", name = "2 - Miner", menu = "menu_miner" }, 
+      { key = "three", name = "3 - Builder", menu = "menu_builder" },
+      { key = "four", name = "4 - Configurations", menu = "menu_config" }
+    }
+  },
+  menu_stations = {
+    path = "Menu -> Stations",
+    prompt = "Choose a station:",
+    parent = "main_menu",
+    options = {
+      { key = "one", name = "1 - Tree Farm", action = show_tree_farm_page },
+      { key = "two", name = "2 - Cooking", action = cooker.start_cooking },
+      { key = "three", name = "3 - Farming", menu = "menu_farms" }
+    }
+  },
+  menu_farms = {
+    path = "Menu -> Stations -> Farms",
+    prompt = "Choose a farm:",
+    parent = "menu_stations",
+    options = {
+      { key = "one", name = "1 - Farmer's Delight: Rice", action = rice_farm },
+      { key = "two", name = "2 - Minecraft: Sugar Cane", action = cane_farm },
+    }
+  },
+  menu_miner = {
+    path = "Menu -> Miner",
+    prompt = "Choose a job:",
+    parent = "main_menu",
+    options = {
+      { key = "one", name = "1 - Dig Out", action = show_digout_page },
+      { key = "two", name = "2 - Flatten chunk", action = show_flatten_chunk_page },
+      { key = "three", name = "3 - Vein Mine", action = show_vein_mine_page },
+      { key = "four", name = "4 - Mine Branch", action = miner.mine_branch },
+      { key = "five", name = "5 - Branch Mining", action = show_branch_mining },
+      { key = "seven", name = "6 - Tunnel", action = dig_tunnel }
+    }
+  },
+  menu_builder = {
+    path = "Menu -> Builder",
+    prompt = "Choose a job:",
+    parent = "main_menu",
+    options = {
+      { key = "one", name = "1 - Place Floor", action = builder.place_floor },
+      { key = "two", name = "2 - Place Ceiling", action = start_place_ceiling },
+      { key = "three", name = "3 - Place Wall", action = builder.place_wall }
+    }
+  },
+  menu_config = {
+    path = "Menu -> Configurations",
+    prompt = "Choose an option:",
+    parent = "main_menu",
+    options = {
+      { key = "one", name = "1 - See Current Config", action = show_current_config_page },
+      { key = "two", name = "2 - Update", action = update.update },
+      { key = "three", name = "3 - Storage", action = show_set_storage_page },
+      { key = "four", name = "4 - Valid Fuel", action = show_set_valid_fuel_page },
+      { key = "five", name = "5 - Forbidden Block", action = show_set_forbidden_block_page }
+    }
+  }
+}
 
--- Check if was doing a task
-local job, data1, data2, data3 = turtle.load_job()
-if job then
-  print( "Turtle resume job: " .. job )
-  print( "Delete the job file to stop it." )
+function show_menu()
+  load_settings()
+  display_menu( all_menu.main_menu )
 
-  if job == "treefarm" then
-    treefarm:resume( data1 )
-  elseif job == "dig_out" then
-    miner:dig_out_resume( data1, data2, data3 )
+  -- Timer to display time
+  local clock_timer = os.startTimer( 1 )
+
+  while true do
+    event = { os.pullEvent() }
+    -- is a key is pressed
+    if event[ 1 ] == "key" then
+      on_key_pressed( keys.getName( event[ 2 ] ) )
+    elseif event[ 1 ] == "timer" and event[ 2 ] == clock_timer then
+      clock_timer = os.startTimer( 1 )
+    elseif event[ 1 ] == "modem_connected" then
+      print( "modem_connected" )
+    elseif event[ 1 ] == "rednet_message" then
+      print( "rednet_message" )
+    end
   end
-
-  has_task = true
 end
 
-if not has_task then show_menu() end
+function on_key_pressed( key_name )
+  -- test
+  if key_name == "p" then
+    turtle.drop_in_storage()
+  end
+
+  -- go back
+  if current_menu.parent and key_name == "b" then
+    display_menu( all_menu[ current_menu.parent ] )
+  end
+
+  -- sub menu or actions
+  for i = 1, #current_menu.options do
+    if current_menu.options[ i ] ~= nil and key_name == current_menu.options[ i ].key then
+      -- sub menu
+      if current_menu.options[ i ].menu ~= nil then
+        display_menu( all_menu[ current_menu.options[ i ].menu ] )
+        os.sleep(0.1)
+        return
+      -- action
+      elseif current_menu.options[ i ].action ~= nil then
+        current_menu.options[ i ].action()
+        os.sleep(0.1)
+        return
+      end
+    end
+  end
+end
+
+show_menu()

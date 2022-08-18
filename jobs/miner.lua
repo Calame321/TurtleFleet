@@ -3,15 +3,12 @@
 ------------
 miner = job:new()
 
-miner.chunk_per_region = 5 -- from center
-miner.branch_mine_length = 16 * miner.chunk_per_region
-
-miner.stuff_to_keep = {}
-miner.stuff_to_keep["minecraft:coal"] = 2
-miner.stuff_to_keep["minecraft:charcoal"] = 2
-miner.stuff_to_keep["enderstorage:ender_chest"] = 2
+miner.branch_mine_length = 80
+miner.branch_mine_quantity = 20
 
 function miner:vein_mine( from, block )
+  if turtle.is_inventory_full() then turtle.drop_in_storage() end
+
   -- up
   if turtle.is_block_name( "up", block ) then
     turtle.force_move( "up" )
@@ -58,10 +55,7 @@ miner.do_row_remaining = 0
 miner.do_width_start = 0
 
 function miner:dig_out_start( depth, width, height )
-  print(
-      "Starting dig out with: " .. tostring( depth ) .. " " .. tostring( width ) .. " " ..
-          tostring( height )
-   )
+  print( "Starting dig out with: ", depth, "depth,", width, "width." )
   if height == nil or height == 3 then
     miner:dig_out( depth, width )
     return
@@ -75,8 +69,7 @@ function miner:dig_out_start( depth, width, height )
   local layer = height / 3
 
   local info_paper_index = turtle.get_info_paper_index()
-  if turtle.has_drop_chest() and turtle.has_fuel_chest() and turtle.has_turtle_chest() and
-      info_paper_index > 0 then
+  if turtle.has_drop_chest() and turtle.has_fuel_chest() and turtle.has_turtle_chest() and info_paper_index > 0 then
     print( "everithing is ok, starting!" )
     for i = 1, layer - 1 do
       turtle.force_up()
@@ -102,24 +95,19 @@ function miner:dig_out_start( depth, width, height )
       turtle.force_up()
     end
   else
-    print(
-        "You must provide " .. tostring( layer ) .. " enderchest for dropping stuff in slot 1, " ..
-            tostring( layer ) ..
-            " enderchest for fuel in slot 2, a enderchest for turtles in slot 3 and a paper renamed with depth and width."
-     )
+    print( "You must provide", layer, "storage for dropping stuff in slot 1, ", layer, "storage for fuel in slot 2, a storage for turtles in slot 3 and a paper renamed with depth and width." )
   end
 
   miner:dig_out( depth, width )
 end
 
 function miner:dig_out( depth, width )
-  turtle.set_position( 0, 0, 0, turtle.NORTH )
+  turtle.do_not_store_items = {}
   turtle.force_forward()
   turtle.turnRight()
   miner.do_width_remaining = width
   miner.do_width_start = width
   miner.do_row_remaining = depth
-  turtle.save_job( "dig_out", miner.do_row_remaining, miner.do_width_start, miner.do_width_remaining )
   miner:dig_out_loop()
   fs.delete( "job" )
 end
@@ -163,12 +151,9 @@ function miner:dig_out_row()
       turtle.force_up()
     end
 
-    if turtle.is_inventory_full() then turtle.drop_in_enderchest( miner.stuff_to_keep ) end
+    if turtle.is_inventory_full() then turtle.drop_in_storage() end
     if miner.do_width_remaining ~= 1 then turtle.force_forward() end
     miner.do_width_remaining = miner.do_width_remaining - 1
-    turtle.save_job(
-        "dig_out", miner.do_row_remaining, miner.do_width_start, miner.do_width_remaining
-     )
   end
 end
 
@@ -181,7 +166,6 @@ function miner:dig_out_change_row()
   miner.do_width_remaining = miner.do_width_start
   miner.do_row_remaining = miner.do_row_remaining - 1
   turtle.force_forward()
-  turtle.save_job( "dig_out", miner.do_row_remaining, miner.do_width_start, miner.do_width_remaining )
   if turtle.x == 0 then
     turtle.turnRight()
   else
@@ -195,13 +179,12 @@ function return_start()
     while turtle.x ~= 0 do turtle.force_forward() end
   end
   turtle.turn( turtle.NORTH )
-  turtle.drop_in_enderchest()
+  turtle.drop_in_storage()
 end
 
 -------------------
 -- Branch Mining --
 -------------------
-
 function miner:check_ore( direction )
   local ore_tag = "forge:ores"
 
@@ -226,6 +209,7 @@ function miner:mine_branch()
     depth = depth + 1
     if not miner:check_ore( "forward" ) then found_forbidden_ore = true end
     if not found_forbidden_ore then turtle.force_forward() end
+    if turtle.is_inventory_full() then turtle.drop_in_storage() end
     if not miner:check_ore( "up" ) then found_forbidden_ore = true end
     if not miner:check_ore( "down" ) then found_forbidden_ore = true end
     turtle.turnLeft()
@@ -242,7 +226,6 @@ function miner:mine_branch()
 
   for i = 0, depth - 1 do
     turtle.force_move( "back" )
-
     if found_forbidden_ore then turtle.digDown() end
   end
 
@@ -251,15 +234,35 @@ end
 
 function miner:empty_inventory()
   for i = 1, 16 do
-    local slot = turtle.getItemDetail( i )
+    -- If it's a storage slot and a drop storage, drop it's content in the chest
+    if turtle.is_storage_slot( i ) then
+      if turtle.get_storage_type( i ) == turtle.DROP_STORAGE then
+        -- place the storage above
+        turtle.dig_all( "up" )
+        turtle.select( i )
+        turtle.placeUp()
 
-    if slot and not turtle.is_valid_fuel( slot.name ) then
-      turtle.select( i )
+        -- get all the item in the storage above and drop them in the chest
+        while turtle.suckUp() do
+          if not turtle.drop() then
+            print( "Please, make some place in the chest !!" )
+            while not turtle.drop() do os.sleep( 5 ) end
+          end
+        end
 
-      if not turtle.drop() then
-        print( "Please, make some place in the chest !!" )
-
-        while not turtle.drop() do os.sleep( 10 ) end
+        -- Pick up the storage
+        turtle.digUp()
+      end
+    else
+      local slot = turtle.getItemDetail( i )
+      
+      if slot and not turtle.is_valid_fuel( slot.name ) then
+        turtle.select( i )
+        
+        if not turtle.drop() then
+          print( "Please, make some place in the chest !!" )
+          while not turtle.drop() do os.sleep( 5 ) end
+        end
       end
     end
   end
@@ -268,7 +271,7 @@ end
 function miner:branch_mining( side )
   local branch_index = 0
 
-  for b = 1, miner.branch_mine_length / 4 do
+  for b = 1, miner.branch_mine_quantity do
     turtle.turn180()
 
     for i = 1, (branch_index * 4) do turtle.force_forward() end
@@ -297,8 +300,6 @@ end
 ------------
 -- Mining --
 ------------
-
-local mining_state = "going_down"
 local mine_start_position
 local mine_level = 6
 local mine_setup = false
@@ -307,7 +308,6 @@ local mine_direction = 0
 
 function miner:setup_mine( mine_position )
   mine_start_position = mine_position
-  miner:save_mine()
 end
 
 function miner:get_mine_y() return (mine_layer * 2) + 4 end
@@ -319,8 +319,6 @@ function miner:get_branch_entrance_pos( branch_index )
 end
 
 function miner:mine()
-  miner:load_mine()
-
   if not mine_setup then
     print( "Need to setup the mine." )
     print( "My pos = " .. tostring( pos.coords ) )
@@ -332,7 +330,6 @@ function miner:mine()
     turtle.turn( turtle.WEST )
     miner:drop_inventory()
     mine_setup = true
-    miner:save_mine()
   end
 
   miner:go_to_mine_start()
@@ -343,7 +340,6 @@ function miner:mine()
 end
 
 function miner:find_next_branch()
-  mining_state = "find_next_branch"
   local branch_index = 0
 
   while true do
@@ -358,7 +354,7 @@ function miner:find_next_branch()
     turtle.turn( RIGHT )
     branch_index = branch_index + 1
 
-    if branch_index * 4 >= miner.branch_mine_length then return false end
+    if branch_index * 4 >= miner.branch_mine_quantity then return false end
   end
 
   return false
@@ -368,9 +364,10 @@ function miner:go_to_mine_start() turtle.pathfind_to( mine_start_position, false
 
 function miner:go_to_output_chest()
   local mine_output_position = vector.new(
-                                   mine_start_position.x, mine_start_position.y,
-                                   mine_start_position.z - 1
-                                )
+    mine_start_position.x,
+    mine_start_position.y,
+    mine_start_position.z - 1
+  )
   turtle.pathfind_to( mine_output_position, false )
 end
 
@@ -383,16 +380,11 @@ function miner:dig_mine_shaft()
 end
 
 function miner:go_down_the_mine()
-  mining_state = "going_down"
-  miner:save_mine()
   local mine_level_position = vector.new( mine_start_position.x, 6, mine_start_position.z )
   turtle.pathfind_to( mine_level_position, false )
 end
 
 function miner:drop_inventory()
-  mining_state = "drop_inventory"
-  miner:save_mine()
-
   for i = 1, 16 do
     local item = turtle.getItemDetail( i )
     if item and item.count > 0 then
@@ -413,37 +405,6 @@ function miner:drop_inventory()
 
   turtle.select( 1 )
   turtle.suckUp()
-end
-
-function miner:load_mine()
-  if not fs.exists( "mine" ) then
-    local file = fs.open( "mine", "w" )
-    file.close()
-  end
-
-  local file = fs.open( "mine", "r" )
-  mining_state = file.readLine()
-  local start_pos_split = mysplit( file.readLine() )
-  mine_start_position = vector.new( start_pos_split[1], start_pos_split[2], start_pos_split[3] )
-  mine_level = tonumber( file.readLine() )
-  mine_setup = "true" == file.readLine()
-  mine_layer = tonumber( file.readLine() )
-  file.close()
-end
-
-function miner:save_mine()
-  local file = fs.open( "mine", "w" )
-  file.writeLine( mining_state )
-  print( "Save mine pos: " .. tostring( mine_start_position ) )
-  file.writeLine(
-      tostring( mine_start_position.x ) .. " " .. tostring( mine_start_position.y ) .. " " ..
-          tostring( mine_start_position.z )
-   )
-  file.writeLine( tostring( mine_level ) )
-  file.writeLine( tostring( mine_setup ) )
-  file.writeLine( tostring( mine_layer ) )
-  file.flush()
-  file.close()
 end
 
 ---------------
@@ -470,23 +431,6 @@ function have_tunneling_materials()
   return has_torch and has_fuel
 end
 
-function miner:load_tunnel()
-  if not fs.exists( "tunnel" ) then
-    return
-  end
-
-  local file = fs.open( "tunnel", "r" )
-  next_torch = tonumber( file.readLine() )
-  file.close()
-end
-
-function miner:save_tunnel()
-  local file = fs.open( "tunnel", "w" )
-  file.writeLine( tostring( next_torch ) )
-  file.flush()
-  file.close()
-end
-
 -- Dig an infinite tunnel and place torch every 11 blocks
 function miner:dig_tunnel()
   -- infinite loop
@@ -494,9 +438,7 @@ function miner:dig_tunnel()
     turtle.dig_all( "forward" )
     turtle.force_forward()
     turtle.dig_all( "up" )
-
     next_torch = next_torch - 1
-    miner:save_tunnel()
 
     if next_torch == 0 then
       local torch_index = turtle.get_item_index( "minecraft:torch" )
@@ -504,8 +446,8 @@ function miner:dig_tunnel()
         print( "Give me more torch please!" )
 
         while torch_index == -1 do
-            os.sleep( 5 )
-            torch_index = turtle.get_item_index( "minecraft:torch" )
+          os.sleep( 5 )
+          torch_index = turtle.get_item_index( "minecraft:torch" )
         end
       end
 

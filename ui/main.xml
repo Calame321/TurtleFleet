@@ -1,0 +1,19 @@
+<frame id="main" bg="white">
+  <!-- Main Menu frame -->
+  <frame bg="purple">
+    <label text="System" x="2" fg="white"/>
+    <label text="Turtle" x="10" fg="white"/>
+  </frame>
+
+  <frame id="pages" y="2" height="46" bg="white" scrollable="true" maxScroll="100%"/>
+
+  <!-- Status Bar frame -->
+  <frame x="1" y="1" anchor="bottomLeft" bg="lightGray" zIndex="15">
+    <label id="lbl_event" x="2" y="1" text="" fg="gray"/>
+    <label id="lbl_time" x="2" y="80%" text="" fg="gray"/>
+  </frame>
+
+  <!-- Up and Down arrow to show if page is scrollabe -->
+  <label id="lbl_up" x="1" y="2" anchor="topRight" text="" bg="white" fg="purple" zIndex="15"/>
+  <label id="lbl_down" x="1" y="0" anchor="bottomRight" text="" bg="white" fg="purple" zIndex="15"/>
+</frame>

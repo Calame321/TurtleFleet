@@ -1,0 +1,33 @@
+<!-- Title -->
+<frame x="13" y="2" width="13" height="1" bg="purple" fg="white" bar="true" barBG="brown" barFG="white" barText="  Branch Mine  " borderColor="yellow" borderLeft="true" borderRight="true">
+  <label x="1" text=""/>
+  <label x="100%" text=""/>
+</frame>
+
+<!-- Start button -->
+<label x="5" y="6" text="" bg="white" fg="black" zIndex="15"/>
+<button x="6" y="5" text="Start" width="9" height="3" zIndex="15"/>
+
+<!-- Options frame -->
+<frame x="22" y="4" width="16" height="6" bg="pink" bar="true" barBG="purple" barFG="white" barText="Options:" borderColor="purple" borderLeft="true" borderRight="true" borderBottom="true">
+  <label x="2" y="3" text="Length:" fg="brown"/>
+  <input x="10" y="3" width="5" type="number" limit="15" value="80" bg="lightGray" fg="white" />
+  <label x="9" y="3" text="" fg="black"/><!-- arrow -->
+  <label x="4" y="4" text="Left"/>
+  <radio x="2" y="4" value="true" symbol=""/>
+  <label x="1" y="4" text="" fg="black"/><!-- arrow -->
+  <label x="4" y="5" text="Right"/>
+  <radio x="2" y="5" value="true" symbol=""/>
+  <label x="1" y="5" text="" fg="black"/><!-- arrow -->
+</frame>
+
+<!-- Instructions frame -->
+<frame id="tf_instruction" x="3" y="9" width="35" height="35" bg="pink" fg="brown" bar="true" barBG="purple" barFG="white" barText="Instructions:" borderColor="purple" borderLeft="true" borderRight="true" borderBottom="true">
+  <label x="2" y="2" width="34" text="Place a chest next to a wall, place the turtle facing the chest."/>
+  <label x="3" y="6" width="34" text="This one sould be set to 'Right'."/>
+  <label x="3" y="7" width="34" text=" "/>
+  <label x="3" y="8" width="34" text=" CC"/>
+  <label x="3" y="9" width="34" text=" Wall " bg="yellow"/>
+  <label x="3" y="11" width="34" text="The turtle will turn to the side it is set and start a branch."/>
+  <label x="3" y="14" width="34" text="When it complete a branch, it will drop his inventory in the chest then start the next branch."/>
+</frame>

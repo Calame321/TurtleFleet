@@ -1,7 +1,6 @@
 ----------------
 -- Networking --
 ----------------
-
 Network = {}
 Network.__index = Network
 

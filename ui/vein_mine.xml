@@ -1,0 +1,15 @@
+<!-- Title -->
+<frame x="13" y="2" width="13" height="1" bg="purple" fg="white" bar="true" barBG="brown" barFG="white" barText="  Vein Mine  " borderColor="yellow" borderLeft="true" borderRight="true">
+  <label x="1" text=""/>
+  <label x="100%" text=""/>
+</frame>
+
+<!-- Start button -->
+<label x="5" y="6" text="" bg="white" fg="black" zIndex="15"/>
+<button x="6" y="5" text="Start" width="9" height="3" zIndex="15"/>
+
+<!-- Instructions frame -->
+<frame id="tf_instruction" x="3" y="9" width="35" height="8" bg="pink" fg="brown" bar="true" barBG="purple" barFG="white" barText="Instructions:" borderColor="purple" borderLeft="true" borderRight="true" borderBottom="true">
+  <label x="2" y="2" width="34" text="Simply place the turtle in front of (And facing) the block you want to vein mine and Start!"/>
+  <label x="2" y="5" width="31" text="The turtle will mine all connected block and come back to its starting location."/>
+</frame>

@@ -1,0 +1,46 @@
+<!-- height="46" -->
+<!-- Title -->
+<frame x="15" y="2" width="11" height="1" bg="purple" fg="white" bar="true" barBG="brown" barFG="white" barText="  Builder  ">
+  <label x="1" text=""/>
+  <label x="100%" text=""/>
+</frame>
+
+<!-- Start button -->
+<label x="5" y="6" text="" bg="white" fg="black" zIndex="15"/>
+<button x="6" y="5" text="Start" width="9" height="3" zIndex="15"/>
+
+<!-- Options frame -->
+<frame x="22" y="4" width="16" height="6" bg="pink" bar="true" fg="brown" barBG="purple" barFG="white" barText="Options:" borderColor="purple" borderLeft="true" borderRight="true" borderBottom="true">
+  <label x="4" y="3" text="Wall"/>
+  <radio x="2" y="3" value="true" symbol=""/>
+  <label x="4" y="4" text="Floor"/>
+  <radio x="2" y="4" value="true"/>
+  <label x="4" y="5" text="Ceiling"/>
+  <radio x="2" y="5" value="true"/>
+  <!-- arrow -->
+  <label x="9" y="3" text="" fg="black"/>
+</frame>
+
+<!-- Plan frame -->
+<frame x="3" y="11" width="35" height="16" bg="pink" fg="brown" bar="true" barBG="purple" barFG="white" barText="Placement:" borderColor="purple" borderLeft="true" borderRight="true" borderBottom="true">
+  <label x="2" y="2" text="Wall = Lower left."/>
+  <label x="2" y="3" text=""/>
+  <label x="2" y="4" text=" = Turtle facing the wall"/>
+  <label x="2" y="5" text="--"/>
+  <label x="2" y="7" text="Floor = Back left."/>
+  <label x="2" y="8" text=""/>
+  <label x="2" y="9" text=" = Turtle facing forward."/>
+  <label x="2" y="10" text="--"/>
+  <label x="2" y="12" text="Floor = Back left."/>
+  <label x="2" y="13" text="--"/>
+  <label x="2" y="14" text=" = Turtle facing forward."/>
+  <label x="2" y="15" text=""/>
+</frame>
+
+<!-- Instructions frame -->
+<frame id="tf_instruction" x="3" y="21" width="35" height="28" bg="pink" fg="brown" bar="true" barBG="purple" barFG="white" barText="Instructions:" borderColor="purple" borderLeft="true" borderRight="true" borderBottom="true">
+  <label x="2" y="2" width="31" text="For each options, the turtle will use the first block in his inventory as the building material.You can fill his inventory (and give him some fuel). He will wait if he runs out or materials or fuel, then start where he was."/>
+  <label x="2" y="11" width="31" text="He will replace any blocks that are already there so its good to change your stone walls to something nice."/>
+  <label x="2" y="18" width="31" text="For the size of the area, he will change direction when he can't go further or find the same block he is placing."/>
+  <label x="2" y="23" width="31" text="So you can place the frame of what you need, then start the turtle. If you are already in a box you dont have to do anything."/>
+</frame>

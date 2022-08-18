@@ -3,15 +3,18 @@
 -----------------------------
 if not turtle then return end
 
-turtle.valid_fuel = { "minecraft:charcoal", "minecraft:coal" }
+-- If this fails (return nil) then we sould be in minecraft 1.12.
+turtle.is_version_1_12 = pcall( settings.save ) ~= nil
 
-turtle.DO_NOT_MINE = {
-  "forbidden_arcanus:stella_arcanum", "minecraft:diamond_ore", "mysticalworld:amethyst_ore"
-}
+turtle.forbidden_block = {}
+turtle.valid_fuel = {}
+turtle.storage = {}
+turtle.do_not_store_items = {}
 
-turtle.enderchest_index = 1
-turtle.fuel_chest_index = 2
-turtle.turtle_chest_index = 3
+turtle.FUEL_STORAGE = 1
+turtle.DROP_STORAGE = 2
+turtle.TURTLE_STORAGE = 3
+turtle.FILTERED_DROP_STORAGE = 4
 
 turtle.NORTH = 0
 turtle.EAST = 1
@@ -69,43 +72,104 @@ end
 --------------
 -- settings -- 
 --------------
-function turtle.load_position()
-  local pos = settings.get( "position" )
 
-  if pos then
-    turtle.x = pos[1].x or 0
-    turtle.y = pos[1].y or 0
-    turtle.z = pos[1].z or 0
-    turtle.dz = pos[2] or -1
-    turtle.dx = pos[3] or 0
+-- Load all the settings
+function turtle.load_settings()
+  turtle.load_forbidden_block()
+  turtle.load_valid_fuel()
+  turtle.load_storage()
+end
+
+function turtle.load_forbidden_block()
+  local loaded_block = settings.get( "forbidden_block" )
+
+  if loaded_block then
+    turtle.forbidden_block = loaded_block
+  else
+    turtle.set_forbidden_block( { "forbidden_arcanus:stella_arcanum" } )
   end
 end
 
-function turtle.save_position()
-  settings.set( "position", { { x = turtle.x, y = turtle.y, z = turtle.z }, turtle.dz, turtle.dx } )
+function turtle.load_valid_fuel()
+  local loaded_fuel = settings.get( "valid_fuel" )
+
+  if loaded_fuel then
+    turtle.valid_fuel = loaded_fuel
+  else
+    turtle.set_valid_fuel( { "minecraft:charcoal", "minecraft:coal" } )
+  end
+end
+
+-- Load the storage settings
+function turtle.load_storage()
+  local loaded_storage = settings.get( "storage" )
+
+  if loaded_storage then
+    turtle.storage = loaded_storage
+  end
+end
+
+function turtle.set_forbidden_block( new_forbidden_block )
+  turtle.forbidden_block = new_forbidden_block
+  settings.set( "forbidden_block", turtle.forbidden_block )
   settings.save()
 end
 
-function turtle.set_position( x, y, z, dir )
-  turtle.x = x
-  turtle.y = y
-  turtle.z = z
-
-  if dir == turtle.NORTH then
-    turtle.dz = -1
-    turtle.dx = 0
-  elseif dir == turtle.WEST then
-    turtle.dz = 0
-    turtle.dx = -1
-  elseif dir == turtle.EAST then
-    turtle.dz = 0
-    turtle.dx = 1
-  elseif dir == turtle.SOUTH then
-    turtle.dz = 1
-    turtle.dx = 0
-  end
-  turtle.save_position()
+function turtle.set_valid_fuel( new_valid_fuel )
+  turtle.valid_fuel = new_valid_fuel
+  settings.set( "valid_fuel", turtle.valid_fuel )
+  settings.save()
 end
+
+function turtle.set_storage( index, new_storage )
+  turtle.storage[ index ] = new_storage
+  settings.set( "storage", turtle.storage )
+  settings.save()
+end
+
+function turtle.remove_storage_config( index )
+  turtle.storage[ index ] = nil
+  settings.set( "storage", turtle.storage )
+  settings.save()
+end
+
+function turtle.add_or_remove_valid_fuel( item_name )
+  local was_removed = false
+
+  for k, v in pairs( turtle.valid_fuel ) do
+    if v == item_name then
+      table.remove( turtle.valid_fuel, k )
+      was_removed = true
+      break
+    end
+  end
+
+  if not was_removed then
+    table.insert( turtle.valid_fuel, item_name )
+  end
+
+  turtle.set_valid_fuel( turtle.valid_fuel )
+end
+
+function turtle.add_or_remove_forbidden_block( block_name )
+  local was_removed = false
+
+  for k, v in pairs( turtle.forbidden_block ) do
+    if v == block_name then
+      table.remove( turtle.forbidden_block, k )
+      was_removed = true
+      break
+    end
+  end
+
+  if not was_removed then
+    table.insert( turtle.forbidden_block, block_name )
+  end
+
+  turtle.set_forbidden_block( turtle.forbidden_block )
+end
+
+turtle.load_settings()
 
 -----------------
 --- Movements ---
@@ -117,7 +181,6 @@ function turtle.forward()
   if not turtle.old_forward() then return false end
   turtle.x = turtle.x + turtle.dx
   turtle.z = turtle.z + turtle.dz
-  turtle.save_position()
   return true
 end
 
@@ -129,7 +192,6 @@ function turtle.down()
   turtle.try_refuel()
   if not turtle.old_down() then return false end
   turtle.y = turtle.y - 1
-  turtle.save_position()
   return true
 end
 
@@ -142,7 +204,6 @@ function turtle.back()
   if not turtle.old_back() then return false end
   turtle.x = turtle.x - turtle.dx
   turtle.z = turtle.z - turtle.dz
-  turtle.save_position()
   return true
 end
 
@@ -154,7 +215,6 @@ function turtle.up()
   turtle.try_refuel()
   if not turtle.old_up() then return false end
   turtle.y = turtle.y + 1
-  turtle.save_position()
   return true
 end
 
@@ -179,9 +239,14 @@ end
 function turtle.reverse( direction ) return turtle.moveDir( turtle.reverseDir( direction ) ) end
 function turtle.force_reverse( direction ) turtle.force_move( turtle.reverseDir( direction ) ) end
 
-function turtle.wait_move( direction ) while not turtle.move( direction ) do os.sleep( 1 ) end end
-
 -- Move --
+function turtle.wait_move( direction )
+  while not turtle.move( direction ) do
+    print( "waiting 5 seconds before trying to move", direction, "again." )
+    os.sleep( 5 )
+  end
+end
+
 function turtle.move( direction, block_to_break )
   turtle.try_refuel()
   local moved = turtle.moveDir( direction )
@@ -194,9 +259,13 @@ end
 
 function turtle.force_move( direction, block_to_break )
   if direction ~= "back" then
-    for b = 1, #turtle.DO_NOT_MINE do
-      if turtle.is_block_name( direction, turtle.DO_NOT_MINE[b] ) then
-        error( "I am scared of this " .. turtle.DO_NOT_MINE[b] )
+    for k, v in pairs( turtle.forbidden_block ) do
+      if turtle.is_block_name( direction, v ) then
+        print( "I am scared of this " .. v .. ". Can you remove it please?" )
+
+        while turtle.is_block_name( direction, v ) do
+          os.sleep( 5 )
+        end
       end
     end
   end
@@ -221,7 +290,6 @@ function turtle.turnRight()
   local old_dx = turtle.dx
   turtle.dx = -turtle.dz
   turtle.dz = old_dx
-  turtle.save_position()
   return true
 end
 
@@ -230,7 +298,6 @@ function turtle.turnLeft()
   local old_dx = turtle.dx
   turtle.dx = turtle.dz
   turtle.dz = -old_dx
-  turtle.save_position()
   return true
 end
 
@@ -327,6 +394,20 @@ function turtle.inspectBack()
   return success, data
 end
 
+function turtle.inspectLeft()
+  turtle.turnLeft()
+  local success, data = turtle.inspect()
+  turtle.turnRight()
+  return success, data
+end
+
+function turtle.inspectRight()
+  turtle.turnRight()
+  local success, data = turtle.inspect()
+  turtle.turnLeft()
+  return success, data
+end
+
 function turtle.inspectDir( direction )
   if direction == "up" then
     return turtle.inspectUp()
@@ -336,6 +417,10 @@ function turtle.inspectDir( direction )
     return turtle.inspect()
   elseif direction == "back" then
     return turtle.inspectBack()
+  elseif direction == "left" then
+    return turtle.inspectLeft()
+  elseif direction == "right" then
+    return turtle.inspectRight()
   end
   error( "inspectDir direction unknown!" )
 end
@@ -395,7 +480,12 @@ function turtle.placeDir( direction )
   error( "turtle.placeDir invalid direction" )
 end
 
-function turtle.wait_place( direction ) while not turtle.placeDir( direction ) do os.sleep( 1 ) end end
+function turtle.wait_place( direction )
+  while not turtle.placeDir( direction ) do
+    print( "waiting 5 seconds before trying to place", direction, "again." )
+    os.sleep( 5 )
+  end
+end
 
 -- Suck --
 function turtle.suckDir( direction )
@@ -525,11 +615,23 @@ function turtle.is_block_name_contains( direction, block_name )
   return s and string.find( d.name, block_name )
 end
 
+-- Check if the block has the specified tag.
 function turtle.is_block_tag( direction, tag )
-  if direction == "back" then return false end
-  if not turtle.detectDir( direction ) then return false end
+  if turtle.is_version_1_12 and tag == "forge:ores" then
+    tag = "ore"
+  end
+
+  if direction == "back" or not turtle.detectDir( direction ) then
+    return false
+  end
+  
   local success, data = turtle.inspectDir( direction )
-  return success and data.tags[tag]
+  
+  if turtle.is_version_1_12 then
+    return success and string.find( data.name, tag )
+  else
+    return success and data.tags[tag]
+  end
 end
 
 -- Inventory --
@@ -568,47 +670,207 @@ function turtle.get_info_paper_index()
   return -1
 end
 
-function turtle.has_chest( index )
-  local item = turtle.getItemDetail( index, true )
-  if item and item.name == "enderstorage:ender_chest" then return true end
+function turtle.has_storage( storage_type )
+  for k, v in pairs( turtle.storage ) do
+    if v.type == storage_type then
+      return true
+    end
+  end
   return false
 end
 
-function turtle.has_fuel_chest() return turtle.has_chest( turtle.fuel_chest_index ) end
-function turtle.has_turtle_chest() return turtle.has_chest( turtle.turtle_chest_index ) end
-function turtle.has_drop_chest() return turtle.has_chest( turtle.enderchest_index ) end
+function turtle.is_storage_slot( i )
+  for k, v in pairs( turtle.storage ) do
+    if k == i then
+      return true
+    end
+  end
+  return false
+end
 
-function turtle.drop_in_enderchest( stuff_to_keep )
+function turtle.get_storage_type( i )
+  for k, v in pairs( turtle.storage ) do
+    if k == i then
+      return v.type
+    end
+  end
+  return nil
+end
+
+function turtle.has_fuel_chest()
+  return turtle.has_storage( turtle.FUEL_STORAGE )
+end
+
+function turtle.has_turtle_chest()
+  return turtle.has_storage( turtle.TURTLE_STORAGE )
+end
+
+function turtle.has_drop_chest()
+  return turtle.has_storage( turtle.DROP_STORAGE )
+end
+
+function turtle.get_storage_index( storage_type )
+  for k, v in pairs( turtle.storage ) do
+    if v.type == storage_type then
+      return k
+    end
+  end
+  return -1
+end
+
+-- Drop the items in the configured storage.
+function turtle.drop_in_storage()
+  print( "Dropping in storage!" )
   if not turtle.has_drop_chest() then return false end
 
+  local is_empty = false
   local to_keep = {}
-  if stuff_to_keep then for k, v in pairs( stuff_to_keep ) do to_keep[k] = v end end
+  for k, v in pairs( turtle.do_not_store_items ) do
+    to_keep[ k ] = v
+  end
 
-  turtle.dig_all( "up" )
-  turtle.select( turtle.enderchest_index )
-  while not turtle.placeUp() do os.sleep( 0.1 ) end
-
+  -- prepare a list of item to drop
+  -- index of the item -> indexes of the storages ( multiple if other are full ) single if filtered storage
+  local to_drop = {}
   for i = 1, 16 do
     local item = turtle.getItemDetail( i )
 
-    if item then
-      print( item.name )
-      print( to_keep[item.name] )
-      if to_keep[item.name] and to_keep[item.name] > 0 then
-        to_keep[item.name] = to_keep[item.name] - 1
+    if item and turtle.can_be_stored( i ) then
+      -- if need to keep the item
+      if to_keep[ item.name ] and to_keep[ item.name ] > 0 then
+        to_keep[ item.name ] = to_keep[ item.name ] - 1
       else
-        turtle.select( i )
-        -- wait to drop stuff if chest full
-        if not turtle.dropUp() then while not turtle.dropUp() do os.sleep( 1 ) end end
+        to_drop[ i ] = turtle.get_storage_index_for_item( i )
       end
     end
   end
 
-  turtle.select( 1 )
-  turtle.digUp()
+  local current_drop_index = -1
+  
+  -- length of table
+  local to_drop_count = 0
+  for _ in pairs( to_drop ) do to_drop_count = to_drop_count + 1 end
+
+  -- While there is still items to drop
+  while to_drop_count > 0 do
+    -- if there is no drop storage out, take the first one
+    if current_drop_index == -1 then
+      for k, v in pairs( to_drop ) do
+        current_drop_index = v[ 1 ]
+        break
+      end
+
+      turtle.select( current_drop_index )
+      turtle.dig_all( "up" )
+
+      while not turtle.placeUp() do
+        os.sleep( 0.5 )
+      end
+      os.sleep( 0.5 )
+    end
+
+    -- for each item to drop, drop them if they have that index
+    -- if the storage is full, get the next one
+    for item_index, storages_index in pairs( to_drop ) do
+      for k, v in pairs( storages_index ) do
+        -- If this item has can go in this storage, drop it
+        if v == current_drop_index then
+          turtle.select( item_index )
+          local was_dropped, err = turtle.dropUp()
+          while not was_dropped and err == "No space for items" do
+            turtle.select( current_drop_index )
+            turtle.digUp()
+            
+            -- get next storage index
+            current_drop_index = turtle.get_next_storage_index( current_drop_index, storages_index )
+            
+            if current_drop_index == -1 then
+              print( "Please, make some place in my storage then press enter?" )
+                read()
+                current_drop_index = storages_index[ 1 ]
+              end
+              
+              turtle.select( current_drop_index )
+              while not turtle.placeUp() do
+                os.sleep( 0.5 )
+              end
+              
+              os.sleep( 0.5 )
+              turtle.select( item_index )
+              was_dropped, err = turtle.dropUp()
+            end
+            
+            -- Remove this item from the list
+            to_drop[ item_index ] = nil
+            to_drop_count = to_drop_count - 1
+        end
+      end
+    end
+
+    -- Pick up the storage
+    turtle.select( current_drop_index )
+    turtle.digUp()
+    current_drop_index = -1
+  end
+
+  print( "Done dropping!" )
 end
 
+-- Gets if the item can be stored away.
+function turtle.can_be_stored( index )
+  if not turtle.is_storage_slot( index ) then
+    local item = turtle.getItemDetail( index )
+
+    if not turtle.is_valid_fuel( item.name ) then
+      return true
+    end
+  end
+  return false
+end
+
+-- Find the index for the storage of the item at the given slot index.
+-- single index for filtered storage, can be multiple for drop storage.
+function turtle.get_storage_index_for_item( i )
+  -- if we have a filtered storage configured, check if the item is in the filter.
+  if turtle.has_storage( turtle.FILTERED_DROP_STORAGE ) then
+    local item_data = turtle.getItemDetail( i )
+
+    -- for each filtered storage
+    for storage_index, storage_data in pairs( turtle.storage ) do
+      if storage_data.type == turtle.FILTERED_DROP_STORAGE then
+        -- if the item is contained in the filter, return the index
+        for k, filtered_item_name in pairs( storage_data.filtered_items ) do
+          if item_data.name == filtered_item_name then
+            return { storage_index }
+          end
+        end
+      end
+    end
+  end
+
+  -- get the indexes of normal drop storages.
+  local drop_storages_index = {}
+  for storage_index, storage_data in pairs( turtle.storage ) do
+    if storage_data.type == turtle.DROP_STORAGE then
+      table.insert( drop_storages_index, storage_index )
+    end
+  end
+  return drop_storages_index
+end
+
+-- Gets the next storage index from the current one in the list.
+function turtle.get_next_storage_index( current_drop_index, storages_index )
+  for k, v in pairs( storages_index ) do
+    if v == current_drop_index and storages_index[ k + 1 ] then
+      return storages_index[ k + 1 ]
+    end
+  end
+  return -1
+end
+
+----------
 -- Fuel --
+----------
 function turtle.get_valid_fuel_index()
   for i = 1, 16 do
     local item = turtle.getItemDetail( i )
@@ -622,17 +884,21 @@ function turtle.get_valid_fuel_index()
 end
 
 function turtle.is_valid_fuel( item_name )
-  for f = 1, #turtle.valid_fuel do if item_name == turtle.valid_fuel[f] then return true end end
+  for f = 1, #turtle.valid_fuel do
+    if item_name == turtle.valid_fuel[f] then
+      return true
+    end
+  end
 
   return false
 end
 
 function turtle.try_refuel()
-  if turtle.getFuelLevel() < 100 then
+  if turtle.getFuelLevel() < 80 then
     local fuel_index = turtle.get_valid_fuel_index()
 
     if fuel_index == -1 and turtle.has_fuel_chest() then
-      turtle.get_fuel_from_enderchest()
+      turtle.get_fuel_from_storage()
       fuel_index = turtle.get_valid_fuel_index()
     end
 
@@ -640,7 +906,9 @@ function turtle.try_refuel()
       print( "Give me fuel please!" )
       print( "Valid fluel:" )
 
-      for f = 1, #turtle.valid_fuel do print( " - " .. turtle.valid_fuel[f] ) end
+      for f = 1, #turtle.valid_fuel do
+        print( " - " .. turtle.valid_fuel[f] )
+      end
 
       while fuel_index == -1 do
         os.sleep( 1 )
@@ -654,10 +922,15 @@ function turtle.try_refuel()
   end
 end
 
-function turtle.get_fuel_from_enderchest()
+function turtle.get_fuel_from_storage()
+  -- If there is no fuel sorage setup, return
   if not turtle.has_fuel_chest() then return false end
 
-  turtle.select( turtle.fuel_chest_index )
+  -- if there is no free space, drop in storage
+  if turtle.is_inventory_full() then turtle.drop_in_storage() end
+
+  local fuel_storage_index = turtle.get_storage_index( turtle.FUEL_STORAGE )
+  turtle.select( fuel_storage_index )
   local dir_to_place = get_empty_block()
   if dir_to_place == "" then
     dir_to_place = "up"
@@ -665,9 +938,9 @@ function turtle.get_fuel_from_enderchest()
   end
 
   while not turtle.placeDir( dir_to_place ) do os.sleep( 0.1 ) end
-  turtle.select( turtle.fuel_chest_index + 1 )
+  turtle.select( ( fuel_storage_index  + 1 ) % 16 )
   turtle.wait_suck( dir_to_place )
-  turtle.select( turtle.fuel_chest_index )
+  turtle.select( fuel_storage_index )
   turtle.digDir( dir_to_place )
   return true
 end
@@ -678,43 +951,9 @@ function get_empty_block()
   return ""
 end
 
--- Job
-function turtle.load_job()
-  local f = fs.open( "job", "r" )
-  if f then
-    local job = f.readLine()
-    if job == "treefarm" then
-      local state = f.readLine()
-      f.close()
-      return job, tonumber( state )
-    elseif job == "dig_out" then
-      local depth_remaining = tonumber( f.readLine() )
-      local width_start = tonumber( f.readLine() )
-      local width_remaining = tonumber( f.readLine() )
-      f.close()
-      return job, depth_remaining, width_start, width_remaining
-    end
-  end
-
-  return nil
-end
-
-function turtle.save_job( job, data1, data2, data3 )
-  local f = fs.open( "job", "w" )
-  f.writeLine( job )
-  f.writeLine( data1 )
-  if data2 then f.writeLine( data2 ) end
-  if data3 then f.writeLine( data3 ) end
-  f.flush()
-  f.close()
-end
-
-turtle.load_position()
-
 --------------
 -- Redstone --
 --------------
-
 function turtle.wait_for_signal( direction, strength )
   local valid_signal = false
 

@@ -1,17 +1,16 @@
 -- A job object.
 job = {
-    -- If the job has been completed
-    done = false
+  -- If the job has been completed
+  done = false
 }
 
 function job:new( o )
-    o = o or {}
-    setmetatable( o, self )
-    self.__index = self
-    return o
+  o = o or {}
+  setmetatable( o, self )
+  self.__index = self
+  return o
 end
 
-function job:start_work()
-end
+function job:start_work() end
 
 return job
