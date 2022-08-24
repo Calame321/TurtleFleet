@@ -1,7 +1,25 @@
+miner = job:new()
+
+----------------------------
+-- global helper function --
+----------------------------
+function miner:mysplit( str, sep )
+  if sep == nil then
+    sep = "%s"
+  end
+
+  local t = {}
+
+  for str in string.gmatch( str, "([^" .. sep .. "]+)" ) do
+    table.insert( t, str )
+  end
+
+  return t
+end
+
 ------------
 -- Miner --
 ------------
-miner = job:new()
 
 miner.branch_mine_length = 80
 miner.branch_mine_quantity = 20
@@ -47,79 +65,205 @@ function miner:vein_mine( from, block )
   turtle.reverse( from )
 end
 
+
+----------------
+-- Fleet Mode --
+----------------
+miner.is_last = false
+
+function miner:equip_for_fleet_mode()
+  -- Pick up configured storages.
+  for k, v in pairs( turtle.storage ) do
+    if v.type == turtle.FUEL_STORAGE then
+      -- Up = fuel_storage or items
+      turtle.empty_select( k )
+      turtle.suckUp( 1 )
+    elseif v.type == turtle.DROP_STORAGE then
+      -- Down = drop_storage
+      turtle.empty_select( k )
+      turtle.suckDown( 1 )
+    elseif v.type == turtle.FILTERED_DROP_STORAGE then
+      -- Right = filtered_drop_storage
+      turtle.turnRight()
+      turtle.empty_select( k )
+      turtle.suck( 1 )
+      turtle.turnLeft()
+    end
+  end
+  
+  --Pick a bucket if available.
+  turtle.select( 1 )
+  turtle.turnLeft()
+  turtle.suck( 1 )
+  turtle.turnRight()
+
+  -- If no fuel storage is set, up should be fuel items.
+  if not turtle.has_fuel_chest() then
+    turtle.suckUp()
+  else
+    -- Safeguard so the turtle dosen't break the chest trying to refuel.
+    if turtle.getFuelLevel() ~= "unlimited" and turtle.getFuelLevel() < 100 then
+      turtle.turn180()
+      local fuel_storage_index = turtle.get_storage_index( turtle.FUEL_STORAGE )
+      turtle.select( fuel_storage_index )
+      turtle.wait_place( "forward" )
+      turtle.suck()
+      turtle.empty_select( fuel_storage_index )
+      turtle.dig()
+      turtle.turn180()
+    end
+  end
+end
+
+function miner:get_paper_data()
+  local paper_index = turtle.get_item_index( "minecraft:paper" )
+  if paper_index ~= -1 then
+    local paper_detail = turtle.getItemDetail( paper_index, true )
+    return paper_detail.displayName
+  end
+  return nil
+end
+
+function miner:place_next_turtle( job_id )
+  -- Pick up a turtle.
+  if not turtle.suck() then
+    miner.is_last = true
+  end
+
+  turtle.force_back()
+  
+  if not miner.is_last then
+    local turtle_index = turtle.get_item_index( "computercraft:turtle" )
+
+    if turtle_index == -1 then
+      turtle_index = turtle.get_item_index( "computercraft:turtle_advanced" )
+    end
+
+    turtle.select( turtle_index )
+    turtle.place()
+    rs.setAnalogueOutput( "front", job_id )
+
+    if turtle.get_item_index( "minecraft:paper" ) ~= -1 then
+      turtle.select( turtle.get_item_index( "minecraft:paper" ) )
+      turtle.drop()
+      turtle.select( 1 )
+    end
+
+    os.sleep( 0.1 )
+    peripheral.call( "front", "turnOn" )
+    turtle.wait_for_signal( "front", job_id )
+    rs.setAnalogueOutput( "front", 0 )
+    os.sleep( 0.1 )
+  end
+end
+
 -------------
 -- Dig Out --
 -------------
 miner.do_width_remaining = 0
 miner.do_row_remaining = 0
 miner.do_width_start = 0
+miner.digout_row_done = 0
 
-function miner:dig_out_start( depth, width, height )
-  print( "Starting dig out with: ", depth, "depth,", width, "width." )
-  if height == nil or height == 3 then
-    miner:dig_out( depth, width )
-    return
+function miner:dig_out_start( depth, width )
+  miner:dig_out( depth, width )
+end
+
+-- The first turtle to start the dig out.
+function miner:fleet_dig_out_start( height )
+  miner.is_first = true
+
+  local paper_data = miner:get_paper_data()
+  local depth = 32
+  local width = 32
+  if paper_data then
+    local d = miner:mysplit( paper_data )
+    depth = tonumber( d[ 1 ] )
+    width = tonumber( d[ 2 ] )
   end
 
-  if height % 3 ~= 0 then
-    print( "The height must be divisible by 3." )
-    return
+  print()
+  print( "Starting dig out with: ", depth, "depth,", width, "width,", height, "height." )
+  print()
+
+  miner:equip_for_fleet_mode()
+  miner:place_next_turtle( 3 )
+  
+  turtle.turnRight()
+  for i = 1, height - 3 do
+    turtle.force_up()
   end
 
-  local layer = height / 3
+  -- Wait for the signal to start.
+  turtle.wait_for_signal( "bottom", 3 )
 
-  local info_paper_index = turtle.get_info_paper_index()
-  if turtle.has_drop_chest() and turtle.has_fuel_chest() and turtle.has_turtle_chest() and info_paper_index > 0 then
-    print( "everithing is ok, starting!" )
-    for i = 1, layer - 1 do
-      turtle.force_up()
-      turtle.select( turtle.turtle_chest_index )
-      turtle.dig_all( "up" )
-      turtle.wait_place( "up" )
-      turtle.suckUp( 1 )
-      turtle.select( turtle.turtle_chest_index )
-      turtle.digUp()
-      turtle.select( turtle.get_item_index( "turtle" ) )
-      turtle.wait_place( "down" )
-      turtle.select( turtle.enderchest_index )
-      turtle.dropDown( 1 )
-      turtle.select( turtle.fuel_chest_index )
-      turtle.dropDown( 1 )
-      turtle.select( info_paper_index )
-      turtle.dropDown()
-      rs.setAnalogueOutput( "bottom", 3 )
-      os.sleep( 0.5 )
-      peripheral.call( "bottom", "turnOn" )
-      turtle.wait_for_signal( "bottom", 3 )
-      turtle.force_up()
-      turtle.force_up()
+  miner:dig_out( depth, width )
+end
+
+function miner:fleet_dig_out()
+  -- get height with paper
+  local paper_data = miner:get_paper_data()
+  local depth = 32
+  local width = 32
+  if paper_data then
+    local d = miner:mysplit( paper_data )
+    depth = tonumber( d[ 1 ] )
+    width = tonumber( d[ 2 ] )
+  end
+  
+  miner:equip_for_fleet_mode()
+  miner:place_next_turtle( 3 )
+
+  -- Find next free spot
+  turtle.turnRight()
+  local found_spot = false
+
+  while not found_spot do
+    turtle.wait_up()
+    turtle.wait_up()
+    local s, d = turtle.inspectUp()
+
+    if s and string.find( d.name, "turtle" ) then
+      found_spot = true
+      -- if this is the last turtle, give the signal!
+      if miner.is_last then
+        rs.setAnalogueOutput( "top", 3 )
+        os.sleep( 0.1 )
+        rs.setAnalogueOutput( "top", 0 )
+      end
+
+      turtle.wait_down()
+      turtle.wait_down()
+    else
+      turtle.wait_up()
     end
-  else
-    print( "You must provide", layer, "storage for dropping stuff in slot 1, ", layer, "storage for fuel in slot 2, a storage for turtles in slot 3 and a paper renamed with depth and width." )
+  end
+
+  if not miner.is_last then
+    -- Wait for the signal from last turtle.
+    turtle.wait_for_signal( "bottom", 3 )
+
+    -- Give next turtle the signal.
+    turtle.wait_up()
+    turtle.wait_up()
+    rs.setAnalogueOutput( "top", 3 )
+    os.sleep( 0.1 )
+    rs.setAnalogueOutput( "top", 0 )
+    turtle.wait_down()
+    turtle.wait_down()
   end
 
   miner:dig_out( depth, width )
 end
 
 function miner:dig_out( depth, width )
-  turtle.do_not_store_items = {}
   turtle.force_forward()
   turtle.turnRight()
   miner.do_width_remaining = width
   miner.do_width_start = width
   miner.do_row_remaining = depth
+  miner.digout_row_done = 0
   miner:dig_out_loop()
-  fs.delete( "job" )
-end
-
-function miner:dig_out_resume( depth, width, remaining )
-  miner.do_row_remaining = depth
-  miner.do_width_start = width
-  miner.do_width_remaining = remaining
-  if turtle.y > 0 then turtle.force_down() end
-  if turtle.y < 0 then turtle.force_up() end
-  miner:dig_out_loop()
-  fs.delete( "job" )
 end
 
 function miner:dig_out_loop()
@@ -132,54 +276,64 @@ function miner:dig_out_loop()
     end
   end
 
-  return_start()
+  -- Return start.
+  if miner.digout_row_done % 2 == 0 then
+    turtle.turn180()
+    for i = 1, miner.do_width_start - 1 do
+      turtle.wait_forward()
+    end
+  end
+
+  turtle.turnRight()
+  turtle.drop_in_storage()
 end
 
 function miner:dig_out_row()
   while miner.do_width_remaining ~= 0 do
-    turtle.dig_all( "up" )
-    turtle.dig_all( "down" )
+    turtle.select( 1 )
 
-    local s, d = turtle.inspectUp()
-    if s and d.name == "minecraft:lava" and d.state.level == 0 then
-      turtle.force_up()
-      turtle.force_down()
-    end
-    s, d = turtle.inspectDown()
-    if s and d.name == "minecraft:lava" and d.state.level == 0 then
-      turtle.force_down()
-      turtle.force_up()
+    if not turtle.dig_all( "up" ) then
+      local s, d = turtle.inspectUp()
+      if s and ( d.name == "minecraft:lava" or d.name == "minecraft:water" ) and d.state.level == 0 then
+        turtle.force_up()
+        turtle.force_down()
+      end
     end
 
-    if turtle.is_inventory_full() then turtle.drop_in_storage() end
-    if miner.do_width_remaining ~= 1 then turtle.force_forward() end
+    if not turtle.dig_all( "down" ) then
+      s, d = turtle.inspectDown()
+      if s and ( d.name == "minecraft:lava" or d.name == "minecraft:water" ) and d.state.level == 0 then
+        turtle.force_down()
+        turtle.force_up()
+      end
+    end
+
+    if miner.do_width_remaining ~= 1 then
+      turtle.force_forward()
+    end
+
     miner.do_width_remaining = miner.do_width_remaining - 1
   end
 end
 
 function miner:dig_out_change_row()
-  if turtle.x == 0 then
-    turtle.turnRight()
-  else
+  if miner.digout_row_done % 2 == 0 then
     turtle.turnLeft()
+  else
+    turtle.turnRight()
   end
+  
+  turtle.force_forward()
+
+  if  miner.digout_row_done % 2 == 0 then
+    turtle.turnLeft()
+  else
+    turtle.turnRight()
+  end
+
   miner.do_width_remaining = miner.do_width_start
   miner.do_row_remaining = miner.do_row_remaining - 1
-  turtle.force_forward()
-  if turtle.x == 0 then
-    turtle.turnRight()
-  else
-    turtle.turnLeft()
-  end
-end
-
-function return_start()
-  if turtle.x > 0 then
-    turtle.turn( turtle.WEST )
-    while turtle.x ~= 0 do turtle.force_forward() end
-  end
-  turtle.turn( turtle.NORTH )
-  turtle.drop_in_storage()
+  miner.digout_row_done = miner.digout_row_done + 1
 end
 
 -------------------
@@ -192,7 +346,11 @@ function miner:check_ore( direction )
     local success, data = turtle.inspectDir( direction )
     local ore_name = data.name
 
-    for b = 1, #turtle.DO_NOT_MINE do if ore_name == turtle.DO_NOT_MINE[b] then return false end end
+    for b = 1, #turtle.forbidden_block do
+      if ore_name == turtle.forbidden_block[ b ] then
+        return false
+      end
+    end
 
     turtle.force_move( direction )
     miner:vein_mine( direction, ore_name )
@@ -254,9 +412,9 @@ function miner:empty_inventory()
         turtle.digUp()
       end
     else
-      local slot = turtle.getItemDetail( i )
+      local item = turtle.getItemDetail( i )
       
-      if slot and not turtle.is_valid_fuel( slot.name ) then
+      if item and not turtle.is_valid_fuel( item.name ) and item.name ~= "minecraft:bucket" then
         turtle.select( i )
         
         if not turtle.drop() then

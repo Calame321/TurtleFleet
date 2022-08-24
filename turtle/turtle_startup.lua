@@ -18,23 +18,6 @@ update = require( "update" )
 -----------
 local SIDES = redstone.getSides()
 
-----------------------------
--- global helper function --
-----------------------------
-function mysplit( str, sep )
-  if sep == nil then
-    sep = "%s"
-  end
-
-  local t = {}
-
-  for str in string.gmatch( str, "([^" .. sep .. "]+)" ) do
-    table.insert( t, str )
-  end
-
-  return t
-end
-
 --------------
 -- Settings --
 --------------
@@ -119,6 +102,7 @@ function flat_one()
   end
 
   for h = 1, height do
+    turtle.select( 1 )
     turtle.force_down()
     turtle.dig()
   end
@@ -129,14 +113,30 @@ function flat_one()
   replace_for_dirt()
   turtle.force_forward()
   replace_for_dirt()
+
+  if turtle.is_inventory_filled_more_than( 0.5 ) then
+    turtle.drop_in_storage()
+  end
 end
 
 function dig_all_up()
   -- dig up until no more block up or average height reached
   while must_go_up() do
     height = height + 1
-    if turtle.detectUp() then last_height = height end
-    turtle.dig()
+
+    if turtle.detectUp() then
+      last_height = height
+    end
+
+    -- If there is water or lava, remove it!
+    if not turtle.dig_all( "forward" ) then
+      local s, d = turtle.inspect()
+      if s and ( d.name == "minecraft:lava" or d.name == "minecraft:water" ) and d.state.level == 0 then
+        turtle.force_forward()
+        turtle.force_back()
+      end
+    end
+
     turtle.force_up()
   end
 end
@@ -177,7 +177,6 @@ function flaten_chunk()
   for x = 1, 16 do
     for y = 1, 4 do
       flat_one()
-      if turtle.is_inventory_full() then turtle.drop_in_storage() end
       if y < 4 then turtle.force_forward() end
       flat_place_torch()
     end
@@ -221,14 +220,14 @@ function flat_place_torch()
 end
 
 function flaten_chunks( number_of_chunk )
-  turtle.do_not_store_items = {
-    ["minecraft:torch"] = 1,
-    ["minecraft:dirt"] = 2
-  }
+  turtle.do_not_store_items["minecraft:torch"] = 1
+  turtle.do_not_store_items["minecraft:dirt"] = 2
 
   for c = 1, number_of_chunk do
     flaten_chunk()
   end
+
+  turtle.do_not_store_items = turtle.default_do_not_store_items
 end
 
 -------------
@@ -364,33 +363,23 @@ end
 -- Fleet Mode --
 ----------------
 local flatten_length = 32
-local is_last = false
-local last_pos
 
 function check_redstone_option()
   for s = 1, #SIDES do
-    local redstone_option = rs.getAnalogueInput( SIDES[s] )
+    local redstone_option = rs.getAnalogueInput( SIDES[ s ] )
 
     if redstone_option == 3 then
-      local data = turtle.getItemDetail( 3, true )
-      turtle.select( 3 )
-      turtle.dropUp()
-      os.sleep( 0.5 )
-      rs.setAnalogueOutput( "top", 3 )
-      os.sleep( 0.5 )
-      rs.setAnalogueOutput( "top", 0 )
-      local d = mysplit( data.displayName )
-      miner:dig_out( tonumber( d[1] ), tonumber( d[2] ) )
+      rs.setAnalogueOutput( "back", 3 )
+      os.sleep( 0.1 )
+      rs.setAnalogueOutput( "back", 0 )
+      has_flaten_fleet_setup()
+      miner.fleet_dig_out()
     elseif redstone_option == 7 then
       rs.setAnalogueOutput( "back", 7 )
       os.sleep( 0.1 )
-      has_flaten_fleet_setup()
       rs.setAnalogueOutput( "back", 0 )
+      has_flaten_fleet_setup()
       fleet_flatten()
-      return true
-    elseif redstone_option == 6 then
-      update()
-      rs.setAnalogueOutput( "back", 1 )
       return true
     end
   end
@@ -399,65 +388,42 @@ function check_redstone_option()
 end
 
 function has_flaten_fleet_setup()
-  local s, d = turtle.inspectUp()
-  local has_chest_up = s and string.find( d.name, "chest" )
-  s, d = turtle.inspectDown()
-  local has_chest_down = s and string.find( d.name, "chest" )
-
-  if has_chest_up and has_chest_down then
-    for i = 1, 4 do
-      s, d = turtle.inspect()
-      local has_chest_front = s and string.find( d.name, "chest" )
-
-      if has_chest_front then
-        turtle.set_position( 0, 0, 0, turtle.NORTH )
-        return true
-      end
-
-      turtle.turnLeft()
-    end
-
-    os.reboot()
+  if turtle.get_info_paper_index() == -1 then
+    print( "I don't have a piece of paper." )
+    print( "I will use the default values." )
   end
 
+  for i = 1, 4 do
+    s, d = turtle.inspect()
+    turtle.select( turtle.get_empty_slot_index() )
+    turtle.suck( 1 )
+
+    local item_detail = turtle.getItemDetail()
+    turtle.drop()
+
+    if item_detail and string.find( item_detail.name, "turtle" ) then
+      return true
+    end
+
+    turtle.turnLeft()
+  end
+  
   return false
 end
 
 function fleet_flatten()
-  turtle.suckUp()
+  turtle.do_not_store_items["minecraft:torch"] = 1
+  turtle.do_not_store_items["minecraft:dirt"] = 2
 
-  if not turtle.suck() then is_last = true end
+  miner.equip_for_fleet_mode()
+  local paper_data =  miner.place_next_turtle( 7 )
 
-  turtle.force_back()
-
-  if is_last then
-    local paper_index = turtle.get_item_index( "minecraft:paper" )
-    if paper_index > 0 then
-      local paper_detail = turtle.getItemDetail( paper_index, true )
-      flatten_length = tonumber( paper_detail.displayName )
-    end
-  else
-    place_mining_turtle()
+  if paper_data then
+    flatten_length = tonumber( paper_data )
   end
 
-  turtle.turnLeft()
-  goto_next_free_spot()
+  -- Find next free spot
   turtle.turn180()
-
-  if not is_last then turtle.wait_for_signal( "back", 10 ) end
-
-  rs.setAnalogueOutput( "front", 10 )
-  os.sleep( 0.05 )
-  rs.setAnalogueOutput( "front", 0 )
-  turtle.turnRight()
-
-  for y = 1, flatten_length / 4 do
-    flat_one()
-    turtle.force_forward()
-  end
-end
-
-function goto_next_free_spot()
   local found_spot = false
 
   while not found_spot do
@@ -470,27 +436,112 @@ function goto_next_free_spot()
       found_spot = true
     end
   end
-end
+  turtle.turnLeft()
 
-function place_mining_turtle()
-  turtle.select( turtle.get_item_index( "computercraft:turtle" ) )
-  turtle.place()
-  rs.setAnalogueOutput( "front", 7 )
-
-  local paper_index = turtle.get_item_index( "minecraft:paper" )
-  if paper_index > 0 then
-    local paper_detail = turtle.getItemDetail( paper_index, true )
-    flatten_length = tonumber( paper_detail.displayName )
-    turtle.select( paper_index )
-    turtle.drop()
-    turtle.select( 1 )
+  -- Wait for the signal to start digging if it's not the last turtle.
+  if not miner.is_last then
+    turtle.wait_for_signal( "right", 10 )
   end
 
-  os.sleep( 0.05 )
-  peripheral.call( "front", "turnOn" )
-  turtle.wait_for_signal( "front", 7 )
+  -- Relay the signal to the turtle in front.
+  rs.setAnalogueOutput( "left", 10 )
+  os.sleep( 0.1 )
+  rs.setAnalogueOutput( "left", 0 )
+
+  -- Start flatenning!
+  turtle.select( 1 )
+  turtle.force_forward()
+
+  for y = 1, flatten_length / 4 do
+    flat_one()
+
+    -- if done, stop.
+    if y ~= math.floor( flatten_length / 4 ) then
+      turtle.force_forward()
+    end
+  end
+
+  turtle.drop_in_storage()
+  turtle.turnLeft()
+
+  -- If it's not the last turtle, wait for a signal.
+  if not miner.is_last then
+    print( "waiting for signal to transfer.")
+    local rs_strength = turtle.wait_for_any_rs_signal( "back" )
+
+    while rs_strength == 1 do
+      turtle.drop_in_storage()
+      
+      -- Signal to the turtle that the storage is done.
+      print( "Sending signal done storing." )
+      rs.setAnalogueOutput( "back", 1 )
+      os.sleep( 0.1 )
+      rs.setAnalogueOutput( "back", 0 )
+      
+      rs_strength = turtle.wait_for_any_rs_signal( "back" )
+    end
+  end
+
+  -- Wait for next turtle.
+  local s, d = turtle.inspect()
+  while not s or ( s and not string.find( d.name, "computercraft:turtle" ) ) do
+    print( "waiting for next turtle. If I'm the last you can reboot me." )
+    os.sleep( 5 )
+    s, d = turtle.inspect()
+  end
+  print( "Other turtle is there!" )
+
+  os.sleep( 2 )
+
+  -- Drop in next turtle
+  print( "Transfering my storage!" )
+  for k, v in pairs( turtle.storage ) do
+    if v.type == turtle.DROP_STORAGE then
+      -- place the storage up.
+      turtle.dig_all( "up" )
+      turtle.select( k )
+      turtle.wait_place( "up" )
+      local empty_index = turtle.get_empty_slot_index()
+
+      -- For all item in the storage.
+      while turtle.suckUp() do
+        -- if next turtle is full, sent redstone signal of strength 1.
+        local has_dropped = turtle.drop()
+        if not has_dropped then
+          -- Tell the turtle to drop it's storage.
+          rs.setAnalogueOutput( "front", 1 )
+          os.sleep( 0.1 )
+          rs.setAnalogueOutput( "front", 0 )
+
+          -- Wait for the turtle to store the items.
+          print( "Waiting fot the turtle in front to store its items.")
+          turtle.wait_for_signal( "front", 1 )
+          turtle.drop()
+        end
+      end
+
+      -- Pick up the storage
+      turtle.select( k )
+      turtle.digUp()
+    end
+  end
+
+  -- Tell the turtle to drop it's storage.
+  rs.setAnalogueOutput( "front", 1 )
+  os.sleep( 0.1 )
   rs.setAnalogueOutput( "front", 0 )
-  os.sleep( 0.10 )
+
+  -- Wait for the turtle to store the items.
+  turtle.wait_for_signal( "front", 1 )
+
+  -- when done, emit redstone strength 2
+  print( "Transfering Done!" )
+  rs.setAnalogueOutput( "front", 2 )
+  os.sleep( 0.1 )
+  rs.setAnalogueOutput( "front", 0 )
+
+  print( "Done!" )
+  os.sleep( 15 )
 end
 
 ----------
@@ -502,6 +553,7 @@ local current_menu = {}
 function display_menu( menu )
   current_menu = menu
   term.clear()
+  show_fuel_level()
   term.setCursorPos( 1, 1 )
   print( menu.path )
   print( menu.prompt )
@@ -516,6 +568,21 @@ function display_menu( menu )
   end
 end
 
+-- Display the fuel level in the lower right corner of the screen.
+function show_fuel_level()
+  if turtle.getFuelLevel() == "unlimited" then
+    local current_fuel = "Fuel: "
+    local fg = "000000f0f0"
+    local bg = "ffffff0f0f"
+    term.setCursorPos( w - #current_fuel, h - 1 )
+    term.blit( current_fuel, fg, bg )
+    return
+  end
+
+  local current_fuel = "Fuel: " .. turtle.getFuelLevel() .. "/" .. turtle.getFuelLimit()
+  term.setCursorPos( w - #current_fuel, h )
+  write( current_fuel )
+end
 
 function show_tree_farm_page()
   term.clear()
@@ -551,18 +618,35 @@ function show_digout_page()
   os.sleep( 0.2 )
   input = read()
   local width = tonumber( input )
+  miner:dig_out_start( depth, width )
 
-  --print( "Height = ? (special instruction...)")
-  --os.sleep( 0.2 )
-  --input = read()
-  
-  --if input == "" then
-    miner:dig_out_start( depth, width )
-  --else
-  --  local height = tonumber( input )
-  --  miner:dig_out_start( depth, width, height )
-  --end
+  show_menu()
+end
 
+function show_fleet_digout_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Fleet Dig out -" )
+  print( "This will dig a cubic area using multiple turtles (The height given divided by 3).")
+  print( "This turtle should be placed on a chest to the left." )
+  print( "The depth and width is given with a renamed piece of paper. ex: '32 16'. (else default 32 x 32 will be used)")
+  print( "Press enter for the chests placement.")
+  os.sleep( 0.2 )
+  read()
+  print( "Chests (not needed if not in config):" )
+  print( "- Up: Fuel" )
+  print( "- Down: Drop Storage" )
+  print( "- Front: Turtle Storage" )
+  print( "- Right: Filtered Storage" )
+  print( "- Left: Buckets (if there is going to be lava)" )
+  print()
+  os.sleep( 0.2 )
+  print( "Height = ? (multiple of 3)")
+  os.sleep( 0.2 )
+  input = read()
+  local height = tonumber( input )
+
+  miner:fleet_dig_out_start( height )
   show_menu()
 end
 
@@ -589,11 +673,37 @@ function show_flatten_chunk_page()
     initial_aditionnal_up = extra_height
   end
 
+  flaten_chunks( nb_chunk )
+  show_menu()
+end
+
+function show_fleet_flatten_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Fleet Flatten Chunk -" )
+  print( "This will flatten an area the width of the number of turtle used." )
+  print( "This turtle should be placed on a chest to the left." )
+  print( "The length is given with a renamed piece of paper. (by step of 4) ex: '64'.")
+  print( "Press enter for the chests placement.")
+  os.sleep( 0.2 )
+  read()
+  print( "Chests (not needed if not in config):" )
+  print( "- Up: Fuel" )
+  print( "- Down: Drop Storage" )
+  print( "- Front: Turtle Storage" )
+  print( "- Right: Filtered Storage" )
+  print( "- Left: Buckets (if there is going to be lava)" )
+  print()
+  print( "Give a paper renamed with the length then press enter to start.")
+  os.sleep( 0.2 )
+  read()
+
   if has_flaten_fleet_setup() then
     fleet_flatten()
   else
-    flaten_chunks( nb_chunk )
+    print( "The Fleet flatten setup is invalid." )
   end
+
   show_menu()
 end
 
@@ -689,7 +799,7 @@ function display_current_storage()
   local line_y = 2
   for i = 1, 16 do
     if turtle.storage[ i ] then
-      local s = i .. ": " .. turtle.storage[ i ].type
+      local s = i .. ": " .. turtle.storage_names[ turtle.storage[ i ].type ]
       term.setCursorPos( w - #s, line_y )
       write( s )
       line_y = line_y + 1
@@ -699,6 +809,14 @@ end
 
 function display_current_valid_fuel()
   term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Refuel All - " )
+  if turtle.refuel_all then
+    print( "Full stack." )
+  else
+    print( "2 fuel item." )
+  end
+
   local current_title = "- Current Valid Fuel -"
   term.setCursorPos( w - #current_title, 1 )
   print( current_title )
@@ -828,6 +946,20 @@ function show_set_valid_fuel_page()
   show_menu()
 end
 
+function show_set_refuel_all_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Refuel All -" )
+  print( "Do you want your turtle to eat a full stack of fuel when it needs it?" )
+  print()
+  print( "y, n" )
+  os.sleep( 0.2 )
+  local input = read()
+
+  turtle.set_refuel_all( input == "y" )
+  show_menu()
+end
+
 function show_set_forbidden_block_page()
   term.clear()
   term.setCursorPos( 1, 1 )
@@ -893,7 +1025,8 @@ local all_menu = {
       { key = "one", name = "1 - Stations", menu = "menu_stations" },
       { key = "two", name = "2 - Miner", menu = "menu_miner" }, 
       { key = "three", name = "3 - Builder", menu = "menu_builder" },
-      { key = "four", name = "4 - Configurations", menu = "menu_config" }
+      { key = "four", name = "4 - Fleet Mode", menu = "menu_fleet" },
+      { key = "five", name = "5 - Configurations", menu = "menu_config" }
     }
   },
   menu_stations = {
@@ -938,6 +1071,15 @@ local all_menu = {
       { key = "three", name = "3 - Place Wall", action = builder.place_wall }
     }
   },
+  menu_fleet = {
+    path = "Menu -> Fleet",
+    prompt = "Choose a job:",
+    parent = "main_menu",
+    options = {
+      { key = "one", name = "1 - Fleet Dig Out", action = show_fleet_digout_page },
+      { key = "two", name = "2 - Fleet Flatten", action = show_fleet_flatten_page }
+    }
+  },
   menu_config = {
     path = "Menu -> Configurations",
     prompt = "Choose an option:",
@@ -947,7 +1089,8 @@ local all_menu = {
       { key = "two", name = "2 - Update", action = update.update },
       { key = "three", name = "3 - Storage", action = show_set_storage_page },
       { key = "four", name = "4 - Valid Fuel", action = show_set_valid_fuel_page },
-      { key = "five", name = "5 - Forbidden Block", action = show_set_forbidden_block_page }
+      { key = "five", name = "5 - Reuel All", action = show_set_refuel_all_page },
+      { key = "six", name = "6 - Forbidden Block", action = show_set_forbidden_block_page }
     }
   }
 }
@@ -991,16 +1134,18 @@ function on_key_pressed( key_name )
       -- sub menu
       if current_menu.options[ i ].menu ~= nil then
         display_menu( all_menu[ current_menu.options[ i ].menu ] )
-        os.sleep(0.1)
+        os.sleep( 0.1 )
         return
       -- action
       elseif current_menu.options[ i ].action ~= nil then
         current_menu.options[ i ].action()
-        os.sleep(0.1)
+        os.sleep( 0.1 )
         return
       end
     end
   end
 end
+
+check_redstone_option()
 
 show_menu()

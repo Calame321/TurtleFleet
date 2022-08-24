@@ -9,12 +9,26 @@ turtle.is_version_1_12 = pcall( settings.save ) ~= nil
 turtle.forbidden_block = {}
 turtle.valid_fuel = {}
 turtle.storage = {}
-turtle.do_not_store_items = {}
+turtle.refuel_all = false
+turtle.is_dropping_in_storage = false
 
 turtle.FUEL_STORAGE = 1
 turtle.DROP_STORAGE = 2
 turtle.TURTLE_STORAGE = 3
 turtle.FILTERED_DROP_STORAGE = 4
+
+turtle.default_do_not_store_items = {
+  [ "minecraft:bucket" ] = 1
+}
+
+turtle.do_not_store_items = turtle.default_do_not_store_items
+
+turtle.storage_names = {
+  [ turtle.FUEL_STORAGE ] = "Fuel storage",
+  [ turtle.DROP_STORAGE ] = "Drop storage",
+  [ turtle.TURTLE_STORAGE ] = "Turtle storage",
+  [ turtle.FILTERED_DROP_STORAGE ] = "Filtered storage",
+}
 
 turtle.NORTH = 0
 turtle.EAST = 1
@@ -78,6 +92,7 @@ function turtle.load_settings()
   turtle.load_forbidden_block()
   turtle.load_valid_fuel()
   turtle.load_storage()
+  turtle.load_refuel_all()
 end
 
 function turtle.load_forbidden_block()
@@ -98,6 +113,10 @@ function turtle.load_valid_fuel()
   else
     turtle.set_valid_fuel( { "minecraft:charcoal", "minecraft:coal" } )
   end
+end
+
+function turtle.load_refuel_all()
+  turtle.refuel_all = settings.get( "refuel_all" ) or false
 end
 
 -- Load the storage settings
@@ -124,6 +143,12 @@ end
 function turtle.set_storage( index, new_storage )
   turtle.storage[ index ] = new_storage
   settings.set( "storage", turtle.storage )
+  settings.save()
+end
+
+function turtle.set_refuel_all( value )
+  turtle.refuel_all = value
+  settings.set( "refuel_all", value )
   settings.save()
 end
 
@@ -184,8 +209,15 @@ function turtle.forward()
   return true
 end
 
-function turtle.wait_forward() while not turtle.forward() do os.sleep( 0.5 ) end end
-function turtle.force_forward( block_to_break ) turtle.force_move( "forward", block_to_break ) end
+function turtle.wait_forward()
+  while not turtle.forward() do
+    os.sleep( 0.5 )
+  end
+end
+
+function turtle.force_forward( block_to_break )
+  turtle.force_move( "forward", block_to_break )
+end
 
 -- Down --
 function turtle.down()
@@ -195,8 +227,14 @@ function turtle.down()
   return true
 end
 
-function turtle.wait_down() while not turtle.down() do os.sleep( 0.5 ) end end
-function turtle.force_down( block_to_break ) turtle.force_move( "down", block_to_break ) end
+function turtle.wait_down()
+  while not turtle.down() do os.sleep( 0.5 )
+  end
+end
+
+function turtle.force_down( block_to_break )
+  turtle.force_move( "down", block_to_break )
+end
 
 -- Back --
 function turtle.back()
@@ -207,8 +245,15 @@ function turtle.back()
   return true
 end
 
-function turtle.wait_back() while not turtle.back() do os.sleep( 0.5 ) end end
-function turtle.force_back( block_to_break ) turtle.force_move( "back", block_to_break ) end
+function turtle.wait_back()
+  while not turtle.back() do
+    os.sleep( 0.5 )
+  end
+end
+
+function turtle.force_back( block_to_break )
+  turtle.force_move( "back", block_to_break )
+end
 
 -- Up --
 function turtle.up()
@@ -218,8 +263,15 @@ function turtle.up()
   return true
 end
 
-function turtle.wait_up() while not turtle.up() do os.sleep( 0.5 ) end end
-function turtle.force_up( block_to_break ) turtle.force_move( "up", block_to_break ) end
+function turtle.wait_up()
+  while not turtle.up() do
+    os.sleep( 0.5 )
+  end
+end
+
+function turtle.force_up( block_to_break )
+  turtle.force_move( "up", block_to_break )
+end
 
 -- Move Direction --
 function turtle.moveDir( direction )
@@ -236,8 +288,13 @@ function turtle.moveDir( direction )
 end
 
 -- Reverse --
-function turtle.reverse( direction ) return turtle.moveDir( turtle.reverseDir( direction ) ) end
-function turtle.force_reverse( direction ) turtle.force_move( turtle.reverseDir( direction ) ) end
+function turtle.reverse( direction )
+  return turtle.moveDir( turtle.reverseDir( direction ) )
+end
+
+function turtle.force_reverse( direction )
+  turtle.force_move( turtle.reverseDir( direction ) )
+end
 
 -- Move --
 function turtle.wait_move( direction )
@@ -248,12 +305,15 @@ function turtle.wait_move( direction )
 end
 
 function turtle.move( direction, block_to_break )
+  turtle.check_lava_source( direction )
   turtle.try_refuel()
+
   local moved = turtle.moveDir( direction )
   if not moved and block_to_break and turtle.is_block_name( direction, block_to_break ) then
     turtle.digDir( direction )
     return turtle.moveDir( direction )
   end
+
   return moved
 end
 
@@ -261,7 +321,7 @@ function turtle.force_move( direction, block_to_break )
   if direction ~= "back" then
     for k, v in pairs( turtle.forbidden_block ) do
       if turtle.is_block_name( direction, v ) then
-        print( "I am scared of this " .. v .. ". Can you remove it please?" )
+        print( "I am scared of this", v, ". Can you remove it please?" )
 
         while turtle.is_block_name( direction, v ) do
           os.sleep( 5 )
@@ -270,7 +330,9 @@ function turtle.force_move( direction, block_to_break )
     end
   end
 
-  while (not turtle.moveDir( direction )) do
+  turtle.check_lava_source( direction )
+
+  while not turtle.moveDir( direction ) do
     local s, d = turtle.inspectDir( direction )
     if s and string.find( d.name, "turtle" ) then
       os.sleep( 0.5 )
@@ -350,19 +412,44 @@ function turtle.digBack()
   turtle.turn180()
 end
 
-function turtle.dig_all( direction ) while turtle.digDir( direction ) do sleep( 0.05 ) end end
+-- Mine until it can't mine again! (falling block safe)
+function turtle.dig_all( direction )
+  local has_dug = turtle.digDir( direction )
+
+  if not has_dug then
+    return false
+  end
+
+  while has_dug do
+    sleep( 0.05 )
+    has_dug = turtle.digDir( direction )
+  end
+
+  return true
+end
 
 function turtle.digDir( direction )
+  local succes, err
+
   if direction == "forward" then
-    return turtle.dig()
+    succes, err = turtle.dig()
   elseif direction == "up" then
-    return turtle.digUp()
+    succes, err = turtle.digUp()
   elseif direction == "down" then
-    return turtle.digDown()
+    succes, err = turtle.digDown()
   elseif direction == "back" then
-    return turtle.digBack()
+    succes, err = turtle.digBack()
+  else
+    error( "turtle.digDir invalid direction" )
   end
-  error( "turtle.digDir invalid direction" )
+
+  turtle.check_lava_source( direction )
+
+  if turtle.is_inventory_full() then
+    turtle.drop_in_storage()
+  end
+
+  return succes, err
 end
 
 -- Detect --
@@ -641,6 +728,29 @@ function turtle.getInventory()
   return inv
 end
 
+function turtle.get_empty_slot_index()
+  for i = 1, 16 do
+    if turtle.getItemCount( i ) == 0 then
+      return i
+    end
+  end
+  return -1
+end
+
+-- Select a slot, if there is an item, move it to another slot witch is not a storage.
+function turtle.empty_select( index )
+  turtle.select( index )
+
+  if turtle.getItemCount() > 0 then
+    for i = 1, 16 do
+      if i ~= index and not turtle.is_storage_slot( i ) and turtle.getItemCount( i ) == 0 then
+        turtle.transferTo( i )
+        return
+      end
+    end
+  end
+end
+
 function turtle.get_item_index( name )
   for i = 1, 16 do
     local item = turtle.getItemDetail( i )
@@ -654,9 +764,23 @@ function turtle.has_items()
   return false
 end
 
+-- If all the slots are occupied.
 function turtle.is_inventory_full()
   for i = 1, 16 do if turtle.getItemCount( i ) == 0 then return false end end
   return true
+end
+
+-- Return if the inventory is filled more than the percentage.
+function turtle.is_inventory_filled_more_than( percent_limit )
+  local occupied_slot = 0
+  for i = 1, 16 do
+    if turtle.getItemCount( i ) > 0 then
+      occupied_slot = occupied_slot + 1
+    end
+  end
+
+  local current_percent = occupied_slot / 16
+  return current_percent > percent_limit
 end
 
 function turtle.get_info_paper_index()
@@ -720,9 +844,12 @@ end
 
 -- Drop the items in the configured storage.
 function turtle.drop_in_storage()
+  if turtle.is_dropping_in_storage then return end
+
   print( "Dropping in storage!" )
   if not turtle.has_drop_chest() then return false end
-
+  
+  turtle.is_dropping_in_storage = true
   local is_empty = false
   local to_keep = {}
   for k, v in pairs( turtle.do_not_store_items ) do
@@ -814,6 +941,7 @@ function turtle.drop_in_storage()
   end
 
   print( "Done dropping!" )
+  turtle.is_dropping_in_storage = false
 end
 
 -- Gets if the item can be stored away.
@@ -894,6 +1022,11 @@ function turtle.is_valid_fuel( item_name )
 end
 
 function turtle.try_refuel()
+  -- Do nothing if the turtle are set to not consume fuel in the mod config.
+  if turtle.getFuelLimit() == "unlimited" then
+    return
+  end
+
   if turtle.getFuelLevel() < 80 then
     local fuel_index = turtle.get_valid_fuel_index()
 
@@ -907,7 +1040,7 @@ function turtle.try_refuel()
       print( "Valid fluel:" )
 
       for f = 1, #turtle.valid_fuel do
-        print( " - " .. turtle.valid_fuel[f] )
+        print( " - " .. turtle.valid_fuel[ f ] )
       end
 
       while fuel_index == -1 do
@@ -918,7 +1051,12 @@ function turtle.try_refuel()
 
     print( "Eating Some Fuel." )
     turtle.select( fuel_index )
-    turtle.refuel( 2 )
+
+    if turtle.refuel_all then
+      turtle.refuel()
+    else
+      turtle.refuel( 2 )
+    end
   end
 end
 
@@ -959,7 +1097,39 @@ function turtle.wait_for_signal( direction, strength )
 
   while not valid_signal do
     os.pullEvent( "redstone" )
+    valid_signal = rs.getAnalogueInput( direction ) == strength
+  end
+end
 
-    if rs.getAnalogueInput( direction, strength ) then valid_signal = true end
+function turtle.wait_for_any_rs_signal( direction )
+  while true do
+    os.pullEvent( "redstone" )
+
+    local redstone_strength = rs.getAnalogueInput( direction )
+    if redstone_strength > 0 then
+      return redstone_strength
+    end
+  end
+end
+
+-----------
+-- Extra --
+-----------
+function turtle.check_lava_source( direction )
+  -- Dont lose time checking if it's back.
+  if direction == "back" then
+    return
+  end
+
+  -- Only check if it has a bucket.
+  local bucket_index = turtle.get_item_index( "minecraft:bucket" ) 
+  if bucket_index ~= -1 then
+    local s, d = turtle.inspectDir( direction )
+    if s and d.name == "minecraft:lava" and d.state.level == 0 then
+      turtle.select( bucket_index )
+      turtle.placeDir( direction )
+      turtle.refuel()
+      turtle.select( 1 )
+    end
   end
 end

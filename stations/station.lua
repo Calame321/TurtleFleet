@@ -16,7 +16,7 @@ station = {
   max_worker = 1,
   -- if the station has been built and is ready to operate.
   is_set_up = false,
-  -- A list of erssources needed to build the station.
+  -- A list of ressources needed to build the station.
   res_to_build = {},
 }
 
