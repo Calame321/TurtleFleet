@@ -267,6 +267,7 @@ while ( true ) do
     if disk_was_clicked then
       show_installing()
       install_disk()
+      break
     end
   end
 end

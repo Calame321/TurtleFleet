@@ -1058,7 +1058,7 @@ local all_menu = {
       { key = "three", name = "3 - Vein Mine", action = show_vein_mine_page },
       { key = "four", name = "4 - Mine Branch", action = miner.mine_branch },
       { key = "five", name = "5 - Branch Mining", action = show_branch_mining },
-      { key = "seven", name = "6 - Tunnel", action = dig_tunnel }
+      { key = "six", name = "6 - Tunnel", action = miner.dig_tunnel }
     }
   },
   menu_builder = {

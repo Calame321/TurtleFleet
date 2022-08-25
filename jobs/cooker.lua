@@ -151,6 +151,8 @@ end
 function cooker:start_cooking()
   term.clear()
   term.setCursorPos( 1, 1 )
+  print( "- Start Cooking! -")
+  turtle.up()
 
   if not has_station() then
     cooker:place_station()
@@ -198,16 +200,8 @@ function cooker:place_station()
   print( "Then press enter.")
   read()
 
-  print( "Sould I place the station the same direction I'm facing? (default = 1)" )
-  print( "1 = no, turn arount" )
-  print( "2 = yes" )
-  local input = read()
-
-  if input ~= "2" then
-    turtle.turn180()
-  end
-
   -- Place chests
+  turtle.turn180()
   turtle.select( 1 )
   turtle.turnRight()
   turtle.wait_place( "forward" )
