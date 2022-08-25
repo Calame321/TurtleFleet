@@ -42,3 +42,6 @@ function run()
     term.setBackgroundColor( colors.black )
   end
 end
+
+print( "This will be used to control or get informations on the turtle fleet later XD" )
+print( "I still need to work on it." )
