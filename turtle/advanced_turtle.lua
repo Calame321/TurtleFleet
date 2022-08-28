@@ -14,8 +14,7 @@ turtle.is_dropping_in_storage = false
 
 turtle.FUEL_STORAGE = 1
 turtle.DROP_STORAGE = 2
-turtle.TURTLE_STORAGE = 3
-turtle.FILTERED_DROP_STORAGE = 4
+turtle.FILTERED_DROP_STORAGE = 3
 
 turtle.default_do_not_store_items = {
   [ "minecraft:bucket" ] = 1
@@ -26,7 +25,6 @@ turtle.do_not_store_items = turtle.default_do_not_store_items
 turtle.storage_names = {
   [ turtle.FUEL_STORAGE ] = "Fuel storage",
   [ turtle.DROP_STORAGE ] = "Drop storage",
-  [ turtle.TURTLE_STORAGE ] = "Turtle storage",
   [ turtle.FILTERED_DROP_STORAGE ] = "Filtered storage",
 }
 
@@ -823,10 +821,6 @@ end
 
 function turtle.has_fuel_chest()
   return turtle.has_storage( turtle.FUEL_STORAGE )
-end
-
-function turtle.has_turtle_chest()
-  return turtle.has_storage( turtle.TURTLE_STORAGE )
 end
 
 function turtle.has_drop_chest()

@@ -10,7 +10,7 @@ local yes_x2 = panel_x2 - 1
 local btn_y = panel_y2
 local btn_y2 = panel_y2 + 2
 local no_x = panel_x + 1
-local no_x2 = panel_x + 8
+local no_x2 = panel_x + 9
 
 local was_installed = false
 local theme = {}
@@ -73,17 +73,17 @@ function show_prompt()
     theme = {
       bg = colors.white,
       text_bg = colors.white,
-      text_fg = colors.blue,
-      title_gb = colors.lightBlue,
-      title_fg = colors.black,
-      window_border = colors.blue,
-      window_corners = colors.cyan,
-      window_text_fg = colors.green,
-      here_btn_bg = colors.green,
-      here_btn_fg = colors.white,
-      disk_btn_bg = colors.lightBlue,
-      disk_btn_fg = colors.blue,
-      text_error = colors.red
+      text_fg = colors.gray,
+      title_bg = colors.gray,
+      title_fg = colors.white,
+      window_border = colors.lightGray,
+      window_corners = colors.lime,
+      window_text_fg = colors.brown,
+      here_btn_bg = colors.brown,
+      here_btn_fg = colors.pink,
+      disk_btn_bg = colors.brown,
+      disk_btn_fg = colors.pink,
+      text_error = colors.white
     }
   end
 

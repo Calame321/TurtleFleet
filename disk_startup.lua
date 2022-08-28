@@ -1,4 +1,23 @@
 -- Install the Turtle Fleet Software --
+if turtle then
+  local s, d = turtle.inspect()
+  if s and d.name == "disk" then
+    print( "Should I copy my settings onto the disk?" )
+    print( "y, n")
+    local input = read()
+    if input == "y" then
+      fs.copy( ".settings", "/disk/.settings" )
+      print( "Done !")
+      read()
+      os.reboot()
+    else
+      print( "Ok, Don't place me in front of the disk drive then..." )
+      read()
+      os.reboot()
+    end
+  end
+end
+
 local files = fs.list( "/disk" )
 
 for k, v in pairs( files ) do
@@ -20,7 +39,10 @@ turtle.select( 1 )
 if turtle.suck( 1 ) or turtle.inspectUp() then
   -- make sure it's a turtle.
   local item = turtle.getItemDetail()
-  if not string.find( item.name, "turtle" ) then return end
+  if not string.find( item.name, "turtle" ) then
+    turtle.drop()
+    return
+  end
 
   turtle.select( 2 )
   turtle.digUp()

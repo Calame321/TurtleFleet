@@ -11,7 +11,6 @@ job = dofile( "turtlefleet/jobs/job.lua" )
 builder = dofile( "turtlefleet/jobs/builder.lua" )
 cooker = dofile( "turtlefleet/jobs/cooker.lua" )
 miner = dofile( "turtlefleet/jobs/miner.lua" )
-update = require( "update" )
 
 -----------
 -- Const --
@@ -607,7 +606,7 @@ function show_digout_page()
   term.setCursorPos( 1, 1 )
   print( "- Dig out -" )
   print( "This will dig a 3 blocks high area the size you specify.")
-  print( "It's recomended to configure some storages before if you can." )
+  print( "It's recomended to set some storages before if you can." )
   print()
   print( "Depth = ?")
   os.sleep( 0.2 )
@@ -633,7 +632,7 @@ function show_fleet_digout_page()
   print( "Press enter for the chests placement.")
   os.sleep( 0.2 )
   read()
-  print( "Chests (not needed if not in config):" )
+  print( "Chests (not needed if not in settings):" )
   print( "- Up: Fuel" )
   print( "- Down: Drop Storage" )
   print( "- Front: Turtle Storage" )
@@ -655,7 +654,7 @@ function show_flatten_chunk_page()
   term.setCursorPos( 1, 1 )
   print( "- Flatten Chunk (16 x 16) -" )
   print( "This will flatten a 16 by 16 area. (from the back left corner). The extra height is to prevent floating blocks." )
-  print( "It's recomended to configure some storages before if you can." )
+  print( "It's recomended to set some storages before if you can." )
   print()
   print( "Number of chunk = ? (default = 1)")
   os.sleep( 0.2 )
@@ -687,7 +686,7 @@ function show_fleet_flatten_page()
   print( "Press enter for the chests placement.")
   os.sleep( 0.2 )
   read()
-  print( "Chests (not needed if not in config):" )
+  print( "Chests (not needed if not in settings):" )
   print( "- Up: Fuel" )
   print( "- Down: Drop Storage" )
   print( "- Front: Turtle Storage" )
@@ -741,13 +740,16 @@ function show_branch_mining()
   term.setCursorPos( 1, 1 )
   print( "- Branch Mining -" )
   print( "For this one, the turtle need to be facing a chest. It will mine the number of branches of specified of the specified length." )
-  print( "*It can use the configured storage." )
   print()
 
-  print( "The turtle should turn left or right? (default = left)")
+  print( "The turtle should turn:" )
+  print( "1 = left (default)" )
+  print( "2 = right")
   os.sleep( 0.2 )
-  local branch_side = read()
-  if branch_side == "" then
+  local input = read()
+  local branch_side = "left"
+
+  if input == "2" then
     branch_side = "left"
   end
 
@@ -869,8 +871,7 @@ function show_set_storage_page()
     print( "What type is it?" )
     print( "1: The turtle will pick fuel from it." )
     print( "2: It will drop it's inventory in the storage when full." )
-    print( "3: Turtle, used for advanced features, soon XD." )
-    print( "4: Filtered, can be used to drop item in a trash or a special storage." )
+    print( "3: Filtered, can be used to drop item in a trash or a special storage." )
     print()
     print( "Type:" )
     os.sleep( 0.2 )
@@ -996,6 +997,10 @@ function show_set_forbidden_block_page()
   show_menu()
 end
 
+function get_installer()
+  shell.run( "pastebin run TBpm1C8V" )
+end
+
 function old_show_menu()
   -- Go to position
   if args[1] == "goto" then
@@ -1008,9 +1013,6 @@ function old_show_menu()
   -- start mining
   elseif args[1] == "mine" then
     miner:mine()
-  -- update the program
-  elseif args[1] == "update" then
-    update.master()
   else
     print( "What?... bye." )
   end
@@ -1056,9 +1058,8 @@ local all_menu = {
       { key = "one", name = "1 - Dig Out", action = show_digout_page },
       { key = "two", name = "2 - Flatten chunk", action = show_flatten_chunk_page },
       { key = "three", name = "3 - Vein Mine", action = show_vein_mine_page },
-      { key = "four", name = "4 - Mine Branch", action = miner.mine_branch },
-      { key = "five", name = "5 - Branch Mining", action = show_branch_mining },
-      { key = "six", name = "6 - Tunnel", action = miner.dig_tunnel }
+      { key = "four", name = "4 - Branch Mining", action = show_branch_mining },
+      { key = "five", name = "5 - Tunnel", action = miner.dig_tunnel }
     }
   },
   menu_builder = {
@@ -1081,12 +1082,12 @@ local all_menu = {
     }
   },
   menu_config = {
-    path = "Menu -> Configurations",
+    path = "Menu -> Settings",
     prompt = "Choose an option:",
     parent = "main_menu",
     options = {
-      { key = "one", name = "1 - See Current Config", action = show_current_config_page },
-      { key = "two", name = "2 - Update", action = update.update },
+      { key = "one", name = "1 - See Current Settings", action = show_current_config_page },
+      { key = "two", name = "2 - Installer", action = get_installer },
       { key = "three", name = "3 - Storage", action = show_set_storage_page },
       { key = "four", name = "4 - Valid Fuel", action = show_set_valid_fuel_page },
       { key = "five", name = "5 - Reuel All", action = show_set_refuel_all_page },

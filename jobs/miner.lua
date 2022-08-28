@@ -435,17 +435,17 @@ function miner:branch_mining( side )
     for i = 1, (branch_index * 4) do turtle.force_forward() end
 
     if side == "left" then
-      turtle.turnLeft()
-    else
       turtle.turnRight()
+    else
+      turtle.turnLeft()
     end
 
     miner:mine_branch()
 
     if side == "left" then
-      turtle.turnLeft()
-    else
       turtle.turnRight()
+    else
+      turtle.turnLeft()
     end
 
     for i = 1, (branch_index * 4) do turtle.force_forward() end
