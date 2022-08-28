@@ -1,11 +1,12 @@
 -- Install the Turtle Fleet Software --
 if turtle then
   local s, d = turtle.inspect()
-  if s and d.name == "disk" then
+  if s and d.name == "computercraft:disk_drive" then
     print( "Should I copy my settings onto the disk?" )
     print( "y, n")
     local input = read()
     if input == "y" then
+      fs.delete( "/disk/.settings" )
       fs.copy( ".settings", "/disk/.settings" )
       print( "Done !")
       read()
