@@ -40,7 +40,7 @@ turtle.select( 1 )
 if turtle.suck( 1 ) or turtle.inspectUp() then
   -- make sure it's a turtle.
   local item = turtle.getItemDetail()
-  if not string.find( item.name, "turtle" ) then
+  if item and not string.find( item.name, "turtle" ) then
     turtle.drop()
     return
   end

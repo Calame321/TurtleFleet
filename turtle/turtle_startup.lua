@@ -878,7 +878,7 @@ function show_set_storage_page()
     input = read()
     local new_storage = { type = tonumber( input ) }
 
-    if new_storage.type == 4 then
+    if new_storage.type == 3 then
       term.clear()
       term.setCursorPos( 1, 1 )
       print( "Place the item to be filtered in the inventory and press enter.")
