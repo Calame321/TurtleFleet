@@ -1090,7 +1090,7 @@ local all_menu = {
       { key = "two", name = "2 - Installer", action = get_installer },
       { key = "three", name = "3 - Storage", action = show_set_storage_page },
       { key = "four", name = "4 - Valid Fuel", action = show_set_valid_fuel_page },
-      { key = "five", name = "5 - Reuel All", action = show_set_refuel_all_page },
+      { key = "five", name = "5 - Refuel All", action = show_set_refuel_all_page },
       { key = "six", name = "6 - Forbidden Block", action = show_set_forbidden_block_page }
     }
   }
