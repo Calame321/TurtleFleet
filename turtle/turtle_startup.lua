@@ -415,7 +415,7 @@ function fleet_flatten()
   turtle.do_not_store_items["minecraft:dirt"] = 2
 
   miner.equip_for_fleet_mode()
-  local paper_data =  miner.place_next_turtle( 7 )
+  local paper_data =  miner:place_next_turtle( 7 )
 
   if paper_data then
     flatten_length = tonumber( paper_data )
