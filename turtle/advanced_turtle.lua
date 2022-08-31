@@ -4,7 +4,7 @@
 if not turtle then return end
 
 -- If this fails (return nil) then we sould be in minecraft 1.12.
-turtle.is_version_1_12 = pcall( settings.save ) ~= nil
+turtle.is_version_1_12 = pcall( settings.save ) == nil
 
 turtle.forbidden_block = {}
 turtle.valid_fuel = {}
