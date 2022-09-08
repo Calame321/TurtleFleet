@@ -3,9 +3,6 @@
 -----------------------------
 if not turtle then return end
 
--- If this fails (return nil) then we sould be in minecraft 1.12.
-turtle.is_version_1_12 = pcall( settings.save ) == nil
-
 turtle.forbidden_block = {}
 turtle.valid_fuel = {}
 turtle.storage = {}
@@ -129,31 +126,31 @@ end
 function turtle.set_forbidden_block( new_forbidden_block )
   turtle.forbidden_block = new_forbidden_block
   settings.set( "forbidden_block", turtle.forbidden_block )
-  settings.save()
+  settings.save(".settings")
 end
 
 function turtle.set_valid_fuel( new_valid_fuel )
   turtle.valid_fuel = new_valid_fuel
   settings.set( "valid_fuel", turtle.valid_fuel )
-  settings.save()
+  settings.save(".settings")
 end
 
 function turtle.set_storage( index, new_storage )
   turtle.storage[ index ] = new_storage
   settings.set( "storage", turtle.storage )
-  settings.save()
+  settings.save(".settings")
 end
 
 function turtle.set_refuel_all( value )
   turtle.refuel_all = value
   settings.set( "refuel_all", value )
-  settings.save()
+  settings.save(".settings")
 end
 
 function turtle.remove_storage_config( index )
   turtle.storage[ index ] = nil
   settings.set( "storage", turtle.storage )
-  settings.save()
+  settings.save(".settings")
 end
 
 function turtle.add_or_remove_valid_fuel( item_name )
@@ -326,9 +323,9 @@ function turtle.force_move( direction, block_to_break )
         end
       end
     end
-  end
 
-  turtle.check_lava_source( direction )
+    turtle.check_lava_source( direction )
+  end
 
   while not turtle.moveDir( direction ) do
     local s, d = turtle.inspectDir( direction )
@@ -340,6 +337,33 @@ function turtle.force_move( direction, block_to_break )
   end
 end
 
+function turtle.force_move_path( path )
+  for i = 1, #path do
+    local dir = path:sub( i, i )
+
+    if dir == "d" then
+      turtle.force_move( "down" )
+    elseif dir == "u" then
+      turtle.force_move( "up" )
+    elseif dir == "f" then
+      turtle.force_move( "forward" )
+    elseif dir == "b" then
+      turtle.force_move( "back" )
+    elseif dir == "l" then
+      turtle.turnLeft()
+    elseif dir == "r" then
+      turtle.turnRight()
+    elseif dir == "n" then
+      turtle.turn( turtle.NORTH )
+    elseif dir == "s" then
+      turtle.turn( turtle.SOUTH )
+    elseif dir == "e" then
+      turtle.turn( turtle.EAST )
+    elseif dir == "w" then
+      turtle.turn( turtle.WEST )
+    end
+  end
+end
 
 ---------------
 --- Turning ---
@@ -510,6 +534,35 @@ function turtle.inspectDir( direction )
   error( "inspectDir direction unknown!" )
 end
 
+function turtle.is_block_name( direction, block_name )
+  local s, d = turtle.inspectDir( direction )
+  return s and d.name == block_name
+end
+
+function turtle.is_block_name_contains( direction, block_name )
+  local s, d = turtle.inspectDir( direction )
+  return s and string.find( d.name, block_name )
+end
+
+-- Check if the block has the tag.
+function turtle.is_block_tag( dir, tag )
+  local s, d = turtle.inspectDir( dir )
+
+  -- If there is nothing, return.
+  if not s then return false end
+
+  -- If in minecraft 1.12, there is no "tags" table
+  if type( d.tags ) == "table" then
+    for k, v in pairs( d.tags ) do
+      if string.find( k, tag ) ~= nil then
+        return true
+      end
+    end
+  end
+  
+  -- Else, try to find it in the name.
+  return string.find( d.name, tag ) ~= nil
+end
 
 -------------
 --- Place ---
@@ -689,36 +742,6 @@ function turtle.pathfind_to( destination, can_dig )
   print( "ARRIVED !" )
 end
 
--- Inspect --
-function turtle.is_block_name( direction, block_name )
-  local s, d = turtle.inspectDir( direction )
-  return s and d.name == block_name
-end
-
-function turtle.is_block_name_contains( direction, block_name )
-  local s, d = turtle.inspectDir( direction )
-  return s and string.find( d.name, block_name )
-end
-
--- Check if the block has the specified tag.
-function turtle.is_block_tag( direction, tag )
-  if turtle.is_version_1_12 and tag == "forge:ores" then
-    tag = "ore"
-  end
-
-  if direction == "back" or not turtle.detectDir( direction ) then
-    return false
-  end
-  
-  local success, data = turtle.inspectDir( direction )
-  
-  if turtle.is_version_1_12 then
-    return success and string.find( data.name, tag )
-  else
-    return success and data.tags[tag]
-  end
-end
-
 -- Inventory --
 function turtle.getInventory()
   local inv = {}
@@ -752,7 +775,9 @@ end
 function turtle.get_item_index( name )
   for i = 1, 16 do
     local item = turtle.getItemDetail( i )
-    if item and string.find( item.name, name ) then return i end
+    if item and string.find( item.name, name ) then
+      return i
+    end
   end
   return -1
 end
@@ -839,9 +864,9 @@ end
 -- Drop the items in the configured storage.
 function turtle.drop_in_storage()
   if turtle.is_dropping_in_storage then return end
-
-  print( "Dropping in storage!" )
   if not turtle.has_drop_chest() then return false end
+  
+  print( "Dropping in storage!" )
   
   turtle.is_dropping_in_storage = true
   local is_empty = false
@@ -1126,4 +1151,8 @@ function turtle.check_lava_source( direction )
       turtle.select( 1 )
     end
   end
+end
+
+function turtle.has_tags( name )
+
 end

@@ -19,23 +19,17 @@ local git_path = "https://raw.githubusercontent.com/Calame321/TurtleFleet/main/"
 local fleet_folder = "turtlefleet/"
 local all_files = {
   "computer/computer_startup.lua",
-  "control/manual_command.lua",
-  "control/network.lua",
-  "jobs/builder.lua",
-  "jobs/cooker.lua",
-  "jobs/job.lua",
-  "jobs/miner.lua",
-  "stations/mine.lua",
-  "stations/station.lua",
-  "stations/treefarm.lua",
+  "turtle/jobs/builder.lua",
+  "turtle/jobs/harvester.lua",
+  "turtle/jobs/lumberjack.lua",
+  "turtle/jobs/miner.lua",
+  "turtle/jobs/smelter.lua",
   "turtle/advanced_turtle.lua",
+  "turtle/fleet_mode.lua",
   "turtle/pathfind.lua",
+  "turtle/turtle_menu.lua",
   "turtle/turtle_startup.lua",
   "utils/update.lua",
-  "img/mine",
-  "img/tree",
-  "img/inventory",
-  "img/icon_missing",
 }
 
 -- Center the text based on the total length

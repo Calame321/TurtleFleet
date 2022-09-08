@@ -1,12 +1,9 @@
 ---------------
 -- TREE FARM --
 ---------------
-treefarm = station:new()
+local tree_farm_length = 15
 
--- Tree Farm
-treefarm.tree_farm_length = 15
-
-function treefarm:cut_tree()
+function cut_tree()
   print( "Cutting a tree." )
   turtle.dig()
   turtle.forward()
@@ -29,23 +26,23 @@ function treefarm:cut_tree()
 end
 
 
-function treefarm:plant_trees()
+function plant_trees()
   print( "Planting trees." )
 
-  for i = 0, treefarm.tree_farm_length do
+  for i = 0, tree_farm_length do
     turtle.suck()
     turtle.force_forward()
     turtle.turnLeft()
-    treefarm:inspect_tree()
+    inspect_tree()
     turtle.turn180()
-    treefarm:inspect_tree()
+    inspect_tree()
     turtle.turnLeft()
   end
 
   turtle.suck()
   turtle.turn180()
 
-  for i = 0, treefarm.tree_farm_length do
+  for i = 0, tree_farm_length do
     turtle.suck()
     turtle.force_forward()
   end
@@ -54,25 +51,21 @@ function treefarm:plant_trees()
 end
 
 
-function treefarm:inspect_tree()
-  local result, data = turtle.inspect()
-
-  if result then
-    if data.name == "minecraft:log" or data.name == "minecraft:log2" or ( not turtle.is_version_1_12 and data.tags[ "minecraft:logs" ] ) then
-      treefarm:cut_tree()
-    end
+function inspect_tree()
+  if turtle.is_block_tag( "forward", "minecraft:logs" ) or turtle.is_block_tag( "forward", "log" ) then
+    cut_tree()
   end
 
   turtle.suck()
 
-  if treefarm:has_sapling() then
+  if has_sapling() then
     turtle.select( 1 )
     turtle.place()
   end
 end
 
 
-function treefarm:manage_furnace()
+function manage_furnace()
   local fuel_slot = turtle.get_valid_fuel_index()
   local coal_amount = 0
 
@@ -127,7 +120,7 @@ function treefarm:manage_furnace()
 end
 
 
-function treefarm:drop_stuff()
+function drop_stuff()
   print( "Unloading items." )
   turtle.turn180()
 
@@ -166,14 +159,14 @@ function treefarm:drop_stuff()
 end
 
 
-function treefarm:has_sapling()
+function has_sapling()
   local item = turtle.getItemDetail( 1 )
   local is_sapling = item and string.find( item.name, "sapling" )
   return is_sapling
 end
 
 
-function treefarm:refil_sapling()
+function refil_sapling()
   turtle.turnLeft()
   turtle.select( 1 )
 
@@ -183,7 +176,7 @@ function treefarm:refil_sapling()
 end
 
 
-function treefarm:check_sapling()
+function check_sapling()
   turtle.select( 1 )
   local item = turtle.getItemDetail( 1 )
   
@@ -193,11 +186,11 @@ function treefarm:check_sapling()
     turtle.turn180()
   end
 
-  treefarm:refil_sapling()
+  refil_sapling()
 end
 
 
-function treefarm:has_tree_farm_setup()
+function has_tree_farm_setup()
   turtle.turnLeft()
   local success, data = turtle.inspect()
 
@@ -239,7 +232,7 @@ function have_setup_materials()
 end
 
 
-function treefarm:setup_tree_farm()
+function setup_tree_farm()
   while not have_setup_materials() do
     os.sleep( 1 )
   end
@@ -260,26 +253,6 @@ function treefarm:setup_tree_farm()
   turtle.transferTo( 1 )
 end
 
-
-function treefarm:start_tree_farm( length )
-  if length ~= nil then
-    treefarm.tree_farm_length = length
-  end
-
-  print( "- Starting TREE FARM -" )
-  if not treefarm:has_tree_farm_setup() then
-    treefarm:setup_tree_farm()
-  end
-
-  while true do
-    treefarm:check_sapling()
-    treefarm:plant_trees()
-    treefarm:manage_furnace()
-    treefarm:drop_stuff()
-    os.sleep( 10 )
-  end
-end
-
 function return_home()
   turtle.turn( turtle.SOUTH )
 
@@ -288,7 +261,28 @@ function return_home()
   end
 
   turtle.turn( turtle.NORTH )
-  treefarm:start_tree_farm()
+  start()
 end
 
-return treefarm
+local lumberjack = {
+  start = function( length )
+    if length ~= nil then
+      tree_farm_length = length
+    end
+  
+    print( "- Starting TREE FARM -" )
+    if not has_tree_farm_setup() then
+      setup_tree_farm()
+    end
+  
+    while true do
+      check_sapling()
+      plant_trees()
+      manage_furnace()
+      drop_stuff()
+      os.sleep( 10 )
+    end
+  end
+}
+
+return lumberjack

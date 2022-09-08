@@ -1,14 +1,12 @@
 -------------
 -- Coocker --
 -------------
-cooker = job:new()
-
 local coocking_time = 10
 local coal_burn_time = 80
 
 local furnace_fuel_ammount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }
 
-function cooker:fill_inv()
+function fill_inv()
   if not turtle.suck() then
     print( "The inventory is empty..." )
 
@@ -28,7 +26,7 @@ function cooker:fill_inv()
   return math.floor( item_in_inv / 16 )
 end
 
-function cooker:drop_remaining_items()
+function drop_remaining_items()
     if turtle.has_items() then
         for i = 1, 16 do
             if turtle.getItemCount( i ) > 0 then
@@ -41,7 +39,7 @@ function cooker:drop_remaining_items()
     end
 end
 
-function cooker:refuel_furnace()
+function refuel_furnace()
     turtle.turnLeft()
     turtle.select( 1 )
     turtle.suck()
@@ -55,7 +53,7 @@ function cooker:refuel_furnace()
         turtle.select( 1 )
 
         -- suck all the fuel possible
-        local fuel_to_transfer = cooker:fill_inv()
+        local fuel_to_transfer = fill_inv()
 
         if each_fuel == 0 then
             error( "Not enough fuel !" )
@@ -87,17 +85,17 @@ function cooker:refuel_furnace()
         turtle.back()
 
         turtle.turnRight()
-        cooker:drop_remaining_items()
+        drop_remaining_items()
         turtle.turnLeft()
     else
         turtle.turnRight()
     end
 end
 
-function cooker:insert_ingerdient()
+function insert_ingerdient()
     turtle.up()
     turtle.select( 1 )
-    local item_to_insert = cooker:fill_inv()
+    local item_to_insert = fill_inv()
     local item = turtle.getItemDetail()
     turtle.turnLeft()
     
@@ -116,11 +114,11 @@ function cooker:insert_ingerdient()
     end
 
     turtle.turnRight()
-    cooker:drop_remaining_items()
+    drop_remaining_items()
     turtle.down()
 end
 
-function cooker:empty_furnace()
+function empty_furnace()
     turtle.down()
     turtle.turnLeft()
     
@@ -135,36 +133,17 @@ function cooker:empty_furnace()
     end
 
     turtle.turnRight()
-    cooker:drop_remaining_items()
+    drop_remaining_items()
     turtle.up()
 end
 
-function cooker:check_own_fuel()
+function check_own_fuel()
     if turtle.getFuelLevel() < 500 then
         turtle.turnRight()
         turtle.suck()
         turtle.refuel()
         turtle.turnLeft()
     end
-end
-
-function cooker:start_cooking()
-  term.clear()
-  term.setCursorPos( 1, 1 )
-  print( "- Start Cooking! -")
-  turtle.up()
-
-  if not has_station() then
-    cooker:place_station()
-  end
-
-  while true do
-      cooker:check_own_fuel()
-      cooker:refuel_furnace()
-      cooker:empty_furnace()
-      cooker:insert_ingerdient()
-      os.sleep( 80 )
-  end
 end
 
 function has_station()
@@ -193,7 +172,7 @@ function has_station()
   return false
 end
 
-function cooker:place_station()
+function place_station()
   print( "Place 3 chests in slot 1" )
   print( "Place 16 furnaces in slot 2" )
   print( "And place some coal in my inventory." )
@@ -232,4 +211,25 @@ function cooker:place_station()
   turtle.wait_move( "up" )
 end
 
-return cooker
+local smelter = {
+  start = function()
+    term.clear()
+    term.setCursorPos( 1, 1 )
+    print( "- Start Cooking! -")
+    turtle.up()
+  
+    if not has_station() then
+      place_station()
+    end
+  
+    while true do
+        check_own_fuel()
+        refuel_furnace()
+        empty_furnace()
+        insert_ingerdient()
+        os.sleep( 80 )
+    end
+  end
+}
+
+return smelter
