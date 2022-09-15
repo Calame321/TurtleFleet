@@ -35,6 +35,10 @@ end
 
 print( "Install Done!" )
 
+if not getComputerLabel() then
+  setComputerLabel( "Turtle ".. getComputerID() )
+end
+
 -- Place the next turtle for installation.
 turtle.select( 1 )
 if turtle.suck( 1 ) or turtle.inspectUp() then
