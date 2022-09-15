@@ -159,8 +159,6 @@ end
 ----------------
 -- Fleet Mode --
 ----------------
-local flatten_length = 32
-
 function has_flaten_fleet_setup()
   if turtle.get_info_paper_index() == -1 then
     print( "I don't have a piece of paper." )
@@ -190,8 +188,10 @@ function fleet_flatten()
   turtle.do_not_store_items["minecraft:dirt"] = 2
 
   equip_for_fleet_mode()
-  local paper_data =  place_next_turtle( 7 )
-
+  place_next_turtle( 7 )
+  local paper_data = get_paper_data()
+  local flatten_length = 32
+  
   if paper_data then
     flatten_length = tonumber( paper_data )
   end
