@@ -12,7 +12,61 @@ local SIDES = redstone.getSides()
 -- Var --
 ---------
 local is_last = false
+local fleet_flatten_length = 32
+local fleet_dig_out_depth = 32
+local fleet_dig_out_width = 32
+  
+--------------
+-- settings -- 
+--------------
 
+-- Load all the settings
+function fleet_load_settings()
+  load_fleet_flatten_length()
+  load_fleet_dig_out_size()
+end
+
+function load_fleet_flatten_length()
+  local loaded_fleet_flatten_length = settings.get( "fleet_flatten_length" )
+
+  if loaded_fleet_flatten_length then
+    fleet_flatten_length = loaded_fleet_flatten_length
+  else
+    set_fleet_flatten_length( 32 )
+  end
+end
+
+function load_fleet_dig_out_size()
+  local loaded_fleet_dig_out_depth = settings.get( "fleet_dig_out_depth" )
+  local loaded_fleet_dig_out_width = settings.get( "fleet_dig_out_width" )
+
+  if loaded_fleet_dig_out_depth then
+    fleet_dig_out_depth = loaded_fleet_dig_out_depth
+    fleet_dig_out_width = loaded_fleet_dig_out_width
+  else
+    set_fleet_dig_out_size( 32, 32 )
+  end
+end
+
+function set_fleet_flatten_length( length )
+  fleet_flatten_length = length
+  settings.set( "fleet_flatten_length", length )
+  settings.save( ".settings" )
+end
+
+function set_fleet_dig_out_size( depth, width )
+  fleet_dig_out_depth = depth
+  fleet_dig_out_width = width
+  settings.set( "fleet_dig_out_depth", depth )
+  settings.set( "fleet_dig_out_width", width )
+  settings.save( ".settings" )
+end
+
+fleet_load_settings()
+
+---------------------
+-- Common Function --
+---------------------
 function equip_for_fleet_mode()
   -- Pick up configured storages.
   for k, v in pairs( turtle.storage ) do
@@ -102,13 +156,13 @@ end
 function fleet_dig_out()
   -- get height with paper
   local paper_data = get_paper_data()
-  local depth = 32
-  local width = 32
+  fleet_dig_out_depth = 32
+  fleet_dig_out_width = 32
   
   if paper_data then
     local d = mysplit( paper_data )
-    depth = tonumber( d[ 1 ] )
-    width = tonumber( d[ 2 ] )
+    fleet_dig_out_depth = tonumber( d[ 1 ] )
+    fleet_dig_out_width = tonumber( d[ 2 ] )
   end
   
   equip_for_fleet_mode()
@@ -153,7 +207,7 @@ function fleet_dig_out()
     turtle.wait_down()
   end
 
-  miner.start_dig_out( depth, width )
+  miner.start_dig_out( fleet_dig_out_depth, fleet_dig_out_width )
 end
 
 ----------------
@@ -162,7 +216,7 @@ end
 function has_flaten_fleet_setup()
   if turtle.get_info_paper_index() == -1 then
     print( "I don't have a piece of paper." )
-    print( "I will use the default values." )
+    print( "I will use the default value:", fleet_flatten_length )
   end
 
   for i = 1, 4 do
@@ -190,11 +244,12 @@ function fleet_flatten()
   equip_for_fleet_mode()
   place_next_turtle( 7 )
   local paper_data = get_paper_data()
-  local flatten_length = 32
   
   if paper_data then
-    flatten_length = tonumber( paper_data )
+    fleet_flatten_length = tonumber( paper_data )
   end
+
+  print( "flatten length:", fleet_flatten_length )
 
   -- Find next free spot
   turtle.turn180()
@@ -226,11 +281,11 @@ function fleet_flatten()
   turtle.select( 1 )
   turtle.force_forward()
 
-  for y = 1, flatten_length / 4 do
+  for y = 1, fleet_flatten_length / 4 do
     flat_one()
 
     -- if done, stop.
-    if y ~= math.floor( flatten_length / 4 ) then
+    if y ~= math.floor( fleet_flatten_length / 4 ) then
       turtle.force_forward()
     end
   end
@@ -324,16 +379,16 @@ local fleet = {
     is_first = true
   
     local paper_data = get_paper_data()
-    local depth = 32
-    local width = 32
+    local fleet_dig_out_depth = 32
+    local fleet_dig_out_width = 32
     if paper_data then
       local d = mysplit( paper_data )
-      depth = tonumber( d[ 1 ] )
-      width = tonumber( d[ 2 ] )
+      fleet_dig_out_depth = tonumber( d[ 1 ] )
+      fleet_dig_out_width = tonumber( d[ 2 ] )
     end
   
     print()
-    print( "Starting dig out with: ", depth, "depth,", width, "width,", height, "height." )
+    print( "Starting dig out with: ", fleet_dig_out_depth, "depth,", fleet_dig_out_width, "width,", height, "height." )
     print()
   
     equip_for_fleet_mode()
@@ -347,7 +402,7 @@ local fleet = {
     -- Wait for the signal to start.
     turtle.wait_for_signal( "bottom", 3 )
   
-    miner.start_dig_out( depth, width )
+    miner.start_dig_out( fleet_dig_out_depth, fleet_dig_out_width )
   end;
 
   flatten = function()
