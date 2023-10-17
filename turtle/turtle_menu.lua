@@ -52,7 +52,7 @@ function show_tree_farm_page()
   print( "The turtle will plant trees and harvest them. It will also cook its own fuel." )
   print()
   print( "Length? (default = 15)")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
   local tree_farm_length = 15
 
@@ -69,7 +69,7 @@ function show_cane_farm()
   print( "- Sugar Cane Farm -" )
   print( "Do you want me to build the farm?")
   print( "y, n? (default = no)")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
 
   if input == "y" then
@@ -90,12 +90,12 @@ function show_digout_page()
   print( "It's recomended to set some storages before if you can." )
   print()
   print( "Depth = ?")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
   local depth = tonumber( input )
 
   print( "Width = ?")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   input = read()
   local width = tonumber( input )
   miner.start_dig_out( depth, width )
@@ -111,7 +111,7 @@ function show_fleet_digout_page()
   print( "This turtle should be placed on a chest to the left." )
   print( "The depth and width is given with a renamed piece of paper. ex: '32 16'. (else default 32 x 32 will be used)")
   print( "Press enter for the chests placement.")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   read()
   print( "Chests (not needed if not in settings):" )
   print( "- Up: Fuel" )
@@ -120,9 +120,9 @@ function show_fleet_digout_page()
   print( "- Right: Filtered Storage" )
   print( "- Left: Buckets (if there is going to be lava)" )
   print()
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   print( "Height = ? (multiple of 3)")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   input = read()
   local height = tonumber( input )
 
@@ -138,13 +138,13 @@ function show_flatten_chunk_page()
   print( "It's recomended to set some storages before if you can." )
   print()
   print( "Number of chunk = ? (default = 1)")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
   local nb_chunk = 1
   if input ~= "" then nb_chunk = tonumber( input ) end
   
   print( "extra height = ? (default = 5)")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   input = read()
   local extra_height = 5
   if input ~= "" then
@@ -163,7 +163,7 @@ function show_fleet_flatten_page()
   print( "This turtle should be placed on a chest to the left." )
   print( "The length is given with a renamed piece of paper. (by step of 4) ex: '64'.")
   print( "Press enter for the chests placement.")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   read()
   print( "Chests (not needed if not in settings):" )
   print( "- Up: Fuel" )
@@ -173,7 +173,7 @@ function show_fleet_flatten_page()
   print( "- Left: Buckets (if there is going to be lava)" )
   print()
   print( "Give a paper renamed with the length then press enter to start.")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   read()
 
   if has_flaten_fleet_setup() then
@@ -181,6 +181,31 @@ function show_fleet_flatten_page()
   else
     print( "The Fleet flatten setup is invalid." )
   end
+
+  menu.show()
+end
+
+function show_fleet_manager_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Fleet Manager -" )
+  print( "This option will build the Fleet Manager system." )
+  print( "It will manage the turtle by itself. Youll give your command trought the computer." )
+  print( "You wont be able to control the turtles that are assigned to it.")
+  print( "Press enter for the lost of material needed.")
+  sleep( 0.2 )
+  read()
+  print( "Material:" )
+  print( "- 1 Chest. (or other storage block)" )
+  print( "- 4 Computer. (at least 1 advanced" )
+  print( "- 4 Wireless Modem. (Ender Modem if possible)" )
+  print( "- 1 Disk Drive" )
+  print( "- 1 Disk" )
+  print()
+  print( "--TODO--")
+  sleep( 0.2 )
+  read()
+
 
   menu.show()
 end
@@ -194,7 +219,7 @@ function show_vein_mine_page()
   print()
 
   print( "Block to mine = ? (default = The block in front)")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
   if input == "" then
     local found_block, block_data = turtle.inspectDir( "forward" )
@@ -224,7 +249,7 @@ function show_branch_mining()
   print( "The turtle should turn:" )
   print( "1 = left (default)" )
   print( "2 = right")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
   local branch_side = "left"
 
@@ -233,7 +258,7 @@ function show_branch_mining()
   end
 
   print( "Number of branches? (default = 20)" )
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
   local branch_quantity = 20
   if input ~= "" then
@@ -241,7 +266,7 @@ function show_branch_mining()
   end
 
   print( "Length of a branch? (default = 80)")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   input = read()
   local branch_length = 80
   if input ~= "" then
@@ -256,19 +281,19 @@ function show_current_config_page()
   display_current_storage()
   term.setCursorPos( 1, h )
   write( "press enter." )
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   read()
 
   display_current_valid_fuel()
   term.setCursorPos( 1, h )
   write( "press enter." )
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   read()
 
   display_current_forbidden_block()
   term.setCursorPos( 1, h )
   write( "press enter." )
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   read()
 
   menu.show()
@@ -332,7 +357,7 @@ function show_set_storage_page()
   print( "To add a new storage, enter witch slot in the turtle's inventory it will be." )
   print()
   print( "Index: *Enter existing index to remove." )
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
   local inventory_slot = tonumber( input )
 
@@ -355,7 +380,7 @@ function show_set_storage_page()
     print( "3: Filtered, can be used to drop item in a trash or a special storage." )
     print()
     print( "Type:" )
-    os.sleep( 0.2 )
+    sleep( 0.2 )
     input = read()
     local new_storage = { type = tonumber( input ) }
 
@@ -363,7 +388,7 @@ function show_set_storage_page()
       term.clear()
       term.setCursorPos( 1, 1 )
       print( "Place the item to be filtered in the inventory and press enter.")
-      os.sleep( 0.2 )
+      sleep( 0.2 )
       input = read()
       new_storage.filtered_items = {}
 
@@ -379,7 +404,7 @@ function show_set_storage_page()
   end
 
   print( "Setup another storage? y, n")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   input = read()
 
   if input == "y" then
@@ -398,7 +423,7 @@ function show_set_valid_fuel_page()
   print( "*same to remove it." )
   print()
   print( "Item name:" )
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
   
   -- if the input is empty, try to get the first item name
@@ -418,7 +443,7 @@ function show_set_valid_fuel_page()
 
   display_current_valid_fuel()
   print( "Add another item? y, n")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   input = read()
 
   if input == "y" then
@@ -435,7 +460,7 @@ function show_set_refuel_all_page()
   print( "Do you want your turtle to eat a full stack of fuel when it needs it?" )
   print()
   print( "y, n" )
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
 
   turtle.set_refuel_all( input == "y" )
@@ -449,7 +474,7 @@ function show_set_forbidden_block_page()
   print( "Blocks that the turtle should not mine! Used if you want to mine diamond ore with fortune or for stuff that can explode." )
   print( "Enter block name or place it in front of the turtle then press enter." )
   print( "*same to remove it." )
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   local input = read()
   
   -- if the input is empty, try to get the block in front
@@ -468,7 +493,7 @@ function show_set_forbidden_block_page()
 
   display_current_forbidden_block()
   print( "Add another block? y, n")
-  os.sleep( 0.2 )
+  sleep( 0.2 )
   input = read()
 
   if input == "y" then
@@ -484,13 +509,13 @@ end
 
 function old_show_menu()
   -- Go to position
-  if args[1] == "goto" then
-    turtle.pathfind_to( vector.new( tonumber( args[2] ), tonumber( args[3] ), tonumber( args[4] ) ), false )
+  if args[ 1 ] == "goto" then
+    turtle.pathfind_to( vector.new( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ), tonumber( args[ 4 ] ) ), false )
   -- setup a mine
-  elseif args[1] == "setupMine" then
-    miner:setup_mine( vector.new( tonumber( args[2] ), tonumber( args[3] ), tonumber( args[4] ) ) )
+  elseif args[ 1 ] == "setupMine" then
+    miner:setup_mine( vector.new( tonumber( args[ 2 ] ), tonumber( args[ 3 ] ), tonumber( args[ 4 ] ) ) )
   -- start mining
-  elseif args[1] == "mine" then
+  elseif args[ 1 ] == "mine" then
     miner:mine()
   end
 end
@@ -555,7 +580,8 @@ local all_menu = {
     parent = "main_menu",
     options = {
       { key = "one", name = "1 - Fleet Dig Out", action = show_fleet_digout_page },
-      { key = "two", name = "2 - Fleet Flatten", action = show_fleet_flatten_page }
+      { key = "two", name = "2 - Fleet Flatten", action = show_fleet_flatten_page },
+      { key = "three", name ="3 - Fleet Manager", action = show_fleet_manager_page}
     }
   },
   menu_config = {
@@ -590,12 +616,12 @@ function on_key_pressed( key_name )
       -- sub menu
       if current_menu.options[ i ].menu ~= nil then
         display_menu( all_menu[ current_menu.options[ i ].menu ] )
-        os.sleep( 0.1 )
+        sleep( 0.1 )
         return
       -- action
       elseif current_menu.options[ i ].action ~= nil then
         current_menu.options[ i ].action()
-        os.sleep( 0.1 )
+        sleep( 0.1 )
         return
       end
     end

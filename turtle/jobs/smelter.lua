@@ -11,7 +11,7 @@ function fill_inv()
     print( "The inventory is empty..." )
 
     while not turtle.suck() do
-      os.sleep( 10 )
+      sleep( 10 )
     end
   end
 
@@ -27,123 +27,123 @@ function fill_inv()
 end
 
 function drop_remaining_items()
-    if turtle.has_items() then
-        for i = 1, 16 do
-            if turtle.getItemCount( i ) > 0 then
-                turtle.select( i )
-                while not turtle.drop() do
-                    os.sleep( 5 )
-                end
-            end
+  if turtle.has_items() then
+    for i = 1, 16 do
+      if turtle.getItemCount( i ) > 0 then
+        turtle.select( i )
+        while not turtle.drop() do
+          sleep( 5 )
         end
+      end
     end
+  end
 end
 
 function refuel_furnace()
-    turtle.turnLeft()
+  turtle.turnLeft()
+  turtle.select( 1 )
+  turtle.suck()
+
+  local need_refuel = turtle.getItemCount( 1 ) < 32
+  turtle.drop()
+
+  if need_refuel then
+    print( "Refuelling the furnaces.")
+    turtle.turn180()
     turtle.select( 1 )
-    turtle.suck()
 
-    local need_refuel = turtle.getItemCount( 1 ) < 32
-    turtle.drop()
+    -- suck all the fuel possible
+    local fuel_to_transfer = fill_inv()
 
-    if need_refuel then
-        print( "Refuelling the furnaces.")
-        turtle.turn180()
-        turtle.select( 1 )
-
-        -- suck all the fuel possible
-        local fuel_to_transfer = fill_inv()
-
-        if each_fuel == 0 then
-            error( "Not enough fuel !" )
-        end
-
-        turtle.turnLeft()
-        turtle.forward()
-        turtle.turnLeft()
-
-        for i = 1, 16 do
-            turtle.forward()
-            turtle.turnLeft()
-            
-            for a = 1, 2 do
-                turtle.select( turtle.get_item_index( "coal" ) )
-                turtle.transferTo( 16 )
-            end
-
-            turtle.select( 16 )
-            turtle.drop( fuel_to_transfer )
-            turtle.turnRight()
-        end
-
-        for i = 1, 16 do
-            turtle.back()
-        end
-
-        turtle.turnRight()
-        turtle.back()
-
-        turtle.turnRight()
-        drop_remaining_items()
-        turtle.turnLeft()
-    else
-        turtle.turnRight()
+    if each_fuel == 0 then
+      error( "Not enough fuel !" )
     end
+
+    turtle.turnLeft()
+    turtle.forward()
+    turtle.turnLeft()
+
+    for i = 1, 16 do
+      turtle.forward()
+      turtle.turnLeft()
+
+      for a = 1, 2 do
+        turtle.select( turtle.get_item_index( "coal" ) )
+        turtle.transferTo( 16 )
+      end
+
+      turtle.select( 16 )
+      turtle.drop( fuel_to_transfer )
+      turtle.turnRight()
+    end
+
+    for i = 1, 16 do
+      turtle.back()
+    end
+
+    turtle.turnRight()
+    turtle.back()
+
+    turtle.turnRight()
+    drop_remaining_items()
+    turtle.turnLeft()
+  else
+    turtle.turnRight()
+  end
 end
 
 function insert_ingerdient()
-    turtle.up()
-    turtle.select( 1 )
-    local item_to_insert = fill_inv()
-    local item = turtle.getItemDetail()
-    turtle.turnLeft()
-    
-    for i = 1, 16 do
-        turtle.forward()
-        for x = 1, 16 do
-            if turtle.getItemCount( x ) > 0 then
-                turtle.select( x )
-                turtle.dropDown( item_to_insert )
-            end
-        end
-    end
+  turtle.up()
+  turtle.select( 1 )
+  local item_to_insert = fill_inv()
+  local item = turtle.getItemDetail()
+  turtle.turnLeft()
 
-    for i = 1, 16 do
-        turtle.back()
+  for i = 1, 16 do
+    turtle.forward()
+    for x = 1, 16 do
+      if turtle.getItemCount( x ) > 0 then
+        turtle.select( x )
+        turtle.dropDown( item_to_insert )
+      end
     end
+  end
 
-    turtle.turnRight()
-    drop_remaining_items()
-    turtle.down()
+  for i = 1, 16 do
+      turtle.back()
+  end
+
+  turtle.turnRight()
+  drop_remaining_items()
+  turtle.down()
 end
 
 function empty_furnace()
-    turtle.down()
-    turtle.turnLeft()
-    
-    for i = 1, 16 do
-        turtle.forward()
-        turtle.select( 1 )
-        turtle.suckUp()
-    end
+  turtle.down()
+  turtle.turnLeft()
 
-    for i = 1, 16 do
-        turtle.back()
-    end
+  for i = 1, 16 do
+    turtle.forward()
+    turtle.select( 1 )
+    turtle.suckUp()
+  end
 
-    turtle.turnRight()
-    drop_remaining_items()
-    turtle.up()
+  for i = 1, 16 do
+    turtle.back()
+  end
+
+  turtle.turnRight()
+  drop_remaining_items()
+  turtle.up()
 end
 
 function check_own_fuel()
-    if turtle.getFuelLevel() < 500 then
-        turtle.turnRight()
-        turtle.suck()
-        turtle.refuel()
-        turtle.turnLeft()
-    end
+  if turtle.getFuelLevel() < 500 then
+    turtle.turnRight()
+    turtle.suck()
+    turtle.refuel()
+    turtle.turnLeft()
+  end
 end
 
 function has_station()
@@ -194,7 +194,7 @@ function place_station()
   turtle.select( 2 )
   turtle.wait_move( "down" )
   turtle.turnRight()
-  
+
   for i = 1, 16 do
     turtle.wait_move( "forward" )
     turtle.turnLeft()
@@ -217,17 +217,17 @@ local smelter = {
     term.setCursorPos( 1, 1 )
     print( "- Start Cooking! -")
     turtle.up()
-  
+
     if not has_station() then
       place_station()
     end
-  
+
     while true do
-        check_own_fuel()
-        refuel_furnace()
-        empty_furnace()
-        insert_ingerdient()
-        os.sleep( 80 )
+      check_own_fuel()
+      refuel_furnace()
+      empty_furnace()
+      insert_ingerdient()
+      sleep( 80 )
     end
   end
 }

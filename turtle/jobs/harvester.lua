@@ -19,7 +19,7 @@ function place_source()
   turtle.placeDown( 2 )
   source_move( "back" )
   turtle.placeDown( 1 )
-  os.sleep( 0.5 )
+  sleep( 0.5 )
   turtle.placeDown( 2 )
   turtle.placeDown( 3 )
   source_move( "forward" )
@@ -84,7 +84,7 @@ function cane_farm()
       end
     end
 
-    os.sleep( 222 )
+    sleep( 222 )
   end
 end
 
@@ -126,19 +126,19 @@ local harvester = {
 
           turtle.turn180()
 
-          local rice_index = get_item_index( "rice_panicle" )
+          local rice_index = turtle.get_item_index( "rice_panicle" )
           while rice_index > 0 do
             turtle.select( rice_index )
             if not turtle.dropDown() then
               print( "The chest is full..." )
               read()
             end
-            rice_index = get_item_index( "rice_panicle" )
+            rice_index = turtle.get_item_index( "rice_panicle" )
           end
         end
       end
 
-      os.sleep( 120 )
+      sleep( 120 )
     end
   end;
 
@@ -248,7 +248,7 @@ local harvester = {
 
     -- start farming!
     print( "Waiting for the sugar cane to grow, then I'll start working." )
-    os.sleep( 240 )
+    sleep( 240 )
     cane_farm()
   end;
 }

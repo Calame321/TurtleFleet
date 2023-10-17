@@ -117,7 +117,7 @@ function dig_out_row()
     end
 
     if not turtle.dig_all( "down" ) then
-      s, d = turtle.inspectDown()
+      local s, d = turtle.inspectDown()
       if s and ( d.name == "minecraft:lava" or d.name == "minecraft:water" ) and d.state.level == 0 then
         turtle.force_down()
         turtle.force_up()
@@ -138,7 +138,7 @@ function dig_out_change_row()
   else
     turtle.turnRight()
   end
-  
+
   turtle.force_forward()
 
   if  digout_row_done % 2 == 0 then
@@ -259,10 +259,10 @@ function empty_inventory()
       end
     else
       local item = turtle.getItemDetail( i )
-      
+
       if item and not turtle.is_valid_fuel( item.name ) and item.name ~= "minecraft:bucket" then
         turtle.select( i )
-        
+
         if not turtle.drop() then
           print( "Please, make some place in the chest !!" )
           while not turtle.drop() do os.sleep( 5 ) end
@@ -322,13 +322,13 @@ function find_next_branch()
   while true do
     -- TODO: Force goto
     turtle.pathfind_to( get_branch_entrance_pos( branch_index ), true )
-    turtle.turn( LEFT )
+    turtle.turn( turtle.LEFT )
 
     local s, d = turtle.inspect()
 
     if (not s or d.name ~= "minecraft:cobblestone") then return true end
 
-    turtle.turn( RIGHT )
+    turtle.turn( turtle.RIGHT )
     branch_index = branch_index + 1
 
     if branch_index * 4 >= branch_mine_quantity then return false end
@@ -496,7 +496,7 @@ end
 
 function replace_for_dirt()
   local s, d = turtle.inspectDown()
-  
+
   if s and ( ( not flatten_cover_water and d.name == "minecraft:water" and d.state.level == 0 ) or ( d.name == "minecraft:grass_block" or d.name == "minecraft:dirt" ) ) then
     return
   end
@@ -584,7 +584,7 @@ local miner = {
   start_dig_out = function( depth, width )
     dig_out( depth, width )
   end;
-  
+
   start_flaten_chunks = function( nb_chunk, extra_height )
     last_average_height = extra_height
     initial_aditionnal_up = extra_height

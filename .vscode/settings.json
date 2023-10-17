@@ -8,6 +8,10 @@
     "vector",
     "read",
     "redstone",
-    "peripheral"
+    "peripheral",
+    "term",
+    "keys",
+    "colors",
+    "shell"
   ]
 }

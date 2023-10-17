@@ -91,7 +91,7 @@ function manage_furnace()
   local has_log = false
   for n = 2, 16 do
     local nCount = turtle.getItemCount( n )
-    
+
     if nCount > 0 then
       turtle.select( n )
       local item = turtle.getItemDetail()
@@ -126,7 +126,7 @@ function drop_stuff()
 
 	for n = 2, 16 do
     local nCount = turtle.getItemCount( n )
-    
+
     if nCount > 0 then
       local item = turtle.getItemDetail( n )
 
@@ -147,14 +147,13 @@ function drop_stuff()
             print( "Make some place in the chest!" )
 
             while not turtle.drop() do
-              os.sleep( 30 )
+              sleep( 30 )
             end
           end
         end
       end
 		end
   end
-  
   turtle.turn180()
 end
 
@@ -179,7 +178,7 @@ end
 function check_sapling()
   turtle.select( 1 )
   local item = turtle.getItemDetail( 1 )
-  
+
   if item and not string.find( item.name, "sapling" ) then
     turtle.turn180()
     turtle.drop()
@@ -234,7 +233,7 @@ end
 
 function setup_tree_farm()
   while not have_setup_materials() do
-    os.sleep( 1 )
+    sleep( 1 )
   end
 
   turtle.select( turtle.get_item_index( "coal" ) )
@@ -269,18 +268,18 @@ local lumberjack = {
     if length ~= nil then
       tree_farm_length = length
     end
-  
+
     print( "- Starting TREE FARM -" )
     if not has_tree_farm_setup() then
       setup_tree_farm()
     end
-  
+
     while true do
       check_sapling()
       plant_trees()
       manage_furnace()
       drop_stuff()
-      os.sleep( 10 )
+      sleep( 10 )
     end
   end
 }
