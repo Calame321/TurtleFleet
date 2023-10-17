@@ -1,0 +1,87 @@
+[gd_scene load_steps=11 format=3 uid="uid://cyw1vd05pl3l3"]
+
+[ext_resource type="Script" path="res://test_websocket.gd" id="1_rmy6s"]
+[ext_resource type="Shader" path="res://animated.gdshader" id="2_gepbw"]
+[ext_resource type="Texture2D" uid="uid://dolj5k8dumaio" path="res://textures/blocks/minecraft/grass.png" id="3_dr702"]
+[ext_resource type="Texture2D" uid="uid://du7agl1mxi7tl" path="res://textures/blocks/minecraft/dirt1.png" id="3_ufl72"]
+[ext_resource type="Texture2D" uid="uid://b3xiufhyies1" path="res://textures/blocks/minecraft/water_still.png" id="5_n0b0x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xf5xk"]
+render_priority = 0
+shader = ExtResource("2_gepbw")
+shader_parameter/model_dimensions = Vector3(1, 1, 1)
+shader_parameter/tile_size = Vector2(16, 16)
+shader_parameter/texture_scale = 1.0
+shader_parameter/tileset_texture = ExtResource("3_ufl72")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7y5lo"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_72o65"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mj7ai"]
+render_priority = 0
+shader = ExtResource("2_gepbw")
+shader_parameter/model_dimensions = Vector3(1, 1, 1)
+shader_parameter/tile_size = Vector2(16, 16)
+shader_parameter/texture_scale = 1.0
+shader_parameter/tileset_texture = ExtResource("3_dr702")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cu3qq"]
+render_priority = 0
+shader = ExtResource("2_gepbw")
+shader_parameter/model_dimensions = Vector3(1, 1, 1)
+shader_parameter/tile_size = Vector2(16, 16)
+shader_parameter/texture_scale = 1.0
+shader_parameter/tileset_texture = ExtResource("5_n0b0x")
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_rmy6s")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 460.0
+offset_top = 257.0
+offset_right = 500.0
+offset_bottom = 280.0
+text = "test"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_xf5xk")
+mesh = SubResource("PlaneMesh_7y5lo")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.53212, 0, -0.0475633)
+material_override = SubResource("ShaderMaterial_xf5xk")
+transparency = 1.0
+mesh = SubResource("BoxMesh_72o65")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.53212, 0.760661, 0.810437)
+material_override = SubResource("ShaderMaterial_xf5xk")
+transparency = 1.0
+mesh = SubResource("BoxMesh_72o65")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.88603, 0.613525, 0.300318)
+material_override = SubResource("ShaderMaterial_mj7ai")
+transparency = 0.1
+mesh = SubResource("BoxMesh_72o65")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.48984, -0.192793, -0.253274)
+material_override = SubResource("ShaderMaterial_cu3qq")
+transparency = 0.1
+mesh = SubResource("BoxMesh_72o65")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3476, 0.220475, 0.542568)
+material_override = SubResource("ShaderMaterial_xf5xk")
+transparency = 1.0
+mesh = SubResource("BoxMesh_72o65")

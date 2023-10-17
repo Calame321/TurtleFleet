@@ -1,0 +1,102 @@
+[gd_scene load_steps=10 format=3 uid="uid://dr7h2cn5c35l2"]
+
+[ext_resource type="PackedScene" uid="uid://dnxxeo3o1uvh6" path="res://world/chunk.tscn" id="1_d013g"]
+[ext_resource type="Script" path="res://free_look_camera.gd" id="4_nnwxj"]
+[ext_resource type="Script" path="res://world/world.gd" id="5"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4415y"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_jvj4x"]
+sky_material = SubResource("ProceduralSkyMaterial_4415y")
+
+[sub_resource type="Environment" id="Environment_ih6sm"]
+background_mode = 2
+sky = SubResource("Sky_jvj4x")
+
+[sub_resource type="SphereMesh" id="SphereMesh_1o8dw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_alynb"]
+albedo_color = Color(1, 0.309804, 0.415686, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vv6vv"]
+albedo_color = Color(0.211765, 0.345098, 1, 1)
+
+[node name="World" type="Node3D"]
+script = ExtResource("5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ih6sm")
+
+[node name="chunk_container" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Chunk" parent="chunk_container" instance=ExtResource("1_d013g")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = 33.0
+offset_right = -45.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label" type="Label" parent="UI/Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Info: none"
+
+[node name="player" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.64381)
+script = ExtResource("4_nnwxj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.14, 0, 0, 0, 0.14, 0, 0, 0, 0.14, 0, 0, 0)
+mesh = SubResource("SphereMesh_1o8dw")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.14, 0, 0, 0, 0.14, 0, 0, 0, 0.14, 1, 1, 0)
+mesh = SubResource("SphereMesh_1o8dw")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.14, 0, 0, 0, 0.14, 0, 0, 0, 0.14, 0, 0, 1)
+mesh = SubResource("SphereMesh_1o8dw")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.14, 0, 0, 0, 0.14, 0, 0, 0, 0.14, 1, 0, 1)
+material_override = SubResource("StandardMaterial3D_alynb")
+mesh = SubResource("SphereMesh_1o8dw")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.14, 0, 0, 0, 0.14, 0, 0, 0, 0.14, 1, 1, 1)
+mesh = SubResource("SphereMesh_1o8dw")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.14, 0, 0, 0, 0.14, 0, 0, 0, 0.14, 0, 1, 1)
+mesh = SubResource("SphereMesh_1o8dw")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.14, 0, 0, 0, 0.14, 0, 0, 0, 0.14, 0, 1, 0)
+material_override = SubResource("StandardMaterial3D_vv6vv")
+mesh = SubResource("SphereMesh_1o8dw")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.14, 0, 0, 0, 0.14, 0, 0, 0, 0.14, 1, 0, 0)
+mesh = SubResource("SphereMesh_1o8dw")

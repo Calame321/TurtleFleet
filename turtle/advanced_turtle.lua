@@ -206,7 +206,7 @@ end
 
 function turtle.wait_forward()
   while not turtle.forward() do
-    os.sleep( 0.5 )
+    sleep( 0.5 )
   end
 end
 
@@ -223,7 +223,7 @@ function turtle.down()
 end
 
 function turtle.wait_down()
-  while not turtle.down() do os.sleep( 0.5 )
+  while not turtle.down() do sleep( 0.5 )
   end
 end
 
@@ -242,7 +242,7 @@ end
 
 function turtle.wait_back()
   while not turtle.back() do
-    os.sleep( 0.5 )
+    sleep( 0.5 )
   end
 end
 
@@ -260,7 +260,7 @@ end
 
 function turtle.wait_up()
   while not turtle.up() do
-    os.sleep( 0.5 )
+    sleep( 0.5 )
   end
 end
 
@@ -295,7 +295,7 @@ end
 function turtle.wait_move( direction )
   while not turtle.move( direction ) do
     print( "waiting 5 seconds before trying to move", direction, "again." )
-    os.sleep( 5 )
+    sleep( 5 )
   end
 end
 
@@ -319,7 +319,7 @@ function turtle.force_move( direction, block_to_break )
         print( "I am scared of this", v, ". Can you remove it please?" )
 
         while turtle.is_block_name( direction, v ) do
-          os.sleep( 5 )
+          sleep( 5 )
         end
       end
     end
@@ -330,7 +330,7 @@ function turtle.force_move( direction, block_to_break )
   while not turtle.moveDir( direction ) do
     local s, d = turtle.inspectDir( direction )
     if s and string.find( d.name, "turtle" ) then
-      os.sleep( 0.5 )
+      sleep( 0.5 )
     elseif not block_to_break or turtle.is_block_name( direction, block_to_break ) then
       turtle.digDir( direction )
     end
@@ -396,9 +396,9 @@ function turtle.turn180()
 end
 
 function turtle.turnDir( direction )
-  if direction == LEFT then
+  if direction == turtle.LEFT then
     return turtle.turnLeft()
-  elseif direction == RIGHT then
+  elseif direction == turtle.RIGHT then
     return turtle.turnRight()
   end
   error( "turtle.turnDir invalid direction!" )
@@ -621,7 +621,7 @@ end
 function turtle.wait_place( direction )
   while not turtle.placeDir( direction ) do
     print( "waiting 5 seconds before trying to place", direction, "again." )
-    os.sleep( 5 )
+    sleep( 5 )
   end
 end
 
@@ -637,7 +637,7 @@ function turtle.suckDir( direction )
   error( "turtle.suckDir invalid direction" )
 end
 
-function turtle.wait_suck( direction ) while not turtle.suckDir( direction ) do os.sleep( 1 ) end end
+function turtle.wait_suck( direction ) while not turtle.suckDir( direction ) do sleep( 1 ) end end
 
 -- Return succes and if false, the name of the block
 function turtle.move_inspect( direction )
@@ -734,7 +734,7 @@ function turtle.pathfind_to( destination, can_dig )
   print( "Going to: " .. tostring( destination ) )
   local path = turtle.A_Star( turtle.position(), destination )
 
-  while not follow_path( path, can_dig ) do
+  while not turtle.follow_path( path, can_dig ) do
     print( "recalculating a path." )
     path = turtle.A_Star( turtle.position(), destination )
   end
@@ -910,9 +910,9 @@ function turtle.drop_in_storage()
       turtle.dig_all( "up" )
 
       while not turtle.placeUp() do
-        os.sleep( 0.5 )
+        sleep( 0.5 )
       end
-      os.sleep( 0.5 )
+      sleep( 0.5 )
     end
 
     -- for each item to drop, drop them if they have that index
@@ -926,26 +926,26 @@ function turtle.drop_in_storage()
           while not was_dropped and err == "No space for items" do
             turtle.select( current_drop_index )
             turtle.digUp()
-            
+
             -- get next storage index
             current_drop_index = turtle.get_next_storage_index( current_drop_index, storages_index )
-            
+
             if current_drop_index == -1 then
               print( "Please, make some place in my storage then press enter?" )
                 read()
                 current_drop_index = storages_index[ 1 ]
               end
-              
+
               turtle.select( current_drop_index )
               while not turtle.placeUp() do
-                os.sleep( 0.5 )
+                sleep( 0.5 )
               end
-              
-              os.sleep( 0.5 )
+
+              sleep( 0.5 )
               turtle.select( item_index )
               was_dropped, err = turtle.dropUp()
             end
-            
+
             -- Remove this item from the list
             to_drop[ item_index ] = nil
             to_drop_count = to_drop_count - 1
@@ -1063,7 +1063,7 @@ function turtle.try_refuel()
       end
 
       while fuel_index == -1 do
-        os.sleep( 1 )
+        sleep( 1 )
         fuel_index = turtle.get_valid_fuel_index()
       end
     end
@@ -1088,13 +1088,13 @@ function turtle.get_fuel_from_storage()
 
   local fuel_storage_index = turtle.get_storage_index( turtle.FUEL_STORAGE )
   turtle.select( fuel_storage_index )
-  local dir_to_place = get_empty_block()
+  local dir_to_place = turtle.get_empty_block()
   if dir_to_place == "" then
     dir_to_place = "up"
     turtle.dig_all( "up" )
   end
 
-  while not turtle.placeDir( dir_to_place ) do os.sleep( 0.1 ) end
+  while not turtle.placeDir( dir_to_place ) do sleep( 0.1 ) end
   turtle.select( ( fuel_storage_index  + 1 ) % 16 )
   turtle.wait_suck( dir_to_place )
   turtle.select( fuel_storage_index )
@@ -1102,7 +1102,7 @@ function turtle.get_fuel_from_storage()
   return true
 end
 
-function get_empty_block()
+function turtle.get_empty_block()
   if not turtle.detectUp() then return "up" end
   if not turtle.detectDown() then return "down" end
   return ""

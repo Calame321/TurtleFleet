@@ -15,7 +15,7 @@ local is_last = false
 local fleet_flatten_length = 32
 local fleet_dig_out_depth = 32
 local fleet_dig_out_width = 32
-  
+
 --------------
 -- settings -- 
 --------------
@@ -86,7 +86,7 @@ function equip_for_fleet_mode()
       turtle.turnLeft()
     end
   end
-  
+
   --Pick a bucket if available.
   turtle.select( 1 )
   turtle.turnLeft()
@@ -127,7 +127,7 @@ function place_next_turtle( job_id )
   end
 
   turtle.force_back()
-  
+
   if not is_last then
     local turtle_index = turtle.get_item_index( "computercraft:turtle" )
 
@@ -145,11 +145,11 @@ function place_next_turtle( job_id )
       turtle.select( 1 )
     end
 
-    os.sleep( 0.1 )
+    sleep( 0.1 )
     peripheral.call( "front", "turnOn" )
     turtle.wait_for_signal( "front", job_id )
     rs.setAnalogueOutput( "front", 0 )
-    os.sleep( 0.1 )
+    sleep( 0.1 )
   end
 end
 
@@ -158,13 +158,13 @@ function fleet_dig_out()
   local paper_data = get_paper_data()
   fleet_dig_out_depth = 32
   fleet_dig_out_width = 32
-  
+
   if paper_data then
     local d = mysplit( paper_data )
     fleet_dig_out_depth = tonumber( d[ 1 ] )
     fleet_dig_out_width = tonumber( d[ 2 ] )
   end
-  
+
   equip_for_fleet_mode()
   place_next_turtle( 3 )
 
@@ -182,7 +182,7 @@ function fleet_dig_out()
       -- if this is the last turtle, give the signal!
       if is_last then
         rs.setAnalogueOutput( "top", 3 )
-        os.sleep( 0.1 )
+        sleep( 0.1 )
         rs.setAnalogueOutput( "top", 0 )
       end
 
@@ -244,7 +244,7 @@ function fleet_flatten()
   equip_for_fleet_mode()
   place_next_turtle( 7 )
   local paper_data = get_paper_data()
-  
+
   if paper_data then
     fleet_flatten_length = tonumber( paper_data )
   end
@@ -274,7 +274,7 @@ function fleet_flatten()
 
   -- Relay the signal to the turtle in front.
   rs.setAnalogueOutput( "left", 10 )
-  os.sleep( 0.1 )
+  sleep( 0.1 )
   rs.setAnalogueOutput( "left", 0 )
 
   -- Start flatenning!
@@ -300,13 +300,13 @@ function fleet_flatten()
 
     while rs_strength == 1 do
       turtle.drop_in_storage()
-      
+
       -- Signal to the turtle that the storage is done.
       print( "Sending signal done storing." )
       rs.setAnalogueOutput( "back", 1 )
-      os.sleep( 0.1 )
+      sleep( 0.1 )
       rs.setAnalogueOutput( "back", 0 )
-      
+
       rs_strength = turtle.wait_for_any_rs_signal( "back" )
     end
   end
@@ -315,12 +315,12 @@ function fleet_flatten()
   local s, d = turtle.inspect()
   while not s or ( s and not string.find( d.name, "computercraft:turtle" ) ) do
     print( "waiting for next turtle. If I'm the last you can reboot me." )
-    os.sleep( 5 )
+    sleep( 5 )
     s, d = turtle.inspect()
   end
   print( "Other turtle is there!" )
 
-  os.sleep( 2 )
+  sleep( 2 )
 
   -- Drop in next turtle
   print( "Transfering my storage!" )
@@ -357,7 +357,7 @@ function fleet_flatten()
 
   -- Tell the turtle to drop it's storage.
   rs.setAnalogueOutput( "front", 1 )
-  os.sleep( 0.1 )
+  sleep( 0.1 )
   rs.setAnalogueOutput( "front", 0 )
 
   -- Wait for the turtle to store the items.
@@ -366,7 +366,7 @@ function fleet_flatten()
   -- when done, emit redstone strength 2
   print( "Transfering Done!" )
   rs.setAnalogueOutput( "front", 2 )
-  os.sleep( 0.1 )
+  sleep( 0.1 )
   rs.setAnalogueOutput( "front", 0 )
 
   print( "Done!" )
@@ -377,7 +377,7 @@ local fleet = {
   -- The first turtle to start the dig out.
   dig_out = function( height )
     is_first = true
-  
+
     local paper_data = get_paper_data()
     local fleet_dig_out_depth = 32
     local fleet_dig_out_width = 32
@@ -386,22 +386,22 @@ local fleet = {
       fleet_dig_out_depth = tonumber( d[ 1 ] )
       fleet_dig_out_width = tonumber( d[ 2 ] )
     end
-  
+
     print()
     print( "Starting dig out with: ", fleet_dig_out_depth, "depth,", fleet_dig_out_width, "width,", height, "height." )
     print()
-  
+
     equip_for_fleet_mode()
     place_next_turtle( 3 )
-    
+
     turtle.turnRight()
     for i = 1, height - 3 do
       turtle.force_up()
     end
-  
+
     -- Wait for the signal to start.
     turtle.wait_for_signal( "bottom", 3 )
-  
+
     miner.start_dig_out( fleet_dig_out_depth, fleet_dig_out_width )
   end;
 
@@ -415,13 +415,13 @@ local fleet = {
 
       if redstone_option == 3 then
         rs.setAnalogueOutput( "back", 3 )
-        os.sleep( 0.1 )
+        sleep( 0.1 )
         rs.setAnalogueOutput( "back", 0 )
         has_flaten_fleet_setup()
         fleet_dig_out()
       elseif redstone_option == 7 then
         rs.setAnalogueOutput( "back", 7 )
-        os.sleep( 0.1 )
+        sleep( 0.1 )
         rs.setAnalogueOutput( "back", 0 )
         has_flaten_fleet_setup()
         fleet_flatten()

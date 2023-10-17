@@ -76,7 +76,7 @@ function pathfind:A_Star( start, goal )
   while table.getn( openSet ) ~= 0 do
     -- avoid 'too long without yeilding'
     if sleep_counter == 30 then
-      os.sleep( 0.05 )
+      sleep( 0.05 )
       sleep_counter = 0
     end
     sleep_counter = sleep_counter + 1

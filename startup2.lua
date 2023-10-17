@@ -1,5 +1,5 @@
 local ui = require( "basalt" )
- 
+
 local w, h = term.getSize()
 
 local main = ui.createFrame():addLayout("turtlefleet/ui/main.xml"):show()
@@ -16,8 +16,7 @@ local lbl_down = main:getDeepObject( "lbl_down" )
 
 main
   :onEvent(
-    function( self, event, value ) 
-          
+    function( self, event, value )
       if event ~= "timer" then
         lbl_event:setText( event .. ": " .. value )
 
@@ -38,7 +37,7 @@ main
             pages:setOffset( offx, math.max( 0, new_offy ) )
             lbl_down:show()
             if new_offy == 0 then lbl_up:hide() end
-            
+
           -- Alt: Focus main menu bar
           elseif value == 342 then
             --menuBar:setFocus()

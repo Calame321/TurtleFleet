@@ -240,12 +240,12 @@ function show_branch_mining()
     branch_quantity = tonumber( input )
   end
 
-  print( "Length of a branche? (default = 80)")
+  print( "Length of a branch? (default = 80)")
   os.sleep( 0.2 )
   input = read()
   local branch_length = 80
   if input ~= "" then
-    branch_quantity = tonumber( input )
+    branch_length = tonumber( input )
   end
 
   miner.start_branch_mining( branch_side, branch_quantity, branch_quantity )

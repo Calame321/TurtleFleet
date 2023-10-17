@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://c2eqa27kj1rm7"]
+
+[ext_resource type="Texture2D" uid="uid://b3u70r1jik06c" path="res://textures/blocks/minecraft/lava_still.png" id="1_5d8ja"]
+
+[resource]
+atlas = ExtResource("1_5d8ja")
+region = Rect2(0, 0, 16, 16)
+margin = Rect2(1, 1, 1, 1)

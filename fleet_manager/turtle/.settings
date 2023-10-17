@@ -1,0 +1,14 @@
+{
+  equpment_left = "advancedperipherals:chunk_controller",
+  position = {
+    y = 64,
+    x = 48,
+    z = 92,
+  },
+  host_id = 0,
+  equpment_right = "computercraft:wireless_modem_advanced",
+  facing = {
+    dx = -1,
+    dz = 0,
+  },
+}

@@ -1,0 +1,46 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://c2gp8grexnq1m"]
+
+[ext_resource type="Texture2D" uid="uid://0eca7acmvlbi" path="res://textures/blocks/minecraft/warped_stem.png" id="1_afay6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w75s2"]
+atlas = ExtResource("1_afay6")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jsbtb"]
+atlas = ExtResource("1_afay6")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lx45t"]
+atlas = ExtResource("1_afay6")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ydwvv"]
+atlas = ExtResource("1_afay6")
+region = Rect2(0, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rmarr"]
+atlas = ExtResource("1_afay6")
+region = Rect2(0, 64, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w75s2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jsbtb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lx45t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ydwvv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rmarr")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

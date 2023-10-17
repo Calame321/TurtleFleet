@@ -1,0 +1,900 @@
+Debug : turtle.data.position_acuracy: perfect
+Info : Going home.
+Info : requested chunk: 3-5
+Info : Received chunk: 3-5
+Debug : A*| start: 50,63,92, 48,65,91
+Trace : A*, Path length: 5
+Debug : Path home: { 49,63,92, 48,63,92, 48,64,92, 48,65,92, 48,65,91 }
+Trace : Moving west.
+Trace : Turning from south to west.
+Debug : Moved to 49, 63, 92
+Trace : Moving west.
+Trace : Turning from east to west.
+Debug : Moved to 50, 63, 92
+Trace : Moving up.
+Trace : Moving up.
+Trace : Moving north.
+Trace : Turning from west to north.
+Debug : Moved to 50, 65, 91
+Trace : Home!
+Info : GPS location from start: 51,63,91
+Debug : 51,63,91 - 50,65,91
+Info : GPS location from start: 51,63,91
+Debug : Moved to 51, 63, 92
+Info : GPS location from start: 51,63,92
+Debug : turtle.data.dx: 0 turtle.data.dz: 1
+Debug : turtle.data.position_acuracy: perfect
+Info : Received a new task: 3504-return home
+Info : Going home.
+Info : requested chunk: 3-5
+Info : Received chunk: 3-5
+Debug : A*| start: 51,63,91, 48,65,91
+Trace : A*, Path length: 5
+Debug : Path home: { 50,63,91, 50,64,91, 50,65,91, 49,65,91, 48,65,91 }
+Trace : Moving west.
+Trace : Turning from south to west.
+Debug : Moved to 52, 63, 91
+Trace : Moving up.
+Trace : Moving up.
+Info : GPS location from start: 51,63,91
+Debug : 51,63,91 - 52,65,91
+Info : GPS location from start: 51,63,91
+Debug : Moved to 52, 63, 91
+Info : GPS location from start: 51,63,92
+Debug : turtle.data.dx: 0 turtle.data.dz: 1
+Debug : turtle.data.position_acuracy: perfect
+Info : Going home.
+Info : requested chunk: 3-5
+Info : Received chunk: 3-5
+Debug : A*| start: 52,63,90, 48,65,91
+Trace : A*, Path length: 7
+Debug : Path home: { 51,63,90, 50,63,90, 49,63,90, 48,63,90, 48,64,90, 48,65,90, 48,65,91 }
+Trace : Moving west.
+Trace : Turning from south to west.
+Debug : Moved to 53, 63, 90
+Info : GPS location from start: 51,63,91
+Debug : 51,63,91 - 53,63,90
+Info : GPS location from start: 51,63,91
+Debug : Moved to 52, 63, 91
+Info : GPS location from start: 51,63,92
+Debug : turtle.data.dx: 0 turtle.data.dz: 1
+Debug : turtle.data.position_acuracy: perfect
+Info : Going home.
+Info : requested chunk: 3-5
+Info : Received chunk: 3-5
+Debug : A*| start: 52,63,90, 48,65,91
+Trace : A*, Path length: 7
+Debug : Path home: { 51,63,90, 50,63,90, 49,63,90, 48,63,90, 48,64,90, 48,65,90, 48,65,91 }
+Trace : Moving west.
+Trace : Turning from south to west.
+Debug : Moved to 53, 63, 90
+Info : GPS location from start: 52,63,91
+Debug : 52,63,91 - 53,63,90
+Info : GPS location from start: 52,63,91
+Debug : Moved to 53, 63, 91
+Info : GPS location from start: 52,63,92
+Debug : turtle.data.dx: 0 turtle.data.dz: 1
+Debug : turtle.data.position_acuracy: perfect
+Info : Going home.
+Info : requested chunk: 3-5
+Info : Received chunk: 3-5
+Debug : A*| start: 53,63,90, 48,65,91
+Trace : A*, Path length: 8
+Debug : Path home: { 52,63,90, 51,63,90, 50,63,90, 49,63,90, 48,63,90, 48,64,90, 48,65,90, 48,65,91 }
+Trace : Moving west.
+Trace : Turning from south to west.
+Debug : Moved to 54, 63, 90
+Info : GPS location from start: 51,63,91
+Debug : 51,63,91 - 54,63,90
+Info : GPS location from start: 51,63,91
+Debug : Moved to 52, 63, 91
+Info : GPS location from start: 51,63,92
+Debug : turtle.data.dx: 0 turtle.data.dz: 1
+Debug : turtle.data.position_acuracy: perfect
+Info : Going home.
+Info : requested chunk: 3-5
+Info : Received chunk: 3-5
+Debug : A*| start: 52,63,90, 48,65,91
+Trace : A*, Path length: 7
+Debug : Path home: { 51,63,90, 50,63,90, 49,63,90, 48,63,90, 48,64,90, 48,65,90, 48,65,91 }
+Trace : Moving west.
+Trace : Turning from south to west.
+Debug : facing -1, 0
+Debug : Moved to 51, 63, 90
+Trace : Moving west.
+Debug : Moved to 50, 63, 90
+Trace : Moving west.
+Debug : Moved to 49, 63, 90
+Trace : Moving west.
+Debug : Moved to 48, 63, 90
+Trace : Moving up.
+Trace : Moving up.
+Trace : Moving south.
+Trace : Turning from west to south.
+Debug : facing 0, -1
+Debug : Moved to 48, 65, 89
+Trace : Home!
+Info : GPS location from start: 51,63,91
+Debug : 51,63,91 - 48,65,89
+Info : GPS location from start: 51,63,91
+Debug : Moved to 51, 63, 90
+Info : GPS location from start: 51,63,92
+Debug : turtle.data.dx: 0 turtle.data.dz: 1
+Debug : turtle.data.position_acuracy: perfect
+Info : GPS location from start: 51,63,91
+Debug : 51,63,91 - 51,63,89
+Info : GPS location from start: 51,63,91
+Debug : Moved to 51, 63, 92
+Info : GPS location from start: 51,63,92
+Debug : turtle.data.dx: 0 turtle.data.dz: 1
+Debug : turtle.data.position_acuracy: perfect
+Info : Received a new task: 6892-return home
+Info : Going home.
+Info : requested chunk: 3-5
+Info : Received chunk: 3-5
+Debug : A*| start: 51,63,91, 48,65,91
+Trace : A*, Path length: 5
+Debug : Path home: { 50,63,91, 50,64,91, 50,65,91, 49,65,91, 48,65,91 }
+Trace : Moving west.
+Trace : Turning from south to west.
+Debug : turnRight: facing -1, 0
+Debug : Moved to 50, 63, 91
+Trace : Moving up.
+Trace : Moving up.
+Trace : Moving west.
+Debug : Moved to 49, 65, 91
+Trace : Moving west.
+Debug : Moved to 48, 65, 91
+Trace : Home!
+Info : GPS location from start: 48,65,91
+Debug : 48,65,91 - 48,65,91
+Debug : turtle.data.position_acuracy: good
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Error : Can't get GPS location. I might be lost...
+Debug : 0,0,0 - 48,65,91
+Error : Can't get GPS location. I might be lost...
+Info : GPS location from start: 47,65,91
+Debug : 47,65,91 - 48,65,91
+Info : GPS location from start: 47,65,91
+Info : GPS location from start: 46,65,91
+Debug : turtle.data.dx: -1 turtle.data.dz: 0
+Debug : turtle.data.position_acuracy: perfect
+Info : GPS location from start: 47,65,91
+Debug : 47,65,91 - 47,65,91
+Debug : turtle.data.position_acuracy: good
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : GPS location from start: 47,65,91
+Debug : 47,65,91 - 47,65,91
+Debug : turtle.data.position_acuracy: good
+Info : GPS location from start: 47,65,91
+Debug : 47,65,91 - 47,65,91
+Debug : turtle.data.position_acuracy: good
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : GPS location from start: 47,65,91
+Debug : 47,65,91 - 47,65,91
+Debug : turtle.data.position_acuracy: good
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Debug : { { quantity = 0 }, { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Info : GPS location from start: 47,65,91
+Debug : 47,65,91 - 47,65,91
+Debug : turtle.data.position_acuracy: good
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Debug : { { quantity = 0 }, { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : { { quantity = 0 }, { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Info : GPS location from start: 47,65,91
+Debug : 47,65,91 - 47,65,91
+Debug : turtle.data.position_acuracy: good
+Debug : { { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { item = "minecraft:coal", quantity = 24 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { item = "minecraft:coal", quantity = 24 }, { item = "minecraft:coal", quantity = 24 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:magma_block", quantity = 1 }, { item = "minecraft:coal", quantity = 24 }, { item = "minecraft:coal", quantity = 24 }, { item = "minecraft:coal", quantity = 16 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "computercraft:wired_modem_full", quantity = 1 }, { item = "computercraft:computer_advanced", quantity = 1 }, { item = "minecraft:powder_snow_bucket", quantity = 1 }, { item = "minecraft:slime_block", quantity = 1 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Info : GPS location from start: 47,65,91
+Debug : 47,65,91 - 47,65,91
+Debug : turtle.data.position_acuracy: good
+Debug : { { quantity = 0 }, { item = "computercraft:computer_advanced", quantity = 1 }, { item = "minecraft:powder_snow_bucket", quantity = 1 }, { item = "minecraft:slime_block", quantity = 1 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { quantity = 0 }, { quantity = 0 }, { item = "minecraft:powder_snow_bucket", quantity = 1 }, { item = "minecraft:slime_block", quantity = 1 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { item = "minecraft:slime_block", quantity = 1 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 43 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 43 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 43 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 43 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 43 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 59 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 19 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Debug : { { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 64 }, { item = "minecraft:coal", quantity = 43 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 }, { quantity = 0 } }
+Debug : Inventory changed.
+Error : Can't get GPS location. I might be lost...
+Debug : 0,0,0 - 47,65,91
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 47,65,91
+Info : GPS location from start: 47,64,92
+Debug : turtle.data.dx: -1 turtle.data.dz: 0
+Debug : turtle.data.position_acuracy: perfect
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Info : Crafted something!
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : GPS location from start: 48,64,92
+Debug : 48,64,92 - 48,64,92
+Debug : turtle.data.position_acuracy: good
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Crafted something!
+Debug : Inventory changed.
+Debug : Inventory changed.
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }
+Info : Received message from 0 and protocol dns with message { sHostname = "command_center", sProtocol = "fleet_protocol", sType = "lookup" }

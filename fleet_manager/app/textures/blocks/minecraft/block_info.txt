@@ -1,0 +1,8 @@
+{
+  "x_blocks": [
+	"minecraft:grass",
+	"minecraft:poppy",
+	"minecraft:dandelion",
+	"minecraft:wheat",
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "type": "TreeFarm",
+  "materials": {
+    { "item": "minecraft:chest", "quantity": 1 },
+    { "tag": "minecraft:sapling", "quantity": 1 }
+  }
+}

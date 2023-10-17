@@ -1,0 +1,25 @@
+[gd_resource type="Environment" load_steps=2 format=3 uid="uid://io57t0rcxpb2"]
+
+[sub_resource type="Sky" id="1"]
+radiance_size = 4
+
+[resource]
+background_mode = 3
+background_color = Color(0.188235, 0.639216, 0.639216, 1)
+sky = SubResource("1")
+sky_rotation = Vector3(0, -1.13446, 0)
+ambient_light_color = Color(1, 0.945098, 0.807843, 1)
+ambient_light_sky_contribution = 0.72
+tonemap_mode = 2
+tonemap_white = 16.0
+ssao_enabled = true
+ssao_light_affect = 1.0
+sdfgi_enabled = true
+glow_enabled = true
+glow_intensity = 0.1
+glow_strength = 0.95
+glow_bloom = 1.0
+glow_blend_mode = 0
+glow_hdr_threshold = 1.2
+adjustment_enabled = true
+adjustment_brightness = 0.9
