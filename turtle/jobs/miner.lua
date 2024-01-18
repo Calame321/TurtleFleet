@@ -498,7 +498,7 @@ end
 function replace_for_dirt()
   local s, d = turtle.inspectDown()
 
-  if s == nil and not flatten_cover_air then
+  if not s and not flatten_cover_air then
     return
   end
 
