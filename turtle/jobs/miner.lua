@@ -417,7 +417,8 @@ local aditionnal_up = 5
 local last_height = 0
 local flatten_height = 0
 local torch_counter = 0
-local flatten_cover_water = true
+local flatten_cover_water = settings.get( "flatten_cover_water" )
+local flatten_cover_air = settings.get( "flatten_cover_air" )
 local wait_for_more_dirt = false
 
 function flat_one()
@@ -496,6 +497,10 @@ end
 
 function replace_for_dirt()
   local s, d = turtle.inspectDown()
+
+  if s == nil and not flatten_cover_air then
+    return
+  end
 
   if s and ( ( not flatten_cover_water and d.name == "minecraft:water" and d.state.level == 0 ) or ( d.name == "minecraft:grass_block" or d.name == "minecraft:dirt" ) ) then
     return

@@ -8,6 +8,9 @@ local fleet = require( "fleet_mode" )
 shell.run( "turtlefleet/turtle/advanced_turtle.lua" )
 shell.run( "turtlefleet/turtle/pathfind.lua" )
 
+settings.define( "flatten_cover_water", { description = "If the flatten job place dirt on water.", default = true, type = "boolean" } )
+settings.define( "flatten_cover_air", { description = "If the flatten job place dirt on air.", default = true, type = "boolean" } )
+
 ---------
 -- Map --
 ---------

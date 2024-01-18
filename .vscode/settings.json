@@ -13,5 +13,8 @@
     "keys",
     "colors",
     "shell"
+  ],
+  "Lua.diagnostics.disable": [
+    "undefined-field"
   ]
 }
