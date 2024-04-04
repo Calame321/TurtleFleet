@@ -10,14 +10,10 @@ config_version=5
 
 [application]
 
-config/name="Voxel Game"
-config/description="This demo is a minimal voxel game, inspired by others such as Minecraft.
-
-Sticking to GDScript and the built-in Godot tools, as this demo does, is
-quite limiting. If you are making your own voxel game, you should probably
-use Zylann's voxel module instead: https://github.com/Zylann/godot_voxel"
+config/name="TurtleFleet Control"
+config/description=" Allow to view and control your TurtleFleet software running on your minecraft world."
 run/main_scene="res://world/world.tscn"
-config/features=PackedStringArray("4.1")
+config/features=PackedStringArray("4.2")
 config/icon="res://icon.png"
 
 [audio]
