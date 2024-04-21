@@ -1,0 +1,28 @@
+--[[
+function show_fleet_digout_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Fleet Dig out -" )
+  print( "This will dig a cubic area using multiple turtles (The height given divided by 3).")
+  print( "This turtle should be placed on a chest to the left." )
+  print( "The depth and width is given with a renamed piece of paper. ex: '32 16'. (else default 32 x 32 will be used)")
+  print( "Press enter for the chests placement.")
+  sleep( 0.2 )
+  read()
+  print( "Chests (not needed if not in settings):" )
+  print( "- Up: Fuel" )
+  print( "- Down: Drop Storage" )
+  print( "- Front: Turtle Storage" )
+  print( "- Right: Filtered Storage" )
+  print( "- Left: Buckets (if there is going to be lava)" )
+  print()
+  sleep( 0.2 )
+  print( "Height = ? (multiple of 3)")
+  sleep( 0.2 )
+  input = read()
+  local height = tonumber( input )
+
+  fleet.dig_out( height )
+  menu.show()
+end
+]]
