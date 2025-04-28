@@ -1079,6 +1079,27 @@ function turtle.try_refuel()
   end
 end
 
+function turtle.refuel_all()
+  -- while not full and there is fuel in inventory.
+  local has_fuel = true
+
+  while turtle.getFuelLevel() < turtle.getFuelLimit() and has_fuel do
+    local fuel_index = turtle.get_valid_fuel_index()
+
+    if fuel_index == -1 and turtle.has_fuel_chest() then
+      turtle.get_fuel_from_storage()
+      fuel_index = turtle.get_valid_fuel_index()
+    end
+
+    if fuel_index == -1 then
+      return
+    end
+
+    turtle.select( fuel_index )
+    turtle.refuel()
+  end
+end
+
 function turtle.get_fuel_from_storage()
   -- If there is no fuel sorage setup, return
   if not turtle.has_fuel_chest() then return false end

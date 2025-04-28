@@ -543,6 +543,11 @@ function show_set_forbidden_block_page()
   menu.show()
 end
 
+function refuel_all()
+  turtle.refuel_all()
+  menu.show()
+end
+
 function get_installer()
   shell.run( "pastebin run TBpm1C8V" )
 end
@@ -570,7 +575,8 @@ local all_menu = {
       { key = "two", name = "2 - Miner", menu = "menu_miner" }, 
       { key = "three", name = "3 - Builder", menu = "menu_builder" },
       { key = "four", name = "4 - Fleet Mode", menu = "menu_fleet" },
-      { key = "five", name = "5 - Configurations", menu = "menu_config" }
+      { key = "five", name = "5 - Configurations", menu = "menu_config" },
+      { key = "six", name = "6 - Refuel All", action = refuel_all }
     }
   },
   menu_stations = {
@@ -621,7 +627,7 @@ local all_menu = {
     options = {
       { key = "one", name = "1 - Fleet Dig Out", action = show_fleet_digout_page },
       { key = "two", name = "2 - Fleet Flatten", action = show_fleet_flatten_page },
-      { key = "three", name ="3 - Fleet Manager", action = show_fleet_manager_page}
+      { key = "three", name ="3 - Fleet Manager", action = show_fleet_manager_page }
     }
   },
   menu_config = {
