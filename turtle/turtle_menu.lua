@@ -98,8 +98,12 @@ function show_digout_page()
   sleep( 0.2 )
   input = read()
   local width = tonumber( input )
-  miner.start_dig_out( depth, width )
-
+  
+  print( "Fill holes? (y or n)")
+  sleep( 0.2 )
+  input = read()
+  local place_walls = input == 'y'
+  miner.start_dig_out( depth, width, place_walls )
   menu.show()
 end
 

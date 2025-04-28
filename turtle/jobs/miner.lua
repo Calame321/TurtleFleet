@@ -19,6 +19,30 @@ end
 -- Miner --
 ------------
 
+function select_build_block()
+  local index = -1
+  
+  while index == -1 do
+    index = turtle.get_item_index( "stone" )
+    if index ~= -1 then break end
+
+    index = turtle.get_item_index( "dirt" )
+    if index ~= -1 then break end
+
+    index = turtle.get_item_index( "netherrack" )
+
+    term.clear()
+    term.setCursorPos( 1, 2 )
+    print( "Need building blocks:" )
+    print( "- Cobblestone" )
+    print( "- Dirt" )
+    print( "- Netherrack" )
+    sleep( 1 )
+  end
+
+  turtle.select( index )
+end
+
 ---------------
 -- Vein Mine --
 ---------------
@@ -72,19 +96,48 @@ do_row_remaining = 0
 do_width_start = 0
 digout_row_done = 0
 
-function dig_out( depth, width )
+function dig_out( depth, width, place_walls )
   turtle.force_forward()
   turtle.turnRight()
   do_width_remaining = width
   do_width_start = width
   do_row_remaining = depth
   digout_row_done = 0
-  dig_out_loop()
+  dig_out_loop( place_walls )
 end
 
-function dig_out_loop()
+function dig_out_loop( place_walls )
   while do_row_remaining ~= 0 do
-    dig_out_row()
+    if place_walls then
+      turtle.turn180()
+      select_build_block()
+      turtle.place()
+      turtle.force_up()
+      select_build_block()
+      turtle.place()
+      turtle.force_down()
+      turtle.force_down()
+      select_build_block()
+      turtle.place()
+      turtle.force_up()
+      turtle.turn180()
+    end
+
+    dig_out_row( place_walls )
+
+    if place_walls then
+      select_build_block()
+      turtle.place()
+      turtle.force_up()
+      select_build_block()
+      turtle.place()
+      turtle.force_down()
+      turtle.force_down()
+      select_build_block()
+      turtle.place()
+      turtle.force_up()
+    end
+
     if do_row_remaining ~= 1 then
       dig_out_change_row()
     else
@@ -104,7 +157,7 @@ function dig_out_loop()
   turtle.drop_in_storage()
 end
 
-function dig_out_row()
+function dig_out_row( place_walls )
   while do_width_remaining ~= 0 do
     turtle.select( 1 )
 
@@ -122,6 +175,17 @@ function dig_out_row()
         turtle.force_down()
         turtle.force_up()
       end
+    end
+
+    if place_walls then
+      turtle.force_up()
+      select_build_block()
+      turtle.placeUp()
+      turtle.force_down()
+      turtle.force_down()
+      select_build_block()
+      turtle.placeDown()
+      turtle.force_up()
     end
 
     if do_width_remaining ~= 1 then
@@ -586,8 +650,9 @@ end
 
 -- public functions
 local miner = {
-  start_dig_out = function( depth, width )
-    dig_out( depth, width )
+  start_dig_out = function( depth, width, place_walls )
+    place_walls = place_walls or false
+    dig_out( depth, width, place_walls )
   end;
 
   start_flaten_chunks = function( nb_chunk, extra_height )
