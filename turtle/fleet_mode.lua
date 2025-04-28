@@ -241,9 +241,9 @@ function fleet_flatten()
   turtle.do_not_store_items["minecraft:torch"] = 1
   turtle.do_not_store_items["minecraft:dirt"] = 2
 
+  local paper_data = get_paper_data()
   equip_for_fleet_mode()
   place_next_turtle( 7 )
-  local paper_data = get_paper_data()
 
   if paper_data then
     fleet_flatten_length = tonumber( paper_data )
