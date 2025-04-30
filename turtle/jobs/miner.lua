@@ -23,7 +23,7 @@ function select_build_block()
   local index = -1
   
   while index == -1 do
-    index = turtle.get_item_index( "stone" )
+    index = turtle.get_item_index( "cobble" )
     if index ~= -1 then break end
 
     index = turtle.get_item_index( "dirt" )
@@ -648,6 +648,18 @@ function flaten_chunks( number_of_chunk )
   turtle.do_not_store_items = turtle.default_do_not_store_items
 end
 
+function check_stairs_sides( fill_holes )
+  if fill_holes then
+    turtle.turnLeft()
+    select_build_block()
+    turtle.place()
+    turtle.turn180()
+    select_build_block()
+    turtle.place()
+    turtle.turnLeft()
+  end
+end
+
 -- public functions
 local miner = {
   start_dig_out = function( depth, width, place_walls )
@@ -706,6 +718,77 @@ local miner = {
         turtle.force_forward()
         next_torch = 11
       end
+    end
+  end;
+
+  dig_stairs = function( going_up, length, size, fill_holes )
+    local torch_distance = 1
+
+    if going_up then
+      turtle.force_up()
+      turtle.force_up()
+    end
+
+    while length > 0 do
+      turtle.force_forward()
+      check_stairs_sides( fill_holes )
+      
+      if size == 'l' then
+        turtle.force_up()
+        check_stairs_sides( fill_holes )
+        turtle.force_up()
+        check_stairs_sides( fill_holes )
+      end
+
+      if fill_holes then
+        turtle.force_up()
+        check_stairs_sides( fill_holes )
+        select_build_block()
+        turtle.placeUp()
+        turtle.force_down()
+      end
+
+      if size == 'l' then
+        turtle.force_down()
+        turtle.force_down()
+      end
+
+      turtle.digDown()
+
+      if torch_distance == 0 then
+        local torch_index = turtle.get_item_index( "minecraft:torch" )
+        
+        if torch_index ~= -1 then
+          turtle.force_back()
+          turtle.select( torch_index )
+          
+          if going_up then
+            turtle.placeDown()
+          else
+            turtle.placeUp()
+          end
+
+          turtle.force_forward()
+        end
+        
+        torch_distance = 7
+      end
+
+      turtle.force_down()
+      
+      if fill_holes then
+        select_build_block()
+        turtle.placeDown()
+        check_stairs_sides( fill_holes )
+      end
+
+      if going_up then
+        turtle.force_up()
+        turtle.force_up()
+      end
+  
+      torch_distance = torch_distance - 1
+      length = length - 1
     end
   end;
 }

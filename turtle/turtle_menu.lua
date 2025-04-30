@@ -159,6 +159,43 @@ function show_flatten_chunk_page()
   menu.show()
 end
 
+function show_stairs_page()
+  term.clear()
+  term.setCursorPos( 1, 1 )
+  print( "- Dig Stairs -" )
+  print( "This will dig a stairs starting a block in front of the turtle." )
+  print()
+  
+  print( "Up or Down? = ? (u or d)")
+  sleep( 0.2 )
+  input = read()
+  local going_up = false
+  if input == "u" then
+    going_up = true
+  end
+
+  print( "Length = ? (default = 15)")
+  sleep( 0.2 )
+  local input = read()
+  local length = 15
+  if input ~= "" then length = tonumber( input ) end
+
+  print( "Small or Large ? (s or l)")
+  sleep( 0.2 )
+  local input = read()
+  local size = "l"
+  if input == "s" then size = "s" end
+
+  print( "fill holes = ? (y or n)")
+  sleep( 0.2 )
+  local input = read()
+  local fill_holes = false
+  if input == "y" then fill_holes = true end
+
+  miner.dig_stairs( going_up, length, size, fill_holes )
+  menu.show()
+end
+
 function show_fleet_flatten_page()
   term.clear()
   term.setCursorPos( 1, 1 )
@@ -611,7 +648,8 @@ local all_menu = {
       { key = "two", name = "2 - Flatten chunk", action = show_flatten_chunk_page },
       { key = "three", name = "3 - Vein Mine", action = show_vein_mine_page },
       { key = "four", name = "4 - Branch Mining", action = show_branch_mining },
-      { key = "five", name = "5 - Tunnel", action = miner.dig_tunnel }
+      { key = "five", name = "5 - Tunnel", action = miner.dig_tunnel },
+      { key = "six", name = "6 - Stairs", action = show_stairs_page }
     }
   },
   menu_builder = {
